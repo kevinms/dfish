@@ -14,7 +14,7 @@ bool TC_Show=true;
 TTF_Font *TC_Font=NULL;
 SDL_Surface *TC_Screen=NULL;
 bool TC_LayersShown[7];
-Uint32 TC_Layers[255][255][7][9];
+Uint32 TC_Layers[255][255][7][7];
 char *TC_FontName=(char *)"./Font.ttf";
 int TC_FontSize=14;
 bool TC_Wait=false;
@@ -52,14 +52,9 @@ int addch(int ch)
   if(TC_Y>TC_H-1)
     TC_Y=TC_H-1;
   TC_Layers[TC_X][TC_Y][TC_L][0] = ch;
-  TC_Layers[TC_X][TC_Y][TC_L][1] = TC_R;
-  TC_Layers[TC_X][TC_Y][TC_L][2] = TC_G;
-  TC_Layers[TC_X][TC_Y][TC_L][3] = TC_B;
-  TC_Layers[TC_X][TC_Y][TC_L][4] = TC_A;
-  TC_Layers[TC_X][TC_Y][TC_L][5] = TC_FR;
-  TC_Layers[TC_X][TC_Y][TC_L][6] = TC_FG;
-  TC_Layers[TC_X][TC_Y][TC_L][7] = TC_FB;
-  TC_Layers[TC_X][TC_Y][TC_L][8] = TC_FA;
+  TC_Layers[TC_X][TC_Y][TC_L][1] = SDL_MapRGBA(TC_Screen->format,TC_R,TC_G,TC_B,TC_A);
+  TC_Layers[TC_X][TC_Y][TC_L][2] = SDL_MapRGBA(TC_Screen->format,TC_FR,TC_FG,TC_FB,TC_FA);
+  TC_Layers[TC_X][TC_Y][TC_L][3] = TC_FA;
   TC_X++;
   if(TC_X>TC_W-1)
     {
@@ -163,22 +158,16 @@ int refresh()
     {
       r.x = i*TC_XSpace;
       r.y = j*TC_YSpace;
-      c.r = TC_Layers[i][j][k][5];
-      c.g = TC_Layers[i][j][k][6];
-      c.b = TC_Layers[i][j][k][7];
-      a = TC_Layers[i][j][k][8];
+      SDL_GetRGBA(TC_Layers[i][j][k][2],TC_Screen->format,&c.r,&c.g,&c.b,&a);
       txt[0] = TC_Layers[i][j][k][0];
       if(txt[0]=='\0'&&txt[1]=='\0')
 	txt[0]=' ';
       t=TTF_RenderUNICODE_Blended(TC_Font,txt,c);
       s=SDL_DisplayFormat(t);
-      c.r = TC_Layers[i][j][k][1];
-      c.g = TC_Layers[i][j][k][2];
-      c.b = TC_Layers[i][j][k][3];
-      SDL_FillRect(s,NULL,SDL_MapRGB(s->format,c.r,c.g,c.b));
+      SDL_FillRect(s,NULL,TC_Layers[i][j][k][1]);
       SDL_BlitSurface(t,NULL,s,NULL);
       if(k!=0)
-	SDL_SetAlpha(s,SDL_SRCALPHA,TC_Layers[i][j][k][8]);
+	SDL_SetAlpha(s,SDL_SRCALPHA,TC_Layers[i][j][k][3]);
       if(k==0||TC_Layers[i][j][k][0]!='\0')
 	SDL_BlitSurface(s,NULL,TC_Screen,&r);
       SDL_FreeSurface(s);
@@ -712,14 +701,8 @@ int changecolor(int x,int y,char r,char g,char b,char fr,char fg,char fb)
     initscr();
   if(x>TC_W||y>TC_H||x<0||y<0)
     return 0;
-  TC_Layers[x][y][TC_L][1] = r;
-  TC_Layers[x][y][TC_L][2] = g;
-  TC_Layers[x][y][TC_L][3] = b;
-  TC_Layers[x][y][TC_L][4] = TC_A;
-  TC_Layers[x][y][TC_L][5] = fr;
-  TC_Layers[x][y][TC_L][6] = fg;
-  TC_Layers[x][y][TC_L][7] = fb;
-  TC_Layers[x][y][TC_L][8] = TC_FA;
+  TC_Layers[x][y][TC_L][1] = SDL_MapRGBA(TC_Screen->format,r,g,b,TC_A);
+  TC_Layers[x][y][TC_L][2] = SDL_MapRGBA(TC_Screen->format,fr,fg,fb,TC_FA);
   return 0;
 };
 int changech(int ch,int x,int y)
@@ -738,14 +721,8 @@ int addcolor(int x,int y,int r,int g,int b,int fr,int fg,int fb)
     initscr();
   if(x>TC_W||y>TC_H||x<0||y<0)
     return 0;
-  r2 = TC_Layers[x][y][TC_L][1];
-  g2 = TC_Layers[x][y][TC_L][2];
-  b2 = TC_Layers[x][y][TC_L][3];
-  a2 = TC_Layers[x][y][TC_L][4];
-  fr2 = TC_Layers[x][y][TC_L][5];
-  fg2 = TC_Layers[x][y][TC_L][6];
-  fb2 = TC_Layers[x][y][TC_L][7];
-  fa2 = TC_Layers[x][y][TC_L][8];
+  SDL_GetRGBA(TC_Layers[x][y][TC_L][1],TC_Screen->format,&r2,&g2,&b2,&a2);
+  SDL_GetRGBA(TC_Layers[x][y][TC_L][2],TC_Screen->format,&fr2,&fg2,&fb2,&fa2);
   r+=r2;
   g+=g2;
   b+=b2;
