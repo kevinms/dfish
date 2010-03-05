@@ -59,8 +59,10 @@
 #define KEY_WHEELUP 1336
 #define KEY_WHEELDOWN 1335
 
+#ifdef __cplusplus
 extern "C"
 {
+#endif
 /* These move the cursor and put things on the screen.*/
 extern int addch(int ch);
 extern int printw(const char *s, ...);
@@ -107,11 +109,13 @@ extern bool TC_Show;
 extern TTF_Font *TC_Font;
 extern SDL_Surface *TC_Screen;
 extern bool TC_LayersShown[7];
-extern Uint32 TC_Layers[255][255][7][9];
+extern Uint32 TC_Layers[255][255][7][7];
 extern char *TC_FontName;
 extern int TC_FontSize;
 
 /* This is an internally used function.*/
 extern int BOUND(int x,int min,int max);
+#ifdef __cplusplus
 }
+#endif
 #endif
