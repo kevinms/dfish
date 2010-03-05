@@ -1,0 +1,87 @@
+---------------------
+Astronomical
+Universe
+Galaxy
+Nebula
+Intersteller Medium
+Outer Space
+---------------------
+
+Intro - Monty Python Galaxy Song
+
+Core Game Objectives
+--------------------
+1) Massive Configurablility with:
+	A) Shuttles
+	B) Weaponry
+	C) Traps
+2) Massive scope of a UNIVERSE
+	A) Worm holes
+	B) Singularities
+	C) Asteriod fields
+3) Interaction with other players
+	A) Human
+	B) AI
+4) Time passes MUCH faster in game so astronomical events can occur
+
+Base Game Ideas
+---------------
+1) Multiplayer
+	A) each players orbits their own planet
+	B) only when a player is close enough to a neighboring planet should
+	   the server begin to send information about another players station
+	C) possible algorithms to be used will be dijkstra's for finding the
+	   shortest possible path, and kd-trees could be used to determine
+	   collisions.  Although this possibly will all be done with path
+	   finding.
+2) 'pending' doom durring the building of their space station.
+	A) Their light source could implode
+	B) Comets and meteors.
+	C) Aliens!! (could come in peace ;) (lost or stranded aliens that need to phone home)
+	D) Black holes, White holes
+	E) Singularities
+3) Material Gathering
+	INTERSTELLAR MATTER a.k.a. ISM (wiki it)
+	A) Set off on the journey with a momentarily self sustaining space shuttle
+	B) Space debris
+	C) Satelites
+	D) Trips to the planet
+	E) Trips to the N moon(s)
+	F) Trips to neighboring planets in the galaxy
+4) Space/Time Travel
+	A) Worm holes can be used to travel between galaxies.
+		I) actually moving entire stations to your enimies galaxy
+	B) Shuttles of varing complexities can be constructed for a variaty of missions
+	   This is a good place to get creative.  You could build a massive fleet of 
+	   self sustaining star cruisers and invade another galaxy.
+	C) As for random plots and scenerios, some ideas could be pulled from star trek.
+
+
+Base Game Physics
+-----------------
+1) Orbital patterns around a planet.
+	A) These orbits will need to be micromanaged to maintain orbit and
+	   not fly off into space or crash into the planet.
+	B) 
+2) Gravity will only be an issue when you are close enough to a planet for it to matter.
+	A) Space Men/Women will actually float off into space if they are not 
+	   tethered to the shuttle/station.
+	B) There will be a random factor to the tether breaking.
+3) Air
+	A) oxygen producing plants.
+	B) air tanks to hold a specific amount of air.
+	C) if the shuttle/station has a whole then the vacumm of space so 
+	   correctly effect the shuttle/station.
+	D) this imposses the need for air locks and emergency protocols.
+4) Weoponry
+	A) A myriad of weapons can be designed in MANY different ways.
+	B) Much more detail here.
+5) Energy
+	A) Solar Power!
+	B) Generators
+	C) Feed off of converting mass to pure energy
+
+
+
+
+bloopdebloo

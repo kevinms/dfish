@@ -1,0 +1,94 @@
+=====================
+     Engine Doc
+=====================
+
+5 frames per second where each frame thousands of calculations will take place.
+Planets will be orbiting around their stars.
+Depending on the type of object it may affect its surrounds as well (singularity)
+Gravity will affect all things to an extent.
+	1) if food is on a tile by itself in space gravity will be calculated for it
+	2) if food is on a tile that is part of a ship then the ships mass
+	   will need to be calculated and gravity will be applied appropriately
+	3) things in space will obay newtons laws of conservation
+
+*** If this engine developes enough it may be possible for a civilization
+	to build planet sized cruisers or possibly even planets.  Therefore,
+	the new object may be large enough to actually noticably affect 
+	surrounding asteriods, planets, even stars!!
+
+//NOTE: If planet orbits are the only things that actually change other
+than player generated objects then how will it look in the game
+1) how fast will the planets orbit
+2) depending on the view you are in 
+
+
+Model
+	1) Calculations
+		A) Planet orbits - calculate every N frame to reduce the # of calculations
+		B) 
+
+View
+	1) Will be built around 'sectors'
+	2) Because I would like this game to be able to scale to epic porportions
+	3) There will be a star gazer (map viewer) in the game.
+		A) Galaxy View
+		B) Star View
+		C) Planet View
+		D) Cruiser View
+	4) Each view will be made up of N sectors
+	5) The menu (or hotkeys) will let you either zoom in on a sector 
+	   or perform actions on objects in that sector
+	6) Objects will be constantly in motion so the need for a 'pin view'
+	   option is great.  Pinning the view to an object will center that
+	   object on the screen. For example a planet will be centered on
+	   screen in planet view.  And a space man or cruiser will be centered
+	   on the screen in cruiser mode.
+	
+Controller
+	1) Will basically be an input handler.
+	2) The controller will call for view and model updates when needed.
+	3) 
+
+Server
+	1) will appropriately distrubute the civilizations in the beginning
+
+Galaxy Editor
+	1) Let the user change practically ALL variables in the game to their liking
+	2) Let them build whatever they would like by giving them a gigantic listing
+	   of items that can be spawned automagically
+
+Scripting Language
+	1) Be able to write scripts to preform different actions in the game.
+	2) Make a script that can control your troops
+	3) Make a script that will wait till a scout sees an enemy then runs
+	   to the laser and attempts to defend the cruiser
+	4) Write a script to calculate the trajectory of an incomming missle
+	   accurately shoot it down
+	5) should it be python/lua/etc?  Maybe even lisp?
+	6) Somehow let the user build their own machinery!  Possibly let
+	   them upload parts.
+	7) if there were some way of letting the users write their own physics
+	   functions for their new objects then they could practically create
+	   anything.
+
+Default Resource Files
+	1) Will hold all the items that can be used in the game.
+	2) Let the user be able to add their own concepts into the game.
+
+Electronic Parts
+	1) Multiple types of rockets all with variables that may be changed
+	2) Have a 'weld' option to weld parts to another object.
+	3) Solar Panels for energy
+	4) Lasers, gravity bomb, traps, programmable lasers, lcd screen for 
+	   displaying information.  each item could return output each frame
+	   and the lcd could be 'wired' to the item.
+	5) Programmable rocket trajectories.  Release the payload as a bundle
+	   then durring its flight have them break apart and target different
+	   enemies.
+	6) Defensive parts will be needed.  Truthfully this seems a little
+	   like an rts now.... accept for the fact the user builds whatever
+	   they want.
+
+// Spring 2010 semester will bring about these
+*** Networking needs to be implmented as well!
+*** Optimization through inline assembly
