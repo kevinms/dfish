@@ -1,8 +1,25 @@
 CC=gcc
-CFLAGS=-Wall -O3 `sdl-config --cflags`
-LIBS=`sdl-config --libs` -lSDL_ttf
+CFLAGS=-g -Wall -O3 `sdl-config --cflags`
 
-all: TinyCurses
+#-----------------------------------------------------------------------
+# Build cu-cam
+LDFLAGS=`sdl-config --libs` -lSDL_ttf
+SOURCES=TinyCurses.c test-view.c
+OBJECTS=$(SOURCES:.c=.o)
 
-TinyCurses: TinyCurses.o
-	$(CC) -shared $(CFLAGS) $(LIBS) -o TinyCurses.so
+EXECUTABLE=test-view
+
+all: $(EXECUTABLE)
+	
+
+test-view: $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+# Implicit rule to compile all .c to .o
+.c.o:
+	$(CC) -c $(CFLAGS) $< -o $@
+
+# Cleanup rules
+
+clean:
+	rm -fv *.o $(EXECUTABLE)  *~
