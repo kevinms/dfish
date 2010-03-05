@@ -1,8 +1,6 @@
 CC=gcc
 CFLAGS=-g -Wall -O3 `sdl-config --cflags`
 
-#-----------------------------------------------------------------------
-# Build cu-cam
 LDFLAGS=`sdl-config --libs` -lSDL_ttf
 SOURCES=TinyCurses.c test-view.c
 OBJECTS=$(SOURCES:.c=.o)
