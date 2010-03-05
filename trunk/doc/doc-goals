@@ -11,19 +11,20 @@ Project Goals
 Project Breakup
 --------------------------------------------------------------------------------
 
-1) Map generation
-2) Space station building
-    1) 
-3) Economy/Resource Gathering
-4) Combat
-5) Player interaction
-6) Travel
-7) Interface
-8) Rendering of view
-9) Saving
-10)General Game Mechanics
-    1) Path finding
-    2) AI
+1) Rendering of view
+2) Map generation
+	a) static and dynamic object generation
+3) Space station building
+4) Saving
+5) Interface
+6) General Game Mechanics
+    a) Path finding
+    b) AI
+7) Economy/Resource Gathering
+8) Combat
+9) Travel
+10)Player interaction
+11)plot
 
 ) Multiplayer
 ) Scripting
