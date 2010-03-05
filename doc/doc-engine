@@ -92,3 +92,30 @@ Electronic Parts
 // Spring 2010 semester will bring about these
 *** Networking needs to be implmented as well!
 *** Optimization through inline assembly
+
+
+March 5, 2010
+----------------------------------------------------------------------------
+Base Game Physics
+-----------------
+1) Orbital patterns around a planet.
+	A) These orbits will need to be micromanaged to maintain orbit and
+	   not fly off into space or crash into the planet.
+	B) 
+2) Gravity will only be an issue when you are close enough to a planet for it to matter.
+	A) Space Men/Women will actually float off into space if they are not 
+	   tethered to the shuttle/station.
+	B) There will be a random factor to the tether breaking.
+3) Air
+	A) oxygen producing plants.
+	B) air tanks to hold a specific amount of air.
+	C) if the shuttle/station has a whole then the vacumm of space so 
+	   correctly effect the shuttle/station.
+	D) this imposses the need for air locks and emergency protocols.
+4) Weoponry
+	A) A myriad of weapons can be designed in MANY different ways.
+	B) Much more detail here.
+5) Energy
+	A) Solar Power!
+	B) Generators
+	C) Feed off of converting mass to pure energy
