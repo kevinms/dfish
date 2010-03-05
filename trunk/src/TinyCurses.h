@@ -63,6 +63,12 @@
 extern "C"
 {
 #endif
+/* KS::ADDED: Specific functions */
+// clears a specific area on a specific layer
+extern int clearext2(int ch,int l,int x, int y, int w, int h);
+//ADDED: non-blocking version
+extern int getchnb();
+
 /* These move the cursor and put things on the screen.*/
 extern int addch(int ch);
 extern int printw(const char *s, ...);

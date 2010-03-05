@@ -16,7 +16,8 @@ SDL_Surface *TC_Screen=NULL;
 bool TC_LayersShown[7];
 Uint32 TC_Layers[255][255][7][7];
 char *TC_FontName=(char *)"./Font.ttf";
-int TC_FontSize=14;
+//int TC_FontSize=14;
+int TC_FontSize=12;
 bool TC_Wait=false;
 bool TC_On=false;
 
@@ -213,6 +214,146 @@ int setcursor(bool c)
   return 0;
 };
 
+int getchnb()
+{
+  SDL_Event e;
+  if(TC_On==false)
+    initscr();
+  TC_Wait=true;
+ // while(1==1)
+    //{
+	//SDL_WaitEvent(&e);
+	if(!SDL_PollEvent(&e)) return 0;
+	if(e.type==SDL_MOUSEBUTTONDOWN)
+	{TC_MX = e.button.x;TC_MY=e.button.y;
+		switch(e.button.button){
+		case SDL_BUTTON_LEFT:
+			return KEY_MOUSE1;
+		case SDL_BUTTON_RIGHT:
+			return KEY_MOUSE2;
+		case SDL_BUTTON_MIDDLE:
+			return KEY_MOUSE3;
+		case SDL_BUTTON_WHEELUP:
+			return KEY_WHEELUP;
+		case SDL_BUTTON_WHEELDOWN:
+			return KEY_WHEELDOWN;
+		};
+	}
+	if(e.type==SDL_MOUSEBUTTONUP){
+		switch(e.button.button){
+		};
+	}
+	if(e.type==SDL_KEYDOWN)
+		switch(e.key.keysym.sym) {
+		case SDLK_RETURN:
+			return '\n';
+		case SDLK_UP:
+			return KEY_UP;
+			break;
+		case SDLK_DOWN:
+			return KEY_DOWN;
+			break;
+		case SDLK_LEFT:
+			return KEY_LEFT;
+			break;
+		case SDLK_RIGHT:
+			return KEY_RIGHT;
+			break;
+		case SDLK_ESCAPE:
+			return KEY_ESCAPE;
+		case SDLK_HOME:
+			return KEY_HOME;
+		case SDLK_END:
+			return KEY_END;
+		case SDLK_PAGEDOWN:
+			return KEY_PAGEDOWN;
+		case SDLK_PAGEUP:
+			return KEY_PAGEUP;
+		case SDLK_INSERT:
+			return KEY_INSERT;
+		case SDLK_SCROLLOCK:
+			return KEY_SCROLL;
+		case SDLK_PAUSE:
+			return KEY_PAUSE;
+		case SDLK_PRINT:
+			return KEY_PRINT;
+		case SDLK_TAB:
+			return KEY_TAB;
+		case SDLK_CAPSLOCK:
+			return KEY_CAPSLOCK;
+		case SDLK_DELETE:
+			return KEY_DELETE;
+		case SDLK_NUMLOCK:
+			return KEY_NUMLOCK;
+		case SDLK_RCTRL:case SDLK_LCTRL:
+			return KEY_CTRLDOWN;
+		case SDLK_RSHIFT:case SDLK_LSHIFT:
+			return KEY_SHIFTDOWN;
+		case SDLK_RALT:case SDLK_LALT:
+			return KEY_ALTDOWN;
+		case SDLK_F1:
+			return KEY_F1;
+		case SDLK_F2:
+			return KEY_F2;
+		case SDLK_F3:
+			return KEY_F3;
+		case SDLK_F4:
+			return KEY_F4;
+		case SDLK_F5:
+			return KEY_F5;
+		case SDLK_F6:
+			return KEY_F6;
+		case SDLK_F7:
+			return KEY_F7;
+		case SDLK_F8:
+			return KEY_F8;
+		case SDLK_F9:
+			return KEY_F9;
+		case SDLK_F10:
+			return KEY_F10;
+		case SDLK_F11:
+			return KEY_F11;
+		case SDLK_F12:
+			return KEY_F12;
+		case SDLK_KP0:
+			return '0';
+		case SDLK_KP1:
+			return '1';
+		case SDLK_KP2:
+			return '2';
+		case SDLK_KP3:
+			return '3';
+		case SDLK_KP4:
+			return '4';
+		case SDLK_KP5:
+			return '5';
+		case SDLK_KP6:
+			return '6';
+		case SDLK_KP7:
+			return '7';
+		case SDLK_KP8:
+			return '8';
+		case SDLK_KP9:
+			return '9';
+		default:
+			return(e.key.keysym.unicode); 
+		};
+	if(e.type==SDL_KEYUP)
+		switch(e.key.keysym.sym)
+		{
+		case SDLK_RCTRL:case SDLK_LCTRL:
+			return KEY_CTRLUP;
+		case SDLK_RALT:case SDLK_LALT:
+			return KEY_ALTUP;
+		case SDLK_RSHIFT:case SDLK_LSHIFT:
+			return KEY_SHIFTUP;
+		default:
+			break;
+		};
+	if(e.type==SDL_QUIT)
+		return KEY_QUIT;
+	return 0;
+}
 int getch()
 {
   SDL_Event e;
@@ -620,6 +761,38 @@ int getchext(int w)
     };
   return -1;
 };
+/*
+int clearexta(int ch,int l,int x, int y, int w, int h)
+{
+  int i,j,k;
+  SDL_Rect rt;
+  int br,bg,bb,bfr,bfg,bfb,bl,ba,bfa;
+  if(TC_On==false)
+    initscr();
+  br=TC_R;bg=TC_G;bb=TC_B;bfr=TC_FR;bfg=TC_FG;bfb=TC_FB;ba=TC_A;bfa=TC_FA;
+  rt.x=0;
+  rt.y=0;
+  rt.w=TC_Screen->w;
+  rt.h=TC_Screen->h;
+  SDL_FillRect(TC_Screen,&rt,SDL_MapRGB(TC_Screen->format,r,g,b));
+  color(r,g,b,fr,fg,fb);
+  setalpha(0);
+  bl=TC_L;
+  for(i=0;i<TC_W;i++)
+    for(j=0;j<TC_H;j++)
+      for(k=0;k<7;k++)
+      {
+        setlayer(k);
+	move(i,j);
+	addch(ch);
+      };
+  setlayer(bl);
+  setalpha(bfa);
+  move(0,0);
+  color(br,bg,bb,bfr,bfg,bfb);
+  return 0;
+};
+*/
 int clearext(int ch,char r,char g,char b,char fr,char fg,char fb)
 {
   int i,j,k;
