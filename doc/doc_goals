@@ -1,0 +1,31 @@
+--------------------------------------------------------------------------------
+Project Goals
+--------------------------------------------------------------------------------
+
+0) fun game play
+0) be able to finish it
+0) build it in small steps
+0) customizable, expandable (start small)
+
+--------------------------------------------------------------------------------
+Project Breakup
+--------------------------------------------------------------------------------
+
+1) Map generation
+2) Space station building
+    1) 
+3) Economy/Resource Gathering
+4) Combat
+5) Player interaction
+6) Travel
+7) Interface
+8) Rendering of view
+9) Saving
+10)General Game Mechanics
+    1) Path finding
+    2) AI
+
+) Multiplayer
+) Scripting
+) Plugins
+) Networking
