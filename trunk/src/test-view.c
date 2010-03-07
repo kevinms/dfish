@@ -11,7 +11,7 @@ int main (int argc, char *argv[])
 			map[i][j] = 'a';
 	
 	//printw("Curses!\n");
-	for(; ch < 'z'; ch++) {
+	for(; ch <= 'z'; ch++) {
 		move(0,0);
 		
 		for(i = 0; i < MSIZE; i++)
