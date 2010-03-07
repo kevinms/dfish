@@ -9,8 +9,8 @@
 int main (int argc, char *argv[]) {
 	int setup = 1;
 	struct posSys_t *GPS, *LPS;
-	GPS = init_map(500, 500, setup);
-	
+	GPS = init_map(500, 500, 1);
+	LPS = init_map(lLDefault, wLDefault, 0);
 	
 	
 	return 0;
