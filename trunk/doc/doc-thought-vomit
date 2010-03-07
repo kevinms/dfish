@@ -41,6 +41,7 @@ Primitives(ideas):
 	Shuttle Ship
 [Stuff]
 	Metal Wall
+	Metal Floor
 	Weapon Mount
 	Air Lock
 	Portal
@@ -67,3 +68,19 @@ Primitives(ideas):
 	Resister
 	Capacitor
 	Hydrolics
+
+------------------------------------------------------------------------
+Item Format/Loader
+------------------------------------------------------------------------
+[Format]
+	File containing all the data about an object
+	Will need to design a detailed file structure
+	Needs to tell what type of peices go where
+
+[Loader]
+	Will just load the vehicle or item to a item struct (or w/e)
+
+[Saver]
+	Be able to select an object and 'group' them, this way if the user
+	created a weapon or ship they would be able to 'group' it together
+	and save this creation to a text file for later use.
