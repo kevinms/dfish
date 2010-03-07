@@ -23,14 +23,56 @@ therefore moves through space as an independent object.
 7. ♅ Uranus
 8. ♆ Neptune
 
-class planet {
-	diameter
-	mass
-	radius
-	orbital_period
-	orbital_eccent-ricity
-	rotation_period
-	moons
-	rings
-	atmosphere
+struct planet {
+	int color
+	int mass
+	int radius
+	int orbital_period
+	int orbital_eccent-ricity  //is this a meausre of how eccentric the 
+					orbit is?
+	int rotation_period
+	struct planet moons*	// array of moons
+	struct rings*		// array of rings
+	struct atmosphere
+	int gravity		// in reference to Earth gravity
+	struct planetary_zones
+	int **map
+	
+}
+
+struct ring {
+	int inner_radius
+	int outer_radius
+	int density
+	int color
+	int angle with respect to the positive x-axis
+}
+
+struct atmosphere {
+	int height		//above planet surface
+	int pressure
+	int oxygen		// % oxygen
+	int nitrogen		// % nitrogen
+	int methane		// % methane
+	int carbon dioxide	// % CO2
+		-these gas paramaters can help dictate what can breath the
+		 atmoshpere, e.g. humans, aliens, plants
+}
+
+struct planetary_zone{
+	int xPos
+	int yPos
+	struct biome
+	int temperature
+	int **map
+	int color
+}
+
+struct biome{
+	int *allowable_plants
+	int *allowable_animals
+	int *natural_resources
+	int *natural_plants
+	int *natural_animals
+	int color
 }

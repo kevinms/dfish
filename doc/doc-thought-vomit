@@ -42,6 +42,7 @@ Primitives(ideas):
 	Shuttle Ship
 	Luxury Ship					-MRPAL
 		-for those stinkin' nobles		-
+	mining/gathering Ship				-
     [requries]						-
 		-control				-
 			-cockpit			-
@@ -98,3 +99,32 @@ Item Format/Loader
 	Be able to select an object and 'group' them, this way if the user
 	created a weapon or ship they would be able to 'group' it together
 	and save this creation to a text file for later use.
+
+------------------------------------------------------------------------
+Space Station Management
+------------------------------------------------------------------------
+[Systems]
+	oxygen								-Mrpal
+		-should be easy to implement				-
+		-units volume produced vs units volume consumed		-
+		-consumes						-
+			-humans						-
+			-animals					-
+			-combustion					
+		-produces
+			-plants
+			-mechanical? (research needed)
+	power
+		-running lines and stuff around the whole station may be
+ 		 tedius and is done in many, many other games. perhaps we
+		 could imagine wireless power, or Have it run through the
+		 walls/floors
+	food
+		-grow plants or animals on station?
+			-takes room, probably not best option
+		-import from planets
+			-could be like expensive imports
+		-artificially produced
+	waste								-
+		-not a fun object					-
+			-I'm in favor of not implementing it		-Mrpal
