@@ -31,6 +31,7 @@ Path Finding|Setting
 Fabricator-vomit - where you can build machinery {ships, weapons}
 ------------------------------------------------------------------------
 [1] Primitve objects
+	[a] basic requirements of any object
 [2] some primitives can be used together to create new amazing 
 	inventions
 
@@ -39,6 +40,14 @@ Primitives(ideas):
 	Cargo Ship
 	Fighter Ship
 	Shuttle Ship
+	Luxury Ship					-MRPAL
+		-for those stinkin' nobles		-
+    [requries]						-
+		-control				-
+			-cockpit			-
+			-ai				-
+		-propulsion				-
+		-protection against space		-MRPAL
 [Stuff]
 	Metal Wall
 	Metal Floor
@@ -65,9 +74,14 @@ Primitives(ideas):
 	Light Detector
 	Motion Detector
 	Pezo Speaker
-	Resister
-	Capacitor
 	Hydrolics
+    [basics]						-MRPAL
+	Resister					-
+	Capacitor					-
+	Inductor					-
+	Transistor					-
+	Current Source					-
+	Voltage Source					-MRPAL
 
 ------------------------------------------------------------------------
 Item Format/Loader
