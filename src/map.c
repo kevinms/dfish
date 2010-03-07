@@ -23,7 +23,7 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 		for(i = 0; i < lSize; i++) {
 			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
 			for(j = 0; j < wSize; j++) {
-				**(myMap) = ch;
+				myMap[i][j] = ch;
 				if (k == 1)
 					ch++;
 				else
@@ -35,26 +35,37 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 					k = 1;
 			}
 		}
-		pSys->lSize = lSize;
-		pSys->wSize = wSize;
 	}
 	else if (setup == 0) {
 		for(i = 0; i < lSize; i++)
 			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
-		pSys->lSize = 0;
-		pSys->wSize = 0;
+		pSys->xPos = 0;
+		pSys->yPos = 0;
 	}
+	pSys->lSize = lSize;
+	pSys->wSize = wSize;
 	pSys->map = myMap;
 	return pSys;
 }
 
-struct posSys_t *move_map (struct posSys_t *GPS, struct posSys_t *LPS) {
+struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 	int i, j;
 	for (i = 0; i < LPS->lSize; i++)
 		for (j = 0; j < LPS->wSize; j++) {
-			LPS->map[i][j] = GPS->map[i + LPS->lSize][j + LPS->wSize];
+			LPS->map[i][j] = GPS->map[i + LPS->yPos][j + LPS->xPos];
 		}
 	
 	return LPS;
 }
 
+struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t *LPS) {
+	if (keyPressed == KEY_UP)
+		LPS->yPos += 3;
+	if (keyPressed == KEY_DOWN)
+		LPS->yPos -= 3;
+	if (keyPressed == KEY_RIGHT)
+		LPS->xPos += 3;
+	if (keyPressed == KEY_LEFT)
+		LPS->xPos -= 3;
+	return LPS;
+}

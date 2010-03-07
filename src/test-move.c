@@ -8,10 +8,32 @@
 
 int main (int argc, char *argv[]) {
 	struct posSys_t *GPS, *LPS;
-	GPS = init_map(500, 500, 1);
+	GPS = init_map(lGDefault, wGDefault, 1);
 	LPS = init_map(lLDefault, wLDefault, 0);
 	
-	LPS = move_map(GPS, LPS);
+	LPS = fix_map(GPS, LPS);
+	int i,j;
+	initscrext(wLDefault, lLDefault, false);
+	refresh();
+	for(i = 0; i < LPS->lSize; i++) {
+		for(j = 0; j < LPS->wSize; j++){
+			printw("%c", LPS->map[i][j]);
+		}
+	}
+	refresh();
+	int keyPressed = 0;
+	while (keyPressed != KEY_TAB) {
+		keyPressed = getch();
+		LPS = move_map(keyPressed, GPS, LPS);
+		LPS = fix_map(GPS, LPS);
+		clear;
+		for(i = 0; i < LPS->lSize; i++) {
+			for(j = 0; j < LPS->wSize; j++){
+				printw("%c", LPS->map[i][j]);
+			}
+		}
+		refresh();
+	}
 	
 	return 0;
 }
