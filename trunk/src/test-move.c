@@ -31,7 +31,6 @@ int main (int argc, char *argv[]) {
 			|| (keyPressed == KEY_DOWN) 
 			|| (keyPressed == KEY_LEFT) 
 			|| (keyPressed == KEY_RIGHT)) {
-			printf("called\n");
 			LPS = move_map(keyPressed, GPS, LPS);
 			LPS = fix_map(GPS, LPS);
 			
