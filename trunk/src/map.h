@@ -21,4 +21,4 @@ struct posSys_t {
 };
 
 struct posSys_t *init_map (int lSize, int wSize, int setup);
-int setup_map (struct posSys_t *GPS, struct posSys_t *LPS);
+struct posSys_t *move_map (struct posSys_t *GPS, struct posSys_t *LPS);

@@ -7,11 +7,11 @@
 #include "map.h"
 
 int main (int argc, char *argv[]) {
-	int setup = 1;
 	struct posSys_t *GPS, *LPS;
 	GPS = init_map(500, 500, 1);
 	LPS = init_map(lLDefault, wLDefault, 0);
 	
+	LPS = move_map(GPS, LPS);
 	
 	return 0;
 }
