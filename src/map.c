@@ -35,19 +35,25 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 					k = 1;
 			}
 		}
+		pSys->lSize = lSize;
+		pSys->wSize = wSize;
 	}
 	else if (setup == 0) {
 		for(i = 0; i < lSize; i++)
 			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
+		pSys->lSize = 0;
+		pSys->wSize = 0;
 	}
 	pSys->map = myMap;
-	pSys->lSize = lSize;
-	pSys->wSize = wSize;
 	return pSys;
 }
 
-int setup_map (struct posSys_t *GPS, struct posSys_t *LPS) {
-	
+struct posSys_t *move_map (struct posSys_t *GPS, struct posSys_t *LPS) {
+	int i, j;
+	for (i = 0; i < LPS->lSize; i++)
+		for (j = 0; j < LPS->wSize; j++) {
+			LPS->map[i][j] = GPS->map[i + LPS->lSize][j + LPS->wSize];
+		}
 	
 	return LPS;
 }
