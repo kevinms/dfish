@@ -33,6 +33,12 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 					k = -1;
 				if (ch == 'a' && k == -1)
 					k = 1;
+/****************************every 4th line is all '#' **********************/
+				if (!(i % 4))
+					myMap[i][j] = '#';
+/***********************************every 4th column is all '|' ***************/
+				if (!(j % 4))
+					myMap[i][j] = '|';
 			}
 		}
 	}
@@ -52,11 +58,9 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 //assigns the proper GPS values to LPS
 //according to LPS->(x and y Positions)
 struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS) {
-	int i, j;
+	int i;
 	for (i = 0; i < LPS->lSize; i++) {
-		for (j = 0; j < LPS->wSize; j++) {
-			LPS->map[i][j] = GPS->map[i + LPS->yPos][j + LPS->xPos];
-		}
+		LPS->map[i] = GPS->map[i + LPS->yPos] + LPS->xPos;
 	}
 	
 	return LPS;
@@ -65,28 +69,28 @@ struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t *LPS) {
 	if (keyPressed == KEY_UP) {
 		if (LPS->yPos >= 3)
-			LPS->yPos -= 3;
+			LPS->yPos -= 1;
 		else
 			LPS->yPos = 0;
 	}
 		
 	if (keyPressed == KEY_DOWN) {
 		if ((LPS->yPos + LPS->lSize + 3) < GPS->lSize)
-			LPS->yPos += 3;
+			LPS->yPos += 1;
 		else
 			LPS->yPos = GPS->lSize - LPS->lSize - 1;
 	}
 		
 	if (keyPressed == KEY_RIGHT) {
 		if ((LPS->xPos + LPS->wSize + 3) < GPS->wSize)
-			LPS->xPos += 3;
+			LPS->xPos += 1;
 		else
 			LPS->xPos = GPS->wSize - LPS->wSize - 1;
 	}
 		
 	if (keyPressed == KEY_LEFT) {
 		if (LPS->xPos >= 3)
-			LPS->xPos -= 3;
+			LPS->xPos -= 1;
 		else
 			LPS->xPos = 0;
 	}
