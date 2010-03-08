@@ -1,13 +1,15 @@
-/*
+/********************************************************
+ * test-poll.c
+ * 
  * Tests event gets with while loops
  * 
- * 
- */
+ ********************************************************/
 
 #include "keys.h"
 #include "SDL.h"
 
 int main (int argc, char *argv[]) {
+/********	Initializes local and global map	*********/
 	struct posSys_t *GPS, *LPS;
 	GPS = init_map(lGDefault, wGDefault, 1);
 	LPS = init_map(lLDefault, wLDefault, 0);

@@ -1,14 +1,13 @@
 /*************************************************************
- * 
+ * map.h
  * 
  * Declares structs and stuff for the global and local map
  * 
- *
  *************************************************************/
 
 #include "TinyCurses.h"
 
-//Positioning System struct
+/*****		Positioning System struct		*****/
 struct posSys_t {
 	int lSize;
 	int wSize;

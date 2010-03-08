@@ -1,10 +1,9 @@
-/*
+/*************************************************************
+ * map.c
+ * 
  * Sets up structs and stuff for the global and local map
  * 
- * 
- * 
- *
- */
+ *************************************************************/
 
 #include "map.h"
 #include <assert.h>
@@ -17,6 +16,12 @@
 #define wGDefault 250
 
 
+
+/************************************************
+ * Initializes the posSys that passes through
+ * changes setup based on the int variable
+ * 		from setting up GPS to LPS
+ ************************************************/
 struct posSys_t *init_map (int lSize, int wSize, int setup) {
 	char ch = 'a';
 	int k = 1;
@@ -41,15 +46,17 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 					k = -1;
 				if (ch == 'a' && k == -1)
 					k = 1;
-/****************************every 4th line is all '#' **********************/
+/************	every 4th line is all '#'		**************/
 				if (!(i % 6))
 					myMap[i][j] = '#';
-/***********************************every 4th column is all '|' ***************/
+/************	every 4th column is all '|'		**************/
 				if (!(j % 4))
 					myMap[i][j] = '|';
 			}
 		}
 	}
+	
+/************	Sets up LPS if setup = 0		**************/
 	else if (setup == 0) {
 		for(i = 0; i < lSize; i++)
 			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
@@ -62,9 +69,10 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 	return pSys;
 }
 
-
-//assigns the proper GPS values to LPS
-//according to LPS->(x and y Positions)
+/**********************************************
+ * assigns the proper GPS values to LPS
+ * according to LPS->(x and y Positions)
+ **********************************************/
 struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 	int i;
 	for (i = 0; i < LPS->lSize; i++) {
@@ -74,6 +82,11 @@ struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 	return LPS;
 }
 
+
+/**********************************************
+ * Changes LPS pointers according to 
+ * 		the offset (x and y Pos)
+ **********************************************/
 struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t *LPS, int num) {
 	if (keyPressed == KEY_UP) {
 		if (LPS->yPos >= num)
