@@ -14,7 +14,7 @@ test-view: $(OBJECTS)
 	
 # build tests
 
-T_EXECUTABLE=test-move
+T_EXECUTABLE=test-move test-poll
 
 test: $(T_EXECUTABLE)
 	

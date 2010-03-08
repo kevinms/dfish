@@ -33,6 +33,9 @@ void downKeyEvent	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS)
 			LPS = fix_map(GPS, LPS);
 			display_map(GPS, LPS);
 	}
+	else if (keyPressed.sym == KEY_TAB) {
+		exit(1);
+	}
 	display_map(GPS, LPS);
 }
 
