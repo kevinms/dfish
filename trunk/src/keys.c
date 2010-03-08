@@ -8,11 +8,6 @@
 #include "keys.h"
 
 
-/******    Defines defaults for Map Shifting Events	******/
-#define numDefault 1
-#define shiftDefault 5
-
-
 /***************************************************
  * 
  * Handles Key Releasing Events
@@ -45,5 +40,9 @@ void downKeyEvent	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS)
 //////NOTE: Exits only after tab and 1 other key is pressed//////
 	if (keyPressed.sym == KEY_TAB) {
 		exit(1);
+	}
+	if (keyPressed.sym == SDLK_w) {
+		char *fName = "map.txt";
+		write_map (fName, GPS);
 	}
 }
