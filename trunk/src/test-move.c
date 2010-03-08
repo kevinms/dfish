@@ -1,8 +1,10 @@
-/*
+/*********************************************
+ * test-move.c
+ * 
  * Tests moving around within a local system
  * and a global system of unicode char's 
  * 
- */
+ *********************************************/
 
 #include "map.h"
 

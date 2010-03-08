@@ -2,6 +2,7 @@
  * keys.h
  * 
  * Inits functions for handling keyboard events
+ * 
  ***************************************************/
 
 #include "map.h"
