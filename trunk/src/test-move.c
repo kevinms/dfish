@@ -31,17 +31,10 @@ int main (int argc, char *argv[]) {
 			|| (keyPressed == KEY_DOWN) 
 			|| (keyPressed == KEY_LEFT) 
 			|| (keyPressed == KEY_RIGHT)) {
-			LPS = move_map(keyPressed, GPS, LPS);
+			LPS = move_map(keyPressed, GPS, LPS, 1);
 			LPS = fix_map(GPS, LPS);
 			
-			clear();
-			for(i = 0; i < LPS->lSize; i++) {
-				for(j = 0; j < LPS->wSize; j++) {
-					printw("%c", LPS->map[i][j]);
-				}
-			}
-			move(0,0);
-			refresh();
+			display_map(GPS, LPS);
 		}
 	}
 	
