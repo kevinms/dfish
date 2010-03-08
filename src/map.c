@@ -66,7 +66,7 @@ struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 	return LPS;
 }
 
-struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t *LPS) {
+struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t *LPS, int num) {
 	if (keyPressed == KEY_UP) {
 		if (LPS->yPos >= 3)
 			LPS->yPos -= 1;
@@ -96,4 +96,17 @@ struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t
 	}
 	
 	return LPS;
+}
+
+
+/////////////////	Displays the map //////////////////
+void display_map (struct posSys_t *GPS, struct posSys_t *LPS) {
+	clear();
+	int i, j;
+	for(i = 0; i < LPS->lSize; i++) {
+		for(j = 0; j < LPS->wSize; j++) {
+			printw("%c", LPS->map[i][j]);
+		}
+	}
+	refresh();	
 }

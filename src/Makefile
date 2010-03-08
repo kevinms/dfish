@@ -26,6 +26,12 @@ T_MOVE_OBJECTS=$(T_MOVE_SOURCES:.c=.o)
 test-move: $(T_MOVE_OBJECTS)
 	$(CC) $(T_MOVE_LDFLAGS) $(T_MOVE_OBJECTS) -o $@
 
+T_POLL_SOURCES=TinyCurses.c test-poll.c map.c
+T_POLL_OBJECTS=$(T_POLL_SOURCES:.c=.o)
+
+test-poll: $(T_POLL_OBJECTS)
+	$(CC) $(T_MOVE_LDFLAGS) $(T_POLL_OBJECTS) -o $@
+
 # Implicit rule to compile all .c to .o
 .c.o:
 	$(CC) -c $(CFLAGS) $< -o $@
