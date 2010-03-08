@@ -1,17 +1,12 @@
-/*
+/*************************************************************
+ * 
+ * 
  * Declares structs and stuff for the global and local map
  * 
- * 
- * 
  *
- */
+ *************************************************************/
 
 #include "TinyCurses.h"
-
-#define lLDefault 40
-#define wLDefault 60
-#define lGDefault 200
-#define wGDefault 250
 
 //Positioning System struct
 struct posSys_t {

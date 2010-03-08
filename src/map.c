@@ -9,6 +9,14 @@
 #include "map.h"
 #include <assert.h>
 
+
+/******    Defines defaults for LPS and GPS structures	******/
+#define lLDefault 40
+#define wLDefault 60
+#define lGDefault 200
+#define wGDefault 250
+
+
 struct posSys_t *init_map (int lSize, int wSize, int setup) {
 	char ch = 'a';
 	int k = 1;
@@ -34,7 +42,7 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 				if (ch == 'a' && k == -1)
 					k = 1;
 /****************************every 4th line is all '#' **********************/
-				if (!(i % 4))
+				if (!(i % 6))
 					myMap[i][j] = '#';
 /***********************************every 4th column is all '|' ***************/
 				if (!(j % 4))
@@ -68,29 +76,29 @@ struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 
 struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t *LPS, int num) {
 	if (keyPressed == KEY_UP) {
-		if (LPS->yPos >= 3)
-			LPS->yPos -= 1;
+		if (LPS->yPos >= num)
+			LPS->yPos -= num;
 		else
 			LPS->yPos = 0;
 	}
 		
 	if (keyPressed == KEY_DOWN) {
-		if ((LPS->yPos + LPS->lSize + 3) < GPS->lSize)
-			LPS->yPos += 1;
+		if ((LPS->yPos + LPS->lSize + num) < GPS->lSize)
+			LPS->yPos += num;
 		else
-			LPS->yPos = GPS->lSize - LPS->lSize - 1;
+			LPS->yPos = GPS->lSize - LPS->lSize - num;
 	}
 		
 	if (keyPressed == KEY_RIGHT) {
-		if ((LPS->xPos + LPS->wSize + 3) < GPS->wSize)
-			LPS->xPos += 1;
+		if ((LPS->xPos + LPS->wSize + num) < GPS->wSize)
+			LPS->xPos += num;
 		else
-			LPS->xPos = GPS->wSize - LPS->wSize - 1;
+			LPS->xPos = GPS->wSize - LPS->wSize - num;
 	}
 		
 	if (keyPressed == KEY_LEFT) {
-		if (LPS->xPos >= 3)
-			LPS->xPos -= 1;
+		if (LPS->xPos >= num)
+			LPS->xPos -= num;
 		else
 			LPS->xPos = 0;
 	}
@@ -99,7 +107,7 @@ struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t
 }
 
 
-/////////////////	Displays the map //////////////////
+/**************		Displays the map 	**************/
 void display_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 	clear();
 	int i, j;
