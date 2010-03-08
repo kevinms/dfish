@@ -10,5 +10,3 @@
 void upKeyEvent (SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS);
 
 void downKeyEvent (SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS);
-
-void shiftKeyEvent (SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS);
