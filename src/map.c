@@ -9,14 +9,6 @@
 #include <assert.h>
 
 
-/******    Defines defaults for LPS and GPS structures	******/
-#define lLDefault 40
-#define wLDefault 60
-#define lGDefault 200
-#define wGDefault 250
-
-
-
 /************************************************
  * Initializes the posSys that passes through
  * changes setup based on the int variable
@@ -130,4 +122,22 @@ void display_map (struct posSys_t *GPS, struct posSys_t *LPS) {
 		}
 	}
 	refresh();	
+}
+
+
+/******		Writes the map data out to a File	 ****/
+void write_map (char *fName, struct posSys_t *GPS) {
+	FILE *outFile;
+	assert((outFile = fopen (fName, "w")) != NULL);
+	
+	fprintf(outFile, "%d ", GPS->lSize);
+	fprintf(outFile, "%d ", GPS->wSize);
+	
+	int i, j;
+	for(i = 0; i < GPS->lSize; i++) {
+		for(j = 0; j < GPS->wSize; j++) {
+			fwrite ((GPS->map[i]+j), 1, sizeof(char), outFile);
+		}
+	}
+	fclose(outFile);
 }
