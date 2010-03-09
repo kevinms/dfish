@@ -8,13 +8,21 @@
 #include "map.h"
 #include <assert.h>
 
-/*******   mallocs space for a length x width map    *********/
-////////////////FAULTY DO NOT USE UNTIL TESTED/////////////////
-void malloc_map(int length, int width, int ***map) {
-	(*map) = (int**)malloc (sizeof(**map)*width);
+/*******************************************************************************
+ *
+ * mallocs space for a length * width map
+ * 
+ * NOTE: you must either pass a pointer to the map or the address of the map
+ * 	eg:  malloc_map(length,width,&map);
+ ******************************************************************************/
+
+void malloc_map(int length, int width, int ***map)
+{
+	assert(((*map) = (int**)malloc (sizeof(**map)*width)) != NULL);
 	int i;
 	for (i = 0; i < width; i++)
-		map[i] = malloc (sizeof(***map) * length);
+		assert(((*map)[i] = malloc (sizeof(***map) * length)) != NULL);
+	
 }
 
 
