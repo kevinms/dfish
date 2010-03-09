@@ -128,14 +128,14 @@ struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t
 		if ((LPS->yPos + LPS->lSize + num) < GPS->lSize)
 			LPS->yPos += num;
 		else
-			LPS->yPos = GPS->lSize - LPS->lSize - num;
+			LPS->yPos = GPS->lSize - LPS->lSize;
 	}
 		
 	if (keyPressed == KEY_RIGHT) {
 		if ((LPS->xPos + LPS->wSize + num) < GPS->wSize)
 			LPS->xPos += num;
 		else
-			LPS->xPos = GPS->wSize - LPS->wSize - num;
+			LPS->xPos = GPS->wSize - LPS->wSize;
 	}
 		
 	if (keyPressed == KEY_LEFT) {
