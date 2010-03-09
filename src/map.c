@@ -72,18 +72,20 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 		FILE *inFile;
 		char buffer;
 		assert((inFile = fopen(arg, "r")) != NULL);
-		//assert((buffer = malloc(sizeof(char))) != NULL);
 		
 		int newLength, newWidth, i, j;
 		assert((fscanf(inFile, "%d %d", &newLength, &newWidth)) == 2);
 		
 		assert((fscanf(inFile, "%c", &buffer)) == 1);
+		//assert((fscanf(inFile, "%c", &buffer)) == 1);
 		
 		for (i = 0; i < newLength; i++) {
 			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
 			
 			for (j = 0; j < newWidth; j++) {
 				assert((fscanf(inFile, "%c", &buffer)) == 1);
+				if (buffer == '\n')
+					assert((fscanf(inFile, "%c", &buffer)) == 1);
 				myMap[i][j] = buffer;
 
 			}
@@ -167,12 +169,14 @@ void write_map (char *fName, struct posSys_t *GPS) {
 	
 	fprintf(outFile, "%d ", GPS->lSize);
 	fprintf(outFile, "%d ", GPS->wSize);
+	fprintf(outFile, "\n");
 	
 	int i, j;
 	for(i = 0; i < GPS->lSize; i++) {
 		for(j = 0; j < GPS->wSize; j++) {
 			fwrite ((GPS->map[i]+j), 1, sizeof(char), outFile);
 		}
+		fprintf(outFile, "\n");
 	}
 	fclose(outFile);
 }
