@@ -18,10 +18,10 @@
 
 void malloc_map(int length, int width, int ***map)
 {
-	assert(((*map) = (int**)malloc (sizeof(**map)*width)) != NULL);
+	assert(((*map) = (int**)malloc (sizeof(**map)*length)) != NULL);
 	int i;
 	for (i = 0; i < width; i++)
-		assert(((*map)[i] = malloc (sizeof(***map) * length)) != NULL);
+		assert(((*map)[i] = malloc (sizeof(***map) * width)) != NULL);
 	
 }
 
@@ -39,11 +39,13 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 	struct posSys_t *pSys;
 	assert((pSys = malloc(sizeof(*pSys))) != NULL);
 	int **myMap;
-	assert((myMap = malloc(sizeof(*myMap)*lSize)) != NULL);
-	
+
+
+	malloc_map(lSize,wSize,&myMap);
+
+
 	if (arg == NULL) {
 		for(i = 0; i < lSize; i++) {
-			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
 			for(j = 0; j < wSize; j++) {
 				myMap[i][j] = ch;
 				if (k == 1)
@@ -70,7 +72,6 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 /************	Sets up LPS if setup = 0		**************/
 	else if (strcmp(arg, lps) == 0) {
 		for(i = 0; i < lSize; i++)
-			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
 		pSys->xPos = 0;
 		pSys->yPos = 0;
 		pSys->lSize = lSize;
