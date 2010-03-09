@@ -9,10 +9,19 @@
 #include "SDL.h"
 
 int main (int argc, char *argv[]) {
+	
+	char *lps = "lps";
+	char *nil;
+	
+	
+	
 /********	Initializes local and global map	*********/
 	struct posSys_t *GPS, *LPS;
-	GPS = init_map(lGDefault, wGDefault, 1);
-	LPS = init_map(lLDefault, wLDefault, 0);
+	if (argc > 0)
+		GPS = init_map(lGDefault, wGDefault, argv[1]);
+	else
+		GPS = init_map(lGDefault, wGDefault, nil);
+	LPS = init_map(lLDefault, wLDefault, lps);
 	
 	LPS = fix_map(GPS, LPS);
 	int i,j;

@@ -8,23 +8,32 @@
 #include "map.h"
 #include <assert.h>
 
+/*******   mallocs space for a length x width map    *********/
+////////////////FAULTY DO NOT USE UNTIL TESTED/////////////////
+void malloc_map(int length, int width, int ***map) {
+	(*map) = (int**)malloc (sizeof(**map)*width);
+	int i;
+	for (i = 0; i < width; i++)
+		map[i] = malloc (sizeof(***map) * length);
+}
+
 
 /************************************************
  * Initializes the posSys that passes through
  * changes setup based on the int variable
  * 		from setting up GPS to LPS
  ************************************************/
-struct posSys_t *init_map (int lSize, int wSize, int setup) {
+struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 	char ch = 'a';
 	int k = 1;
 	int i, j;
-	
+	char *lps = "lps";
 	struct posSys_t *pSys;
 	assert((pSys = malloc(sizeof(*pSys))) != NULL);
 	int **myMap;
 	assert((myMap = malloc(sizeof(*myMap)*lSize)) != NULL);
 	
-	if (setup == 1) {
+	if (arg == NULL) {
 		for(i = 0; i < lSize; i++) {
 			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
 			for(j = 0; j < wSize; j++) {
@@ -46,17 +55,43 @@ struct posSys_t *init_map (int lSize, int wSize, int setup) {
 					myMap[i][j] = '|';
 			}
 		}
+		pSys->lSize = lSize;
+		pSys->wSize = wSize;
 	}
 	
 /************	Sets up LPS if setup = 0		**************/
-	else if (setup == 0) {
+	else if (strcmp(arg, lps) == 0) {
 		for(i = 0; i < lSize; i++)
 			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
 		pSys->xPos = 0;
 		pSys->yPos = 0;
+		pSys->lSize = lSize;
+		pSys->wSize = wSize;
 	}
-	pSys->lSize = lSize;
-	pSys->wSize = wSize;
+	else {
+		FILE *inFile;
+		char buffer;
+		assert((inFile = fopen(arg, "r")) != NULL);
+		//assert((buffer = malloc(sizeof(char))) != NULL);
+		
+		int newLength, newWidth, i, j;
+		assert((fscanf(inFile, "%d %d", &newLength, &newWidth)) == 2);
+		
+		assert((fscanf(inFile, "%c", &buffer)) == 1);
+		
+		for (i = 0; i < newLength; i++) {
+			assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
+			
+			for (j = 0; j < newWidth; j++) {
+				assert((fscanf(inFile, "%c", &buffer)) == 1);
+				myMap[i][j] = buffer;
+
+			}
+		}
+		fclose(inFile);
+		pSys->lSize = newLength;
+		pSys->wSize = newWidth;
+	}
 	pSys->map = myMap;
 	return pSys;
 }
