@@ -5,66 +5,14 @@
  * 
  *************************************************************/
 
-#include "TinyCurses.h"
+#include "obj_map.h"
+
 
 /******    Defines defaults for LPS and GPS structures	******/
 #define lLDefault 40
 #define wLDefault 60
 #define lGDefault 200
 #define wGDefault 250
-
-
-/*****		Positioning System struct		*****/
-struct posSys_t {
-	int lSize;
-	int wSize;
-	int **map;
-	int xPos;
-	int yPos;
-};
-
-/*********  	Landscape Obj struct	*********/
-struct landsc_t {
-	int type;
-	struct posSys *chData;
-	char class;
-	///add more stuff
-};
-
-/*********  	Stats/Status struct		*********/
-struct status_t {
-	int type;
-	char class;
-	char *effect;
-	///add more stuff
-};
-
-/*********  	Items & Objs struct		*********/
-struct item_t {
-	int type;
-	struct posSys *chData;
-	char class;
-	char *name;
-	struct status_t *status;
-	///add more stuff
-};
-
-/*********  	Player Unit struct		*********/
-struct unit_t {
-	int type;
-	struct posSys *chData;
-	char class;
-	struct item_t *inventory;
-	struct status_t *status;
-	///add more stuff
-};
-
-/*********		Map Object union		*********/
-union map_obj {
-	struct unit_t *unit;
-	struct landsc_t *landscape;
-	struct item_t *item;
-};
 
 
 void malloc_map(int length, int width, int ***map);

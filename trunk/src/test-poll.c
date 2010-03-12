@@ -22,6 +22,12 @@ nil = 0; /* Archie avoiding a warning */
 		GPS = init_map(lGDefault, wGDefault, nil);
 	LPS = init_map(lLDefault, wLDefault, lps);
 	
+	
+/*****		Initializing Map Objects		*************/
+	FILE *objFile;
+	assert((objFile = fopen("dataz/obj_data.dat", "r")) != NULL);
+	assert(init_objMap(objFile) != 0);
+	
 	LPS = fix_map(GPS, LPS);
 	int i,j;
 	initscrext(wLDefault, lLDefault, false);
@@ -66,7 +72,6 @@ nil = 0; /* Archie avoiding a warning */
 			}
 		}
 	}
-	printf("\nhi\n");
 
 	return 0;
 }
