@@ -6,7 +6,6 @@
  *************************************************************/
 
 #include "map.h"
-#include <assert.h>
 
 /*******************************************************************************
  *
@@ -85,9 +84,10 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
  *
  ******************************************************************************/
 	else {
-		FILE *inFile;
+		FILE *inFile;		///actual map char data
 		char buffer;
 		assert((inFile = fopen(arg, "r")) != NULL);
+		
 		
 		int newLength, newWidth, i, j;
 		assert((fscanf(inFile, "%d %d", &newLength, &newWidth)) == 2);
@@ -95,15 +95,12 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 		assert((fscanf(inFile, "%c", &buffer)) == 1);
 
 		
-		for (i = 0; i < newLength; i++) {
-			//assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
-			
+		for (i = 0; i < newLength; i++) {			
 			for (j = 0; j < newWidth; j++) {
 				assert((fscanf(inFile, "%c", &buffer)) == 1);
 				if (buffer == '\n')
 					assert((fscanf(inFile, "%c", &buffer)) == 1);
 				myMap[i][j] = buffer;
-
 			}
 		}
 		fclose(inFile);

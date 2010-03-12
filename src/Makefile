@@ -15,7 +15,7 @@ test: $(T_EXECUTABLE)
 	
 
 T_POLL_LDFLAGS=`sdl-config --libs` -lSDL_ttf
-T_POLL_SOURCES=TinyCurses.c test-poll.c map.c keys.c
+T_POLL_SOURCES=TinyCurses.c test-poll.c map.c keys.c obj_map.c
 T_POLL_OBJECTS=$(T_POLL_SOURCES:.c=.o)
 
 test-poll: $(T_POLL_OBJECTS)
