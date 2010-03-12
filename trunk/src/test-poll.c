@@ -25,8 +25,14 @@ nil = 0; /* Archie avoiding a warning */
 	
 /*****		Initializing Map Objects		*************/
 	FILE *objFile;
+	union map_obj *mapObjs;
+	int numObjs;
+	assert((mapObjs = malloc(sizeof(*mapObjs))) != NULL);
+	
 	assert((objFile = fopen("dataz/obj_data.dat", "r")) != NULL);
-	assert(init_objMap(objFile) != 0);
+	assert((numObjs = init_objMap(objFile, mapObjs)) != 0);
+	
+	fclose(objFile);
 	
 	LPS = fix_map(GPS, LPS);
 	int i,j;
