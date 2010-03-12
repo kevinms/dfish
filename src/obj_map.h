@@ -7,7 +7,6 @@
  *************************************************************/
 
 #include "TinyCurses.h"
-#include <assert.h>
 
 /***			Define  space stuff to be 0-19			***/
 #define OBJ_STAR		0
@@ -39,7 +38,7 @@ struct posSys_t {
 /*********  	Landscape Obj struct	*********/
 struct landsc_t {
 	int type;
-	struct posSys *chData;
+	struct posSys_t *chData;
 	char class;
 	///add more stuff
 };
@@ -55,7 +54,7 @@ struct status_t {
 /*********  	Items & Objs struct		*********/
 struct item_t {
 	int type;
-	struct posSys *chData;
+	struct posSys_t *chData;
 	char class;
 	char *name;
 	struct status_t *status;
@@ -65,7 +64,7 @@ struct item_t {
 /*********  	Player Unit struct		*********/
 struct unit_t {
 	int type;
-	struct posSys *chData;
+	struct posSys_t *chData;
 	char class;
 	struct item_t *inventory;
 	struct status_t *status;
@@ -79,5 +78,6 @@ union map_obj {
 	struct item_t *item;
 };
 
-int init_objMap (FILE *objFile, union map_obj *mapObjs);
 union map_obj *init_obj (int type, char class, struct posSys_t *loc);
+int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS);
+void add_obj (union map_obj *myObj, struct posSys_t *GPS);

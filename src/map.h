@@ -5,7 +5,7 @@
  * 
  *************************************************************/
 
-#include "obj_map.h"
+#include "TinyCurses.h"
 
 
 /******    Defines defaults for LPS and GPS structures	******/

@@ -5,8 +5,7 @@
  * 
  ********************************************************/
 
-#include "keys.h"
-#include "SDL.h"
+#include "teahf.h"
 
 int main (int argc, char *argv[]) {
 	
@@ -30,7 +29,7 @@ nil = 0; /* Archie avoiding a warning */
 	assert((mapObjs = malloc(sizeof(*mapObjs))) != NULL);
 	
 	assert((objFile = fopen("dataz/obj_data.dat", "r")) != NULL);
-	assert((numObjs = init_objMap(objFile, mapObjs)) != 0);
+	assert((numObjs = init_objMap(objFile, mapObjs, GPS)) != 0);
 	
 	fclose(objFile);
 	

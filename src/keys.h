@@ -5,7 +5,7 @@
  * 
  ***************************************************/
 
-#include "map.h"
+#include "TinyCurses.h"
 
 
 /******    Defines defaults for Map Shifting Events	******/
