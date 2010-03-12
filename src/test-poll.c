@@ -12,8 +12,7 @@ int main (int argc, char *argv[]) {
 	
 	char *lps = "lps";
 	char *nil;
-	
-	
+nil = 0; /* Archie avoiding a warning */
 	
 /********	Initializes local and global map	*********/
 	struct posSys_t *GPS, *LPS;
@@ -36,10 +35,10 @@ int main (int argc, char *argv[]) {
 	move(0,0);
 	refresh();
 
-	int keyPressed = 0;
+
 	SDL_Event test_event;
-	
-	while (keyPressed != KEY_TAB) {
+	while(1){
+
 		
 /************************************************************
  * 
@@ -55,12 +54,19 @@ int main (int argc, char *argv[]) {
 				case SDL_KEYDOWN:
 					downKeyEvent(&test_event, GPS, LPS);
 					break;
+
+/* Exits with terminal message "Reality Was Aborted" when the (x) button is 
+   clicked or the program is sent an alt + f4 signal			      */
+				case SDL_QUIT:
+					printf("Reality Was ");
+					abort();
+					break;
 				default: 
 					break;
 			}
 		}
 	}
-
+	printf("\nhi\n");
 
 	return 0;
 }
