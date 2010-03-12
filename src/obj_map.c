@@ -8,13 +8,14 @@
 #include "obj_map.h"
 
 
-int init_objMap (FILE *objFile) {
-	char name[20] = "";
+int init_objMap (FILE *objFile, union map_obj *mapObjs) {
 	int xPos, yPos;
 	int height, width;
 	int numObjs = 0;
 	char class = A_CLASS;
 	int type = OBJ_ASTEROID;
+	struct posSys_t *newSys;
+	assert((newSys = malloc(sizeof(*newSys))) != NULL);
 	
 	char temp[20];
 	char temp2[20];
@@ -32,9 +33,6 @@ int init_objMap (FILE *objFile) {
 		comp = "NUM_OBJS";
 		if (strcmp(temp, comp) == 0)
 			assert(fscanf(objFile, "%d", &numObjs) == 1);
-		comp = "NAME";
-		if (strcmp(temp, comp) == 0)
-			assert(fscanf(objFile, "%s", name) == 1);
 		
 		comp = "TYPE";
 		if (strcmp(temp, comp) == 0) {
@@ -60,7 +58,18 @@ int init_objMap (FILE *objFile) {
 		comp = "HW";
 		if (strcmp(temp, comp) == 0)
 			assert(fscanf(objFile, "%d %d", &height, &width) == 2);
-		
+		comp = ";";
+		if (strcmp(temp, comp) == 0) {
+			newSys->xPos = xPos;
+			newSys->yPos = yPos;
+			newSys->lSize = height;
+			newSys->wSize = width;
+
+			mapObjs = init_obj(type, class, newSys);
+			mapObjs++;
+			numObjs++;
+			assert((newSys = malloc(sizeof(*newSys))) != NULL);
+		}
 	}
 	
 	
@@ -69,10 +78,24 @@ int init_objMap (FILE *objFile) {
 	return 1;
 }
 
-union map_obj *init_obj (int type, char class, struct posSys_t loc) {
+union map_obj *init_obj (int type, char class, struct posSys_t *loc) {
 	union map_obj *myObj;
 	assert((myObj = malloc (sizeof(*myObj))) != NULL);
 	
+	FILE *charData;
+	assert((charData = fopen("dataz/obj_planet.dat", "r")) != 0);
+	
+	if (type == OBJ_PLANET) {
+		//designate as landsc_t in union
+		//fill in type and class
+		//read chardata
+	}
+	
+	fclose(charData);
 	
 	return (myObj);
 }
+
+
+//add function that adds objs to map//
+

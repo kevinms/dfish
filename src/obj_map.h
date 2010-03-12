@@ -79,5 +79,5 @@ union map_obj {
 	struct item_t *item;
 };
 
-int init_objMap (FILE *objFile);
-union map_obj *init_obj (int type, char class, struct posSys_t loc);
+int init_objMap (FILE *objFile, union map_obj *mapObjs);
+union map_obj *init_obj (int type, char class, struct posSys_t *loc);
