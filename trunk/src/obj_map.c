@@ -5,10 +5,45 @@
  * 
  *************************************************************/
 
-#include "obj_map.h"
+#include "teahf.h"
 
 
-int init_objMap (FILE *objFile, union map_obj *mapObjs) {
+
+union map_obj *init_obj (int type, char class, struct posSys_t *loc) {
+	union map_obj *myObj;
+	assert((myObj = malloc (sizeof(*myObj))) != NULL);
+	
+	FILE *charData;
+	assert((charData = fopen("dataz/obj_planet.dat", "r")) != 0);
+	if (type == OBJ_PLANET) {
+		assert((myObj->landscape = malloc(sizeof(struct landsc_t))) != NULL);
+		myObj->landscape->type = type;
+		myObj->landscape->class = class;
+		
+		malloc_map(loc->lSize, loc->wSize, &(loc->map));
+		
+		char temp;
+		int i,j;
+		for(i = 0; i < loc->lSize -1; i++) {
+			for(j = 0; j < loc->wSize -1; j++) {
+				assert((fscanf(charData, "%c", &temp)) == 1);
+				if (temp == '\n')
+					assert((fscanf(charData, "%c", &temp)) == 1);
+				printf("%c", temp);
+				loc->map[i][j] = temp;
+			}
+		}
+		myObj->landscape->chData = loc;
+	}
+	
+	fclose(charData);
+	
+	return (myObj);
+}
+
+
+
+int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS) {
 	int xPos, yPos;
 	int height, width;
 	int numObjs = 0;
@@ -37,18 +72,18 @@ int init_objMap (FILE *objFile, union map_obj *mapObjs) {
 		comp = "TYPE";
 		if (strcmp(temp, comp) == 0) {
 			assert(fscanf(objFile, "%s", temp2) == 1);
-			
+			printf("\n%s\n", temp2);
 			comp = "OBJ_STAR";
-			if (strcmp(temp, comp) == 0)
+			if (strcmp(temp2, comp) == 0)
 				type = OBJ_STAR;
 			comp = "OBJ_PLANET";
-			if (strcmp(temp, comp) == 0)
+			if (strcmp(temp2, comp) == 0)
 				type = OBJ_PLANET;
 			comp = "OBJ_ASTEROID";
-			if (strcmp(temp, comp) == 0)
+			if (strcmp(temp2, comp) == 0)
 				type = OBJ_ASTEROID;
 			comp = "OBJ_NEBULA";
-			if (strcmp(temp, comp) == 0)
+			if (strcmp(temp2, comp) == 0)
 				type = OBJ_NEBULA;
 		}
 		
@@ -66,6 +101,7 @@ int init_objMap (FILE *objFile, union map_obj *mapObjs) {
 			newSys->wSize = width;
 
 			mapObjs = init_obj(type, class, newSys);
+			add_obj(mapObjs, GPS);
 			mapObjs++;
 			numObjs++;
 			assert((newSys = malloc(sizeof(*newSys))) != NULL);
@@ -78,24 +114,21 @@ int init_objMap (FILE *objFile, union map_obj *mapObjs) {
 	return 1;
 }
 
-union map_obj *init_obj (int type, char class, struct posSys_t *loc) {
-	union map_obj *myObj;
-	assert((myObj = malloc (sizeof(*myObj))) != NULL);
+void add_obj (union map_obj *myObj, struct posSys_t *GPS) {
+	int i,j;
+	struct posSys_t *objLoc;
+//	if (myObj->landscape->chData != NULL)
+		objLoc = myObj->landscape->chData;
+//	if (myObj->item->chData != NULL)
+	//	objLoc = myObj->item->chData;
+	//if (myObj->unit->chData != NULL)
+	//	objLoc = myObj->unit->chData;
 	
-	FILE *charData;
-	assert((charData = fopen("dataz/obj_planet.dat", "r")) != 0);
+	for(i = 0; i < objLoc->lSize; i++) {
+			for(j = 0; j < objLoc->wSize; j++) {
+				
+				GPS->map[i + objLoc->yPos][j + objLoc->xPos] = objLoc->map[i][j];
+			}
+		}
 	
-	if (type == OBJ_PLANET) {
-		//designate as landsc_t in union
-		//fill in type and class
-		//read chardata
-	}
-	
-	fclose(charData);
-	
-	return (myObj);
 }
-
-
-//add function that adds objs to map//
-
