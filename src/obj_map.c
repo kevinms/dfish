@@ -24,13 +24,15 @@ union map_obj *init_obj (int type, char class, struct posSys_t *loc) {
 		
 		char temp;
 		int i,j;
-		for(i = 0; i < loc->lSize -1; i++) {
-			for(j = 0; j < loc->wSize -1; j++) {
+		printf("%d %d\n %d %d\n", loc->lSize, loc->wSize, loc->xPos, loc->yPos);
+		for(i = 0; i < loc->lSize; i++) {
+			for(j = 0; j < loc->wSize; j++) {
 				assert((fscanf(charData, "%c", &temp)) == 1);
 				if (temp == '\n')
 					assert((fscanf(charData, "%c", &temp)) == 1);
 				printf("%c", temp);
-				loc->map[i][j] = temp;
+				//if (temp != ' ')
+					loc->map[i][j] = temp;
 			}
 		}
 		myObj->landscape->chData = loc;
@@ -72,7 +74,6 @@ int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS) {
 		comp = "TYPE";
 		if (strcmp(temp, comp) == 0) {
 			assert(fscanf(objFile, "%s", temp2) == 1);
-			printf("\n%s\n", temp2);
 			comp = "OBJ_STAR";
 			if (strcmp(temp2, comp) == 0)
 				type = OBJ_STAR;
