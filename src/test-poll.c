@@ -30,9 +30,9 @@ nil = 0; /* Archie avoiding a warning */
 	
 	assert((objFile = fopen("dataz/obj_data.dat", "r")) != NULL);
 	assert((numObjs = init_objMap(objFile, mapObjs, GPS)) != 0);
-	
+
 	fclose(objFile);
-	
+		
 	LPS = fix_map(GPS, LPS);
 	int i,j;
 	initscrext(wLDefault, lLDefault, false);
