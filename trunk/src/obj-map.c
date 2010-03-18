@@ -9,18 +9,19 @@
 
 
 /*************************************************************
- * Adds objects to map, and creates a map_obj
+ * Adds objects to map, and creates a map_objS
  *************************************************************/
-union map_obj *init_obj (int type, char class, struct posSys_t *loc) {
-	union map_obj *myObj;
+struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
+	struct map_objS *myObj;
 	assert((myObj = malloc (sizeof(*myObj))) != NULL);
+	assert((myObj->type = malloc(sizeof(*(myObj->type)))) != NULL);
 	
 	FILE *charData;
 	assert((charData = fopen("dataz/obj_planet.dat", "r")) != 0);
 	if (type == OBJ_PLANET) {
-		assert((myObj->landscape = malloc(sizeof(struct landsc_t))) != NULL);
-		myObj->landscape->type = type;
-		myObj->landscape->class = class;
+		assert((myObj->type->landscape = malloc(sizeof(*(myObj->type->landscape)))) != NULL);
+		myObj->type->landscape->type = type;
+		myObj->type->landscape->class = class;
 		
 		malloc_map(loc->lSize, loc->wSize, &(loc->map));
 		
@@ -34,7 +35,7 @@ union map_obj *init_obj (int type, char class, struct posSys_t *loc) {
 				loc->map[i][j] = temp;
 			}
 		}
-		myObj->landscape->chData = loc;
+		myObj->type->landscape->chData = loc;
 	}
 	
 	fclose(charData);
@@ -44,7 +45,7 @@ union map_obj *init_obj (int type, char class, struct posSys_t *loc) {
 
 
 
-int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS) {
+int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) {
 	int xPos, yPos;
 	int height, width;
 	int numObjs = 0;
@@ -77,8 +78,10 @@ int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS) {
 			if (strcmp(temp2, comp) == 0)
 				type = OBJ_STAR;
 			comp = "OBJ_PLANET";
-			if (strcmp(temp2, comp) == 0)
+			if (strcmp(temp2, comp) == 0) {
+				mapObjs->archeType = ARCH_LANDSC;
 				type = OBJ_PLANET;
+			}
 			comp = "OBJ_ASTEROID";
 			if (strcmp(temp2, comp) == 0)
 				type = OBJ_ASTEROID;
@@ -99,7 +102,8 @@ int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS) {
 			newSys->yPos = yPos;
 			newSys->lSize = height;
 			newSys->wSize = width;
-
+			mapObjs->ptrGPS = GPS;
+			
 			mapObjs = init_obj(type, class, newSys);
 			add_obj(mapObjs, GPS);
 			mapObjs++;
@@ -115,11 +119,11 @@ int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS) {
 	return 1;
 }
 
-void add_obj (union map_obj *myObj, struct posSys_t *GPS) {
+void add_obj (struct map_objS *myObj, struct posSys_t *GPS) {
 	int i,j;
 	struct posSys_t *objLoc;
 //	if (myObj->landscape->chData != NULL)
-		objLoc = myObj->landscape->chData;
+		objLoc = myObj->type->landscape->chData;
 //	if (myObj->item->chData != NULL)
 	//	objLoc = myObj->item->chData;
 	//if (myObj->unit->chData != NULL)

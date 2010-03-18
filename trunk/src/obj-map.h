@@ -8,6 +8,12 @@
 
 #include "TinyCurses.h"
 
+
+/***			Define Archetypes for the structure		***/
+#define ARCH_LANDSC		100
+#define ARCH_UNIT		200
+#define ARCH_ITEM		300
+
 /***			Define  space stuff to be 0-19			***/
 #define OBJ_STAR		0
 #define OBJ_PLANET		1
@@ -16,7 +22,8 @@
 
 /***	Define different types of units to be 20-49		***/
 #define OBJ_UNIT		20
-
+#define OBJ_ENEMY		21
+#define OBJ_CREATURE	22
 
 /***	Define different types of items to be 50-99		***/
 #define OBJ_ITEM		50
@@ -24,6 +31,7 @@
 /***	Define object classes	***/
 #define A_CLASS 'A'
 #define B_CLASS 'B'
+#define C_CLASS 'C'
 
 
 /*****		Positioning System struct		*****/
@@ -33,7 +41,6 @@ struct posSys_t {
 	int **map;
 	int xPos;
 	int yPos;
-	//maybe include a ptr to GPS??//
 };
 
 /*********  	Landscape Obj struct	*********/
@@ -79,6 +86,13 @@ union map_obj {
 	struct item_t *item;
 };
 
-union map_obj *init_obj (int type, char class, struct posSys_t *loc);
-int init_objMap (FILE *objFile, union map_obj *mapObjs, struct posSys_t *GPS);
-void add_obj (union map_obj *myObj, struct posSys_t *GPS);
+struct map_objS {
+	int archeType;
+	union map_obj *type;
+	struct posSys_t *ptrGPS;
+	
+};
+
+struct map_objS *init_obj (int type, char class, struct posSys_t *loc);
+int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS);
+void add_obj (struct map_objS *myObj, struct posSys_t *GPS);

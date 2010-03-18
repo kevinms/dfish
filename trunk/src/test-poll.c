@@ -24,7 +24,7 @@ nil = 0; /* Archie avoiding a warning */
 	
 /*****		Initializing Map Objects		*************/
 	FILE *objFile;
-	union map_obj *mapObjs;
+	struct map_objS *mapObjs;
 	int numObjs;
 	assert((mapObjs = malloc(sizeof(*mapObjs))) != NULL);
 	
