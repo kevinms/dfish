@@ -2,7 +2,7 @@ MAP_DATA
 	NUM_OBJS 5
 		
 		TYPE 	OBJ_PLANET
-		XY		50 70
-		HW	10 10	;
+		XY		5 7
+		HW	10 16	;
 		
 		/escape
