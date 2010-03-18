@@ -41,10 +41,10 @@ Primitives(ideas):
 	Fighter Ship
 	Shuttle Ship
 	Luxury Ship					-MRPAL
-		-for those stinkin' nobles		-
+		-for those stinkin' nobles (add self-destr options ;D )		-
 	mining/gathering Ship				-
     [requries]						-
-		-control				-
+		-control/navigation				-
 			-cockpit			-
 			-ai				-
 		-propulsion				-
@@ -52,7 +52,7 @@ Primitives(ideas):
 [Stuff]
 	Metal Wall
 	Metal Floor
-	Weapon Mount
+	Weapon Mount -> add to it specs for power loads, etc.
 	Air Lock
 	Portal
 	Boosters
@@ -112,13 +112,15 @@ Space Station Management
 			-animals					-
 			-combustion					
 		-produces
-			-plants
+			-plants -> mostly algae and other easy to deal w/ plants
 			-mechanical? (research needed)
+				YES, CO2 filters and CO2->O2 converters
 	power
 		-running lines and stuff around the whole station may be
  		 tedius and is done in many, many other games. perhaps we
 		 could imagine wireless power, or Have it run through the
 		 walls/floors
+			Sim City power/water design??
 	food
 		-grow plants or animals on station?
 			-takes room, probably not best option
@@ -128,3 +130,5 @@ Space Station Management
 	waste								-
 		-not a fun object					-
 			-I'm in favor of not implementing it		-Mrpal
+			-could be good, use recycling tech to produce raw/reusable
+				materials, get random neat obj's from it			-Nick
