@@ -9,6 +9,13 @@ need dimensions of individual ASCII character boxes
 	
 
 
+Later on, use systems of equations and linear algebra to detect
+	intersections
+	and use calculus?? for generating (3d??) objects
+	->  what math lib to use to do integrals and deriv's?
+		and lib to do matrix calc's?
+
+
 /******************Planets**********************/
 be able to generate a new planet on command with
 	circular equations
