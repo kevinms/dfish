@@ -26,7 +26,8 @@ generates a circle with radius R
 
 height and width = 2 * R
 
-xy coord eqn == R^2 = (x-xOffset) + (y-yOffset)
+xy coord eqn == R^2 = (x-xOffset)^2 + (y-yOffset)^2
+   => y = +/- sqrt( R^2 - (x-xOffset)^2) + yOffset
 
 
 use 'o' for outer borders of planet?
