@@ -31,7 +31,8 @@ void malloc_map(int length, int width, int ***map)
  * 		from setting up GPS to LPS
  ************************************************/
 struct posSys_t *init_map (int lSize, int wSize, char *arg) {
-	char ch = 'a';
+//	char ch = 'a';
+	char ch = ' ';
 	int k = 1;
 	int i, j;
 	char *lps = "lps";
@@ -47,7 +48,7 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 		for(i = 0; i < lSize; i++) {
 			for(j = 0; j < wSize; j++) {
 				myMap[i][j] = ch;
-				if (k == 1)
+/*				if (k == 1)
 					ch++;
 				else
 					ch--;
@@ -55,13 +56,13 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 				if (ch == 'z' && k == 1)
 					k = -1;
 				if (ch == 'a' && k == -1)
-					k = 1;
-/************	every 4th line is all '#'		**************/
-				if (!(i % 6))
-					myMap[i][j] = '#';
-/************	every 4th column is all '|'		**************/
-				if (!(j % 4))
-					myMap[i][j] = '|';
+					k = 1;*/
+/************	every 5th line is all '#'		**************/
+		//		if (!(i % 5))
+		//			myMap[i][j] = '#';
+/************	every 5th column is all '|'		**************/
+		//		if (!(j % 5))
+		//			myMap[i][j] = '|';
 			}
 		}
 		pSys->lSize = lSize;
