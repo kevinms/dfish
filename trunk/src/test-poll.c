@@ -47,10 +47,11 @@ printf("width:%d\nheight:%d\n",TC_XSpace,TC_YSpace);
 	move(0,0);
 	refresh();
 
-
+	int keyPressed = -1;
 	SDL_Event test_event;
 	while(1){
 
+		fprintf(stderr,"event %d = %d\n",test_event.key.keysym.sym,KEY_TAB);
 		
 /************************************************************
  * 
@@ -77,7 +78,11 @@ printf("width:%d\nheight:%d\n",TC_XSpace,TC_YSpace);
 					break;
 			}
 		}
+		keyPressed = test_event.key.keysym.sym;
 	}
 
+	fprintf(stderr,"hi\n");
+	exit(0);
 	return 0;
+	printf("asdfasfd\n");
 }
