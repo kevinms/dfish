@@ -7,6 +7,14 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 
+/* Dfish defines */
+#define FONT_SPACE_HEIGHT 15
+#define FONT_SPACE_WIDTH  15
+#define FONT_HEIGHT 	  15
+#define FONT_WIDTH	  15
+
+
+
 /* Defining bool for C/C++ compatibility.*/
 #define bool char
 #define true 1

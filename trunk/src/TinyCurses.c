@@ -153,6 +153,10 @@ int refresh()
   Uint16 txt[2] = {'\0','\0'};
   if(TC_On==false)
     initscr();
+  /*************testing**************/
+  TC_XSpace = FONT_SPACE_WIDTH;
+  TC_YSpace = FONT_SPACE_HEIGHT;
+  /**********************************/
   r.w = TC_XSpace;
   r.h = TC_YSpace;
   for(i=0;i<TC_W;i++)for(j=0;j<TC_H;j++)for(k=0;k<7;k++)if(TC_LayersShown[k]==true)

@@ -28,7 +28,7 @@ test-poll: $(T_POLL_OBJECTS)
 # Cleanup rules
 
 clean:
-	rm -fv *.o $(EXECUTABLE)  *~
+	rm -fv *.o object-gen/*.o $(EXECUTABLE)  *~
 
 clean-test:
 	rm -fv *.o $(T_EXECUTABLE)  *~

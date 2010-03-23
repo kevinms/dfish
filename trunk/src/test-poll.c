@@ -10,8 +10,7 @@
 int main (int argc, char *argv[]) {
 	
 	char *lps = "lps";
-	char *nil;
-nil = 0; /* Archie avoiding a warning */
+	char *nil = 0;
 	
 /********	Initializes local and global map	*********/
 	struct posSys_t *GPS, *LPS;
@@ -36,7 +35,7 @@ nil = 0; /* Archie avoiding a warning */
 	LPS = fix_map(GPS, LPS);
 	int i,j;
 	initscrext(wLDefault, lLDefault, false);
-	SDL_WM_SetCaption( "Dfish", NULL );
+
 	refresh();
 	for(i = 0; i < LPS->lSize; i++) {
 		for(j = 0; j < LPS->wSize; j++){
@@ -45,7 +44,8 @@ nil = 0; /* Archie avoiding a warning */
 	}
 	move(0,0);
 	refresh();
-
+/****		Title					*****************/
+	SDL_WM_SetCaption( "Dfish", NULL );
 
 	SDL_Event test_event;
 	while(1){
