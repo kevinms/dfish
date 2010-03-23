@@ -96,9 +96,7 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 		assert((fscanf(inFile, "%c", &buffer)) == 1);
 
 		
-		for (i = 0; i < newLength; i++) {
-			//assert((*(myMap+i) = malloc(sizeof(**myMap)*wSize)) != NULL);
-			
+		for (i = 0; i < newLength; i++) {			
 			for (j = 0; j < newWidth; j++) {
 				assert((fscanf(inFile, "%c", &buffer)) == 1);
 				if (buffer == '\n')
