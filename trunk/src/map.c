@@ -57,12 +57,12 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 					k = -1;
 				if (ch == 'a' && k == -1)
 					k = 1;*/
-/************	every 5th line is all '#'		**************/
-		//		if (!(i % 5))
-		//			myMap[i][j] = '#';
+/************	every 5th line is all '-'		**************/
+				if (!(i % 5))
+					myMap[i][j] = '-';
 /************	every 5th column is all '|'		**************/
-		//		if (!(j % 5))
-		//			myMap[i][j] = '|';
+				if (!(j % 5))
+					myMap[i][j] = '|';
 			}
 		}
 		pSys->lSize = lSize;
