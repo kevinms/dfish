@@ -1,48 +1,55 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+/*************************************************************
+ * realistic-circle-gen.c
+ * 
+ * Generates a realistic circle
+ * 
+ *************************************************************/
 
-//#define ratio 1.8
 
-int main () {
-   FILE *write;
-   float ratio = 15/7;
+#include "../teahf.h"
+
+int gen_circle (struct map_objS *obj) {
+	FILE *write;
    write = fopen("out.txt", "w");
-   int i, j, k, r, outerK, x, prevK;
-   r = 20;
-   outerK = 1;
-   for (i = 1-r; i <= r; i++) {
-      k = sqrt((r * r) - (i * i)) * ratio;
-      if (i == r - 1)
-         prevK = k;
-      if (i == r) {
-         outerK = prevK * .7;
-      }
-
-      for (j = 0-r*ratio; j < r * ratio; j++) {
-		if(j < 0) {
-			if(abs(j) > k) {
-				fprintf(write," ");
+	
+	struct posSys_t *loc;
+	loc = obj->type->landscape->chData;
+	char class = obj->type->landscape->class;
+	int i, j, k, r;
+	
+	if (class == A_CLASS)
+		r = 6;
+	if (class == B_CLASS)
+		r = 12;
+	if (class == C_CLASS)
+		r = 18;
+	
+	loc->lSize = 2 * r;
+	loc->wSize = loc->lSize * ratio - 1;
+	malloc_map(loc->lSize, loc->wSize, &(loc->map));
+	
+	for (i = 0; i < r * 2; i++) {
+		k = sqrt((r * r) - ((i-r) * (i-r))) * ratio;
+		
+		for (j = 0; j < r * ratio * 2; j++) {
+			if(j < 0 + r * ratio) {
+				if(j < (r*ratio) - k) {
+					loc->map[i][j] = ' ';
+				}
+				else {
+					loc->map[i][j] = '@';
+				}
 			}
-			else
-				fprintf(write,"@");
+			else if(j >= r*ratio) {
+				if (j < k + r*ratio) {
+					loc->map[i][j] = '@';
+				}
+				else {
+					loc->map[i][j] = ' ';
+				}
+			}
 		}
-		else if(j >= 0) {
-         if (abs(j) < k) {
-            fprintf(write, "@");
-         }
-         else if (k == 0) {
-            for (x = 0; x < outerK; x++) {
-               fprintf(write, "0");
-            }
-            k--;
-         }
-         else {
-            fprintf(write, " ");
-         }
-		}
-      }
-      fprintf(write, "\n");
-   }
-   return 0;
+	}
+	obj->type->landscape->chData = loc;
+	return 0;
 }

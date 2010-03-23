@@ -2,11 +2,12 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define ratio 15/7
+
 int main () {
 	FILE *write;
 	int i, j, k, r;
 
-	float ratio = 15/7;
 	r = 20;
 
 	write = fopen("out.txt", "w");

@@ -19,7 +19,7 @@ void malloc_map(int length, int width, int ***map)
 {
 	assert(((*map) = (int**)malloc (sizeof(**map)*length)) != NULL);
 	int i;
-	for (i = 0; i < width; i++)
+	for (i = 0; i < length; i++)
 		assert(((*map)[i] = malloc (sizeof(***map) * width)) != NULL);
 	
 }

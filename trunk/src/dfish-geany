@@ -14,14 +14,15 @@ description=
 run_cmd=
 
 [files]
-current_page=8
+current_page=3
 FILE_NAME_0=719;C;0;16;1;1;0;/home/nicholas/dfish/src/test-poll.c;0
 FILE_NAME_1=0;C;0;16;1;1;0;/home/nicholas/dfish/src/keys.c;0
 FILE_NAME_2=197;C;0;16;1;1;0;/home/nicholas/dfish/src/keys.h;0
-FILE_NAME_3=89;C;0;16;1;1;0;/home/nicholas/dfish/src/teahf.h;0
+FILE_NAME_3=166;C;0;16;1;1;0;/home/nicholas/dfish/src/teahf.h;0
 FILE_NAME_4=719;C;0;16;1;1;0;/home/nicholas/dfish/src/obj-map.c;0
 FILE_NAME_5=0;C;0;16;1;1;0;/home/nicholas/dfish/src/obj-map.h;0
 FILE_NAME_6=0;None;0;16;1;1;0;/home/nicholas/dfish/src/dataz/obj_planet.dat;0
-FILE_NAME_7=52;None;0;16;1;1;0;/home/nicholas/dfish/src/dataz/obj_data.dat;0
-FILE_NAME_8=454;None;0;16;1;1;0;/home/nicholas/dfish/doc/doc-generation;0
-FILE_NAME_9=120;Make;0;16;1;1;0;/home/nicholas/dfish/src/Makefile;0
+FILE_NAME_7=68;None;0;16;1;1;0;/home/nicholas/dfish/src/dataz/obj_data.dat;0
+FILE_NAME_8=508;Make;0;16;1;1;0;/home/nicholas/dfish/src/Makefile;0
+FILE_NAME_9=954;C;0;16;1;1;0;/home/nicholas/dfish/src/TinyCurses.c;0
+FILE_NAME_10=3408;C;0;16;1;1;0;/home/nicholas/dfish/src/TinyCurses.h;0
