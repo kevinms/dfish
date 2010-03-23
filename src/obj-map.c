@@ -22,20 +22,10 @@ struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 		assert((myObj->type->landscape = malloc(sizeof(*(myObj->type->landscape)))) != NULL);
 		myObj->type->landscape->type = type;
 		myObj->type->landscape->class = class;
-		
-		malloc_map(loc->lSize, loc->wSize, &(loc->map));
-		
-		char temp;
-		int i,j;
-		for(i = 0; i < loc->lSize; i++) {
-			for(j = 0; j < loc->wSize; j++) {
-				assert((fscanf(charData, "%c", &temp)) == 1);
-				if (temp == '\n')
-					assert((fscanf(charData, "%c", &temp)) == 1);
-				loc->map[i][j] = temp;
-			}
-		}
 		myObj->type->landscape->chData = loc;
+		
+		gen_circle(myObj);
+		
 	}
 	
 	fclose(charData);
@@ -129,12 +119,12 @@ void add_obj (struct map_objS *myObj, struct posSys_t *GPS) {
 	//if (myObj->unit->chData != NULL)
 	//	objLoc = myObj->unit->chData;
 	
+	
+	
 	for(i = 0; i < objLoc->lSize; i++) {
 		for(j = 0; j < objLoc->wSize; j++) {
 			if (objLoc->map[i][j] != ' ')
 				GPS->map[i + objLoc->yPos][j + objLoc->xPos] = objLoc->map[i][j];
 		}
-		
 	}
-	
 }
