@@ -43,7 +43,6 @@ nil = 0; /* Archie avoiding a warning */
 			printw("%c", LPS->map[i][j]);
 		}
 	}
-printf("width:%d\nheight:%d\n",TC_XSpace,TC_YSpace);
 	move(0,0);
 	refresh();
 
