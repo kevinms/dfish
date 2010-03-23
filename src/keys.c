@@ -38,13 +38,10 @@ void downKeyEvent	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS)
 	LPS = fix_map(GPS, LPS);
 	display_map(GPS, LPS);
 	
-/*	Exits with message "Reality Was Aborted" when tab or esc is pressed   */
-	if (keyPressed.sym == KEY_TAB || keyPressed.sym == KEY_ESCAPE) {
-		printf("Reality Was ");
-		abort();
-
-
-
+//////NOTE: Exits only after tab and 1 other key is pressed//////
+	if (keyPressed.sym == KEY_TAB) {
+		SDL_Quit();
+		exit(0);
 	}
 	if (keyPressed.sym == SDLK_w) {
 		char *fName = "map.txt";
