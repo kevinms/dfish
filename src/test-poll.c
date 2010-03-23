@@ -36,13 +36,14 @@ nil = 0; /* Archie avoiding a warning */
 	LPS = fix_map(GPS, LPS);
 	int i,j;
 	initscrext(wLDefault, lLDefault, false);
+	SDL_WM_SetCaption( "Dfish", NULL );
 	refresh();
 	for(i = 0; i < LPS->lSize; i++) {
 		for(j = 0; j < LPS->wSize; j++){
 			printw("%c", LPS->map[i][j]);
 		}
 	}
-	
+printf("width:%d\nheight:%d\n",TC_XSpace,TC_YSpace);
 	move(0,0);
 	refresh();
 
