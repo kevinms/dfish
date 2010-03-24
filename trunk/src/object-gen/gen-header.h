@@ -7,6 +7,6 @@
 
 #include "../TinyCurses.h"
 
-#define ratio 15/7
+#define ratio 1
 
 int gen_circle (struct map_objS *obj);

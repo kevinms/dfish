@@ -33,7 +33,7 @@ void malloc_map(int length, int width, int ***map)
 struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 //	char ch = 'a';
 	char ch = ' ';
-	int k = 1;
+//	int k = 1;
 	int i, j;
 	char *lps = "lps";
 	struct posSys_t *pSys;
