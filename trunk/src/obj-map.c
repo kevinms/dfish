@@ -9,6 +9,20 @@
 
 
 /*************************************************************
+ * Searches a list of names in an array and returns 
+ * 		the index of the name matching the token
+ *************************************************************/
+int getndx (char *arr[], char *token) {
+	int i = 0;
+	int count = 0;
+	while ((strcasecmp(token, arr[i]) != 0) && (count == 0)) {
+			i++;
+	}
+	return (i);
+}
+
+
+/*************************************************************
  * Adds objects to map, and creates a map_objS
  *************************************************************/
 struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
@@ -49,6 +63,10 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 	char *comp = "MAP_DATA";
 	char *escape = "/escape";
 	
+	//Beware, getndx will segfault if char * not recognized
+	//					0			1		2		3	4	5	6
+	char *nameArr[] = {"NUM_OBJS", "TYPE", "XY", "HW", ";", "/escape", NULL};
+	
 	
 	assert(fscanf(objFile, "%s", temp) == 1);
 	if (strcmp(comp, temp) != 0)
@@ -58,6 +76,8 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 		assert(fscanf(objFile, "%s", temp) == 1);
 		
 		comp = "NUM_OBJS";
+		if (temp != NULL)
+
 		if (strcmp(temp, comp) == 0)
 			assert(fscanf(objFile, "%d", &numObjs) == 1);
 		
