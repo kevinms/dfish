@@ -93,6 +93,15 @@ struct map_objS {
 	
 };
 
+struct system_t {
+	struct map_objS *sysObjs;
+	int numObjs;
+	struct posSys_t *sysData;
+	struct posSys_t *ptrGPS;
+	
+};
+
+int getndx (char *arr[], char *token);
 struct map_objS *init_obj (int type, char class, struct posSys_t *loc);
 int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS);
 void add_obj (struct map_objS *myObj, struct posSys_t *GPS);
