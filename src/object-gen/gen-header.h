@@ -9,4 +9,5 @@
 
 #define ratio 1
 
-int gen_circle (struct map_objS *obj);
+int gen_planet (struct map_objS *obj);
+int gen_star (struct map_objS *obj);

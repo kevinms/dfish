@@ -30,19 +30,24 @@ struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 	assert((myObj = malloc (sizeof(*myObj))) != NULL);
 	assert((myObj->type = malloc(sizeof(*(myObj->type)))) != NULL);
 	
-	FILE *charData;
-	assert((charData = fopen("dataz/obj_planet.dat", "r")) != 0);
-	if (type == OBJ_PLANET) {
-		assert((myObj->type->landscape = malloc(sizeof(*(myObj->type->landscape)))) != NULL);
-		myObj->type->landscape->type = type;
-		myObj->type->landscape->class = class;
-		myObj->type->landscape->chData = loc;
-		
-		gen_circle(myObj);
-		
+	switch (type) {
+		case OBJ_PLANET:
+			assert((myObj->type->landscape = malloc(sizeof(*(myObj->type->landscape)))) != NULL);
+			myObj->type->landscape->type = type;
+			myObj->type->landscape->class = class;
+			myObj->type->landscape->chData = loc;
+			
+			gen_planet(myObj);
+			break;
+		case OBJ_STAR:
+			assert((myObj->type->landscape = malloc(sizeof(*(myObj->type->landscape)))) != NULL);
+			myObj->type->landscape->type = type;
+			myObj->type->landscape->class = class;
+			myObj->type->landscape->chData = loc;
+			
+			gen_star(myObj);
+			break;
 	}
-	
-	fclose(charData);
 	
 	return (myObj);
 }
@@ -78,10 +83,10 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 		ndx = getndx(nameArr, temp);
 		switch (ndx) {
 		
-			case 0:
+			case 0:		/**		NUM_OBJS	**/
 				assert(fscanf(objFile, "%d", &numObjs) == 1);
 				break;
-			case 1:
+			case 1:		/**		Type		**/
 				assert(fscanf(objFile, "%s", temp2) == 1);
 				comp = "OBJ_STAR";
 				if (strcmp(temp2, comp) == 0)
@@ -98,13 +103,13 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 				if (strcmp(temp2, comp) == 0)
 					type = OBJ_NEBULA;
 				break;
-			case 2:
+			case 2:		/**		XY			**/
 				assert(fscanf(objFile, "%d %d", &xPos, &yPos) == 2);
 				break;
-			case 3:
+			case 3:		/**		HW			**/
 				assert(fscanf(objFile, "%d %d", &height, &width) == 2);
 				break;
-			case 4:
+			case 4:		/**			;		**/
 				newSys->xPos = xPos;
 				newSys->yPos = yPos;
 				newSys->lSize = height;
