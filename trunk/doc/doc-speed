@@ -1,0 +1,13 @@
+
+SPEED
+
+
+
+-------------------------------------------------------------------
+Square font
+-------------------------------------------------------------------
+-every time the screen is refreshed, we expand the image to make each character
+ squarish
+
+-instead we can remove this code and just implement a new .ttf file (true type 
+ font) that is already expanded
