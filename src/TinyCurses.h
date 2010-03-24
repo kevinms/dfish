@@ -13,6 +13,10 @@
 #define FONT_HEIGHT 	  15
 #define FONT_WIDTH	  15
 
+/* Dfish functions */
+SDL_Surface *DoubleWide(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
+Uint32 getpixel(SDL_Surface *surface, int x, int y);
+void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
 
 /* Defining bool for C/C++ compatibility.*/

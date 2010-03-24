@@ -27,12 +27,12 @@ void upKeyEvent 	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) 
 void downKeyEvent	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) {
 
 	SDL_keysym keyPressed = event->key.keysym;
-	int myNum = 1;
+	int myNum = 5;
 	
 /****		Detects presence of Shift keys		****/
 	if ((keyPressed.mod & KMOD_RSHIFT)
 		|| (keyPressed.mod & KMOD_LSHIFT))
-			myNum = 5;
+			myNum = 10;
 
 	LPS = move_map(keyPressed.sym, GPS, LPS, myNum);
 	LPS = fix_map(GPS, LPS);

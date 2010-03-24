@@ -9,8 +9,8 @@
 
 
 /******    Defines defaults for LPS and GPS structures	******/
-#define lLDefault 40
-#define wLDefault 60
+#define lLDefault 41
+#define wLDefault 61
 #define lGDefault 200
 #define wGDefault 250
 
