@@ -5,4 +5,7 @@ MAP_DATA
 		XY		5 7
 		HW	10 16	;
 		
+		TYPE 	OBJ_STAR
+		XY		20 20
+		HW	10 16	;
 		/escape
