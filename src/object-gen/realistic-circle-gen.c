@@ -33,7 +33,9 @@ int gen_circle (struct map_objS *obj) {
 		
 		for (j = 0; j < r * ratio * 2; j++) {
 			if(j < 0 + r * ratio) {
-				if(j < (r*ratio) - k) {
+				if(i == r && j == 0)
+					loc->map[i][j] = ' ';
+				else if(j < (r*ratio) - k) {
 					loc->map[i][j] = ' ';
 				}
 				else {
@@ -41,7 +43,10 @@ int gen_circle (struct map_objS *obj) {
 				}
 			}
 			else if(j >= r*ratio) {
-				if (j < k + r*ratio) {
+				if (i == r && j == r * 2 - 1)
+					loc->map[i][j] = ' ';
+				else if (j < k + r*ratio) {
+				
 					loc->map[i][j] = '@';
 				}
 				else {

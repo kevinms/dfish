@@ -567,10 +567,13 @@ int initscrext(int w,int h,bool real)
   TC_Font = TTF_OpenFont(TC_FontName,TC_FontSize);
   TTF_GlyphMetrics(TC_Font,'@',&x,&x,&x,&x,&TC_XSpace);
   TC_YSpace = TTF_FontLineSkip(TC_Font)+1;
-  if(real){
-print("width: %d\nheight: %d\n", w, h);
+  /*************testing**************/
+  TC_XSpace = FONT_SPACE_WIDTH;
+  TC_YSpace = FONT_SPACE_HEIGHT;
+  /**********************************/
+  if(real)
       TC_Screen = SDL_SetVideoMode(w,h,32,SDL_SWSURFACE);
- } else
+  else
       TC_Screen = SDL_SetVideoMode(w*TC_XSpace,h*TC_YSpace,32,SDL_SWSURFACE);
   if(TC_Screen==NULL)
     TC_Screen = SDL_SetVideoMode(640,480,32,SDL_SWSURFACE);

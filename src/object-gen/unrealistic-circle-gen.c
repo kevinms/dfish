@@ -2,13 +2,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define ratio 15/7
+#define ratio 1
 
 int main () {
 	FILE *write;
 	int i, j, k, r;
 
-	r = 20;
+	r = 18;
 
 	write = fopen("out.txt", "w");
 
@@ -17,18 +17,22 @@ int main () {
 
 		for (j = 0-r*ratio; j < r*ratio; j++) {
 			if(j < 0) {
-				if(abs(j) > k)
+				if(abs(i) == 0 && abs(j) == r)
+fprintf(write,"$");
+				else if(abs(j) > k)
 					fprintf(write," ");
 				else if(abs(j) == k)
-					fprintf(write,"0");
+					fprintf(write,"@");
 				else
 					fprintf(write,"@");
 			}
 			else if(j > 0) {
+				if(abs(i) == 0 && abs (j) ==r)
+fprintf(write,"$");
 				if (j < k)
 					fprintf(write, "@");
 				else if (j == k)
-					fprintf(write, "0");
+					fprintf(write, "@");
 				else
 					fprintf(write, " ");
 			}
