@@ -66,7 +66,7 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 	//Beware, getndx will segfault if char * not recognized
 	//					0			1		2		3	4	5	6
 	char *nameArr[] = {"NUM_OBJS", "TYPE", "XY", "HW", ";", "/escape", NULL};
-	
+	int ndx;
 	
 	assert(fscanf(objFile, "%s", temp) == 1);
 	if (strcmp(comp, temp) != 0)
@@ -75,54 +75,51 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 	while (strcmp(escape, temp) != 0) {
 		assert(fscanf(objFile, "%s", temp) == 1);
 		
-		comp = "NUM_OBJS";
-		if (temp != NULL)
-
-		if (strcmp(temp, comp) == 0)
-			assert(fscanf(objFile, "%d", &numObjs) == 1);
+		ndx = getndx(nameArr, temp);
+		switch (ndx) {
 		
-		comp = "TYPE";
-		if (strcmp(temp, comp) == 0) {
-			assert(fscanf(objFile, "%s", temp2) == 1);
-			comp = "OBJ_STAR";
-			if (strcmp(temp2, comp) == 0)
-				type = OBJ_STAR;
-			comp = "OBJ_PLANET";
-			if (strcmp(temp2, comp) == 0) {
-				mapObjs->archeType = ARCH_LANDSC;
-				type = OBJ_PLANET;
-			}
-			comp = "OBJ_ASTEROID";
-			if (strcmp(temp2, comp) == 0)
-				type = OBJ_ASTEROID;
-			comp = "OBJ_NEBULA";
-			if (strcmp(temp2, comp) == 0)
-				type = OBJ_NEBULA;
-		}
-		
-		comp = "XY";
-		if (strcmp(temp, comp) == 0)
-			assert(fscanf(objFile, "%d %d", &xPos, &yPos) == 2);
-		comp = "HW";
-		if (strcmp(temp, comp) == 0)
-			assert(fscanf(objFile, "%d %d", &height, &width) == 2);
-		comp = ";";
-		if (strcmp(temp, comp) == 0) {
-			newSys->xPos = xPos;
-			newSys->yPos = yPos;
-			newSys->lSize = height;
-			newSys->wSize = width;
-			mapObjs->ptrGPS = GPS;
-			
-			mapObjs = init_obj(type, class, newSys);
-			add_obj(mapObjs, GPS);
-			mapObjs++;
-			numObjs++;
-			newSys++;
-			assert((newSys = malloc(sizeof(*newSys))) != NULL);
+			case 0:
+				assert(fscanf(objFile, "%d", &numObjs) == 1);
+				break;
+			case 1:
+				assert(fscanf(objFile, "%s", temp2) == 1);
+				comp = "OBJ_STAR";
+				if (strcmp(temp2, comp) == 0)
+					type = OBJ_STAR;
+				comp = "OBJ_PLANET";
+				if (strcmp(temp2, comp) == 0) {
+					mapObjs->archeType = ARCH_LANDSC;
+					type = OBJ_PLANET;
+				}
+				comp = "OBJ_ASTEROID";
+				if (strcmp(temp2, comp) == 0)
+					type = OBJ_ASTEROID;
+				comp = "OBJ_NEBULA";
+				if (strcmp(temp2, comp) == 0)
+					type = OBJ_NEBULA;
+				break;
+			case 2:
+				assert(fscanf(objFile, "%d %d", &xPos, &yPos) == 2);
+				break;
+			case 3:
+				assert(fscanf(objFile, "%d %d", &height, &width) == 2);
+				break;
+			case 4:
+				newSys->xPos = xPos;
+				newSys->yPos = yPos;
+				newSys->lSize = height;
+				newSys->wSize = width;
+				mapObjs->ptrGPS = GPS;
+				
+				mapObjs = init_obj(type, class, newSys);
+				add_obj(mapObjs, GPS);
+				mapObjs++;
+				numObjs++;
+				newSys++;
+				assert((newSys = malloc(sizeof(*newSys))) != NULL);
+				break;
 		}
 	}
-	
 	
 	
 	
