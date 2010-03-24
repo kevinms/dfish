@@ -25,7 +25,7 @@ int gen_circle (struct map_objS *obj) {
 		r = 18;
 	
 	loc->lSize = 2 * r;
-	loc->wSize = loc->lSize * ratio - 1;
+	loc->wSize = loc->lSize /* ratio - 1*/; 
 	malloc_map(loc->lSize, loc->wSize, &(loc->map));
 	
 	for (i = 0; i < r * 2; i++) {

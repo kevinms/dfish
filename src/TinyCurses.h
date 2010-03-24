@@ -8,8 +8,8 @@
 #include "SDL_ttf.h"
 
 /* Dfish defines */
-#define FONT_SPACE_HEIGHT 15
-#define FONT_SPACE_WIDTH  15
+#define FONT_SPACE_HEIGHT 14
+#define FONT_SPACE_WIDTH  14
 #define FONT_HEIGHT 	  15
 #define FONT_WIDTH	  15
 
