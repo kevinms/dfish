@@ -7,7 +7,6 @@
 
 #include "teahf.h"
 
-
 /*************************************************************
  * Searches a list of names in an array and returns 
  * 		the index of the name matching the token
@@ -21,7 +20,6 @@ int getndx (char *arr[], char *token) {
 	return (i);
 }
 
-
 /*************************************************************
  * Adds objects to map, and creates a map_objS
  *************************************************************/
@@ -29,7 +27,7 @@ struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 	struct map_objS *myObj;
 	assert((myObj = malloc (sizeof(*myObj))) != NULL);
 	assert((myObj->type = malloc(sizeof(*(myObj->type)))) != NULL);
-	
+
 	switch (type) {
 		case OBJ_PLANET:
 			assert((myObj->type->landscape = malloc(sizeof(*(myObj->type->landscape)))) != NULL);
@@ -48,11 +46,9 @@ struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 			gen_star(myObj);
 			break;
 	}
-	
+
 	return (myObj);
 }
-
-
 
 int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) {
 	int xPos, yPos;
@@ -69,24 +65,24 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 	char *escape = "/escape";
 	
 	//Beware, getndx will segfault if char * not recognized
-	//					0			1		2		3	4	5	6
+	//                      0         1      2     3    4       5       6
 	char *nameArr[] = {"NUM_OBJS", "TYPE", "XY", "HW", ";", "/escape", NULL};
 	int ndx;
-	
+
 	assert(fscanf(objFile, "%s", temp) == 1);
 	if (strcmp(comp, temp) != 0)
 		return 0;
-	
+
 	while (strcmp(escape, temp) != 0) {
 		assert(fscanf(objFile, "%s", temp) == 1);
-		
+
 		ndx = getndx(nameArr, temp);
 		switch (ndx) {
-		
-			case 0:		/**		NUM_OBJS	**/
+
+			case 0: /* NUM_OBJS */
 				assert(fscanf(objFile, "%d", &numObjs) == 1);
 				break;
-			case 1:		/**		Type		**/
+			case 1: /* Type */
 				assert(fscanf(objFile, "%s", temp2) == 1);
 				comp = "OBJ_STAR";
 				if (strcmp(temp2, comp) == 0)
@@ -103,13 +99,13 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 				if (strcmp(temp2, comp) == 0)
 					type = OBJ_NEBULA;
 				break;
-			case 2:		/**		XY			**/
+			case 2: /* XY */
 				assert(fscanf(objFile, "%d %d", &xPos, &yPos) == 2);
 				break;
-			case 3:		/**		HW			**/
+			case 3: /* HW */
 				assert(fscanf(objFile, "%d %d", &height, &width) == 2);
 				break;
-			case 4:		/**			;		**/
+			case 4: /* ; */
 				newSys->xPos = xPos;
 				newSys->yPos = yPos;
 				newSys->lSize = height;
@@ -125,24 +121,25 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 				break;
 		}
 	}
-	
-	
-	
+
 	return 1;
 }
 
 void add_obj (struct map_objS *myObj, struct posSys_t *GPS) {
 	int i,j;
 	struct posSys_t *objLoc;
-//	if (myObj->landscape->chData != NULL)
+
+	objLoc = myObj->type->landscape->chData;
+
+/*
+	if (myObj->landscape->chData != NULL)
 		objLoc = myObj->type->landscape->chData;
-//	if (myObj->item->chData != NULL)
-	//	objLoc = myObj->item->chData;
-	//if (myObj->unit->chData != NULL)
-	//	objLoc = myObj->unit->chData;
-	
-	
-	
+	if (myObj->item->chData != NULL)
+		objLoc = myObj->item->chData;
+	if (myObj->unit->chData != NULL)
+		objLoc = myObj->unit->chData;
+*/
+
 	for(i = 0; i < objLoc->lSize; i++) {
 		for(j = 0; j < objLoc->wSize; j++) {
 			if (objLoc->map[i][j] != ' ')

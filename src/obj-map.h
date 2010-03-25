@@ -10,7 +10,6 @@
 
 #include "TinyCurses.h"
 
-
 /* Define Archetypes for the structure */
 #define ARCH_LANDSC		100
 #define ARCH_UNIT		200

@@ -1026,10 +1026,10 @@ Uint32 getpixel(SDL_Surface *surface, int x, int y)
  * gets pixel info
  * 
  * accepts 
- * 	
+ * 
  * 
  * returns
- * 	
+ * 
  ************************************************************************/
 
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)

@@ -1,0 +1,59 @@
+
+--------------------------------------------------------------------------------
+DFISH - The Game
+--------------------------------------------------------------------------------
+
+Each player starts around a planet
+You can build and customize a starbase
+	be a fort and a shipyard all in one
+
+Planet has research, resource gathering, econ??, and gov't??
+
+~Research has 3~4 main categories: armor, weapons, support stuff, and engines
+	research discoveries are dependent on your currently available resources
+		(what scientists have to tinker with...)
+	
+	
+Production of ships should be limited to a handful of ships per player
+	Use rarity of resources to manage the number of ships produced and the types
+	Cooler ships should be dependent on even rarer resources
+	allow different tech trees to be based around different config's of resources
+		ship/tech development should be dependent on the resources available
+		The ADAPTABLE player should be the one that wins the game
+			the one that can use the hand of resources dealt to him and make the best stuff
+	
+Purpose of ship combat is to have a zoomed-in view so that the player can see
+	the coolness of the ships he and the other players have designed
+The ships are going to be BIG
+
+
+--------------------------------------------------------------------------------
+DFISH - Protocol
+--------------------------------------------------------------------------------
+
+100 - 350 Bytes per eth frame
+
+/* When client connects to server */
+8  B - Planet position
+16 B - Planet texture
+
+/* Each time there is a client update */
+32 B - Opponent ship positions (3)
+   B - Weapon Fire (lasers, missiles, etc)
+   B - Debris
+   B - Ship movement vectors
+
+/* Should be sent only when needed */
+   B - Current opponent ship blueprints (that includes damaged parts etc)
+   B - Damage updates (specific items like lasers)
+
+--------------------------------------------------------------------------------
+Blueprints - aka bloopdeblah
+--------------------------------------------------------------------------------
+
+Can save any object that you create (individual weapons, ships, bases, anything)
+
+All ship parts
+All ship attributes (mass, #weapons, power, speed, #crew)
+Damage to parts
+
