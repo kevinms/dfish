@@ -11,12 +11,11 @@
 #include "TinyCurses.h"
 
 
-/******    Defines defaults for LPS and GPS structures	******/
+/* Defines defaults for LPS and GPS structures */
 #define lLDefault 41
 #define wLDefault 61
 #define lGDefault 200
 #define wGDefault 250
-
 
 void malloc_map(int length, int width, int ***map);
 struct posSys_t *init_map (int lSize, int wSize, char *arg);
