@@ -7,8 +7,8 @@ OBJECTS=$(SOURCES:.c=.o)
 
 all: $(EXECUTABLE)
 	
-# build tests
 
+# build tests
 T_EXECUTABLE=test-poll
 
 test: $(T_EXECUTABLE)
@@ -26,7 +26,6 @@ test-poll: $(T_POLL_OBJECTS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # Cleanup rules
-
 clean:
 	rm -fv *.o object-gen/*.o $(EXECUTABLE)  *~
 
