@@ -89,15 +89,24 @@ int gen_star (struct map_objS *obj) {
 	loc->wSize = loc->lSize /* ratio - 1*/; 
 	malloc_map(loc->lSize, loc->wSize, &(loc->map));
 	
+	
+	float fi, fj, fr;
+	
+	
 	for (i = 0; i < r * 2; i++) {
 		k = sqrt((r * r) - ((i-r) * (i-r))) * ratio;
-		if ((shell_r > (i - r)) && (i > 1))
+		if ((i >= r - shell_r) && (i <= r * 2 - (r - shell_r)))
 			shell = sqrt((shell_r * shell_r) - ((i-r) * (i-r))) * ratio;
 		else
 			shell = 0;
-		printf("%d\n", shell);
 		
 		for (j = 0; j < r * ratio * 2; j++) {
+			
+			fi = i;
+			fj = j;
+			fr = r;
+			double myatan = atan((fi-fr)/(fj-fr));
+			
 			if(j < r * ratio) {
 				if(i == r && j == 0)
 					loc->map[i][j] = ' ';
@@ -105,10 +114,22 @@ int gen_star (struct map_objS *obj) {
 					loc->map[i][j] = ' ';
 				}
 				else {
-					if (j > r * ratio - shell)
+					if (j > r * ratio - shell -1 )
 						loc->map[i][j] = '@';
 					else {
-						loc->map[i][j] = '-';
+						if (myatan > (PI / 10))
+							if (myatan > (PI / 2.75))
+								loc->map[i][j] = '|';
+							else
+								loc->map[i][j] = '\\';
+						else if (fabs(myatan) > (PI / 10))
+							if (fabs(myatan) > (PI / 2.75))
+								loc->map[i][j] = '|';
+							else
+								loc->map[i][j] = '/';
+						else
+							loc->map[i][j] = '~';
+loc->map[i][j] = '*';
 					}
 				}
 			}
@@ -119,7 +140,19 @@ int gen_star (struct map_objS *obj) {
 					if (j < (r * ratio + shell))
 						loc->map[i][j] = '@';
 					else {
-						loc->map[i][j] = '-';
+						if (myatan > (PI / 10))
+							if (myatan > (PI / 2.75))
+								loc->map[i][j] = '|';
+							else
+								loc->map[i][j] = '\\';
+						else if (fabs(myatan) > (PI / 10))
+							if (fabs(myatan) > (PI / 2.75))
+								loc->map[i][j] = '|';
+							else
+								loc->map[i][j] = '/';
+						else
+							loc->map[i][j] = '~';
+loc->map[i][j] = '*';
 					}
 				}
 				else {
