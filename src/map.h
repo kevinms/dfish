@@ -5,6 +5,9 @@
  * 
  *************************************************************/
 
+#ifndef MAP_H_
+#define MAP_H_
+
 #include "TinyCurses.h"
 
 
@@ -21,3 +24,5 @@ struct posSys_t *fix_map (struct posSys_t *GPS, struct posSys_t *LPS);
 struct posSys_t *move_map (int keyPressed, struct posSys_t *GPS, struct posSys_t *LPS, int num);
 void display_map (struct posSys_t *GPS, struct posSys_t *LPS);
 void write_map (char *fName, struct posSys_t *GPS);
+
+#endif /* !MAP_H_ */
