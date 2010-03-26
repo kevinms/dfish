@@ -28,6 +28,9 @@ int gen_planet (struct map_objS *obj) {
 	if (class == C_CLASS)
 		r = 18;
 	
+	
+	
+	
 	loc->lSize = 2 * r;
 	loc->wSize = loc->lSize /* ratio - 1*/; 
 	malloc_map(loc->lSize, loc->wSize, &(loc->map));
@@ -162,5 +165,20 @@ loc->map[i][j] = '*';
 		}
 	}
 	obj->type->landscape->chData = loc;
+	return 0;
+}
+
+
+int hit_check (struct posSys_t *chData, struct posSys_t *GPS) {
+	int i,j;
+	
+	for (i = 0; i < chData->lSize; i++) {
+		for (j = 0; j < chData->wSize; j++) {
+			if (((GPS->map[i+chData->yPos][j+chData->xPos] == '@')
+					|| (GPS->map[i+chData->yPos][j+chData->xPos] == '*'))
+				&& (chData->map[i][j] != ' '))
+				return -1;
+		}
+	}
 	return 0;
 }

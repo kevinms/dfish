@@ -61,34 +61,7 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 		pSys->lSize = lSize;
 		pSys->wSize = wSize;
 	}
-
-/*******************************************************************************
- *
- * 	Hey can we get the read map in a separate function?
- *
- ******************************************************************************/
-	else {
-		FILE *inFile;		///actual map char data
-		char buffer;
-		assert((inFile = fopen(arg, "r")) != NULL);
-
-		int newLength, newWidth, i, j;
-		assert((fscanf(inFile, "%d %d", &newLength, &newWidth)) == 2);
-		
-		assert((fscanf(inFile, "%c", &buffer)) == 1);
-
-		for (i = 0; i < newLength; i++) {			
-			for (j = 0; j < newWidth; j++) {
-				assert((fscanf(inFile, "%c", &buffer)) == 1);
-				if (buffer == '\n')
-					assert((fscanf(inFile, "%c", &buffer)) == 1);
-				myMap[i][j] = buffer;
-			}
-		}
-		fclose(inFile);
-		pSys->lSize = newLength;
-		pSys->wSize = newWidth;
-	}
+	
 	pSys->map = myMap;
 	return pSys;
 }

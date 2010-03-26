@@ -10,14 +10,10 @@
 int main (int argc, char *argv[]) {
 	
 	char *lps = "lps";
-	char *nil = 0;
 	
 	/* Initializes local and global map */
 	struct posSys_t *GPS, *LPS;
-	if (argc > 5)
-		GPS = init_map(lGDefault, wGDefault, argv[1]);
-	else
-		GPS = init_map(lGDefault, wGDefault, nil);
+	GPS = init_map(lGDefault, wGDefault, argv[1]);
 	LPS = init_map(lLDefault, wLDefault, lps);
 
 
@@ -28,8 +24,9 @@ int main (int argc, char *argv[]) {
 	assert((solSys->sysObjs = malloc(sizeof(*(solSys->sysObjs)))) != NULL);
 	
 	assert((objFile = fopen("dataz/obj_data.dat", "r")) != NULL);
-	assert((solSys->numObjs = init_objMap(objFile, GPS, solSys)) != 0);
-
+	init_objMap(objFile, GPS, solSys);
+	printf("%d\n", solSys->numObjs);
+	
 	fclose(objFile);
 
 	LPS = fix_map(GPS, LPS);

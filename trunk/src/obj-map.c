@@ -23,8 +23,9 @@ int getndx (char *arr[], char *token) {
 /*************************************************************
  * Returns a random positive int, from the interval [x,max] 
  *************************************************************/
-int get_rand (int x, int max) {
-	
+int get_rand (int x, int min, int max) {
+	Uint32 y = x;
+	x = (rand_r(&y) % (max - min) + min);
 	return x;
 }
 
@@ -58,14 +59,53 @@ struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 	return (myObj);
 }
 
+void init_newObjs (struct system_t *mySys, int currObjs, int maxObjs) {
+	
+	
+}
+
+/*************************************************************
+ * Initializes a new system map
+ *************************************************************/
+void init_newMap(struct system_t *emptySys) {
+	int min = 5;
+	int max = 10;
+	emptySys->numObjs = get_rand(0, min, max);
+	int class, type, xPos, yPos;
+	struct posSys_t *newSys;
+	struct map_objS *currObj;
+	
+	int i, count = 0, objNdx = 0;
+	for (i = 0; i < emptySys->numObjs; i++) {
+		//init_newObjs(emptySys, count, emptySys->numObjs);
+		xPos = get_rand(objNdx, 0, emptySys->ptrGPS->wSize - 50);
+		yPos = get_rand(objNdx, 0, emptySys->ptrGPS->lSize - 50);
+		type = get_rand(objNdx, 0, 2);
+		class = B_CLASS;
+printf("%d %d %d %d\n", emptySys->numObjs, type, xPos, yPos);
+		assert((newSys = malloc(sizeof(*newSys))) != NULL);
+		newSys->xPos = xPos;
+		newSys->yPos = yPos;
+		
+		currObj = emptySys->sysObjs + objNdx;
+		currObj = init_obj(type, class, newSys);
+		currObj->ptrGPS = emptySys->ptrGPS;
+		add_obj(currObj);
+		objNdx++;
+		newSys++;
+		count++;
+	}
+	
+}
 
 /*************************************************************
  * Initializes the system map using data gleaned from the
  * input file and posts it into the GPS
  *************************************************************/
 int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys) {
+	int objNdx = 0;
 	mySys->numObjs = 0;
-	
+	mySys->ptrGPS = GPS;
 	int xPos, yPos;
 	int height, width;
 	int numObjs = 0;
@@ -79,14 +119,18 @@ int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys) {
 	char *comp = "MAP_DATA";
 	char *escape = "/escape";
 	
+	struct map_objS *currObj;
+	
 	//Beware, getndx will segfault if char * not recognized
 	//                      0         1      2     3    4       5       6
 	char *nameArr[] = {"NUM_OBJS", "TYPE", "XY", "HW", ";", "/escape", NULL};
 	int ndx;
 
-	assert(fscanf(objFile, "%s", temp) == 1);
-	if (strcmp(comp, temp) != 0)
-		return 0;
+	//assert(fscanf(objFile, "%s", temp) == 1);
+	if (strcmp(comp, temp) != 0) {
+		init_newMap(mySys);
+		return mySys->numObjs;
+	}
 
 	while (strcmp(escape, temp) != 0) {
 		assert(fscanf(objFile, "%s", temp) == 1);
@@ -104,7 +148,7 @@ int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys) {
 					type = OBJ_STAR;
 				comp = "OBJ_PLANET";
 				if (strcmp(temp2, comp) == 0) {
-					mySys->sysObjs->archeType = ARCH_LANDSC;
+					mySys->sysObjs[objNdx].archeType = ARCH_LANDSC;
 					type = OBJ_PLANET;
 				}
 				comp = "OBJ_ASTEROID";
@@ -126,12 +170,12 @@ int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys) {
 				newSys->lSize = height;
 				newSys->wSize = width;
 				
-				
-				mySys->sysObjs = init_obj(type, class, newSys);
-				mySys->sysObjs->ptrGPS = GPS;
-				add_obj(mySys->sysObjs);
-				mySys->sysObjs++;
+				currObj = mySys->sysObjs + objNdx;
+				currObj = init_obj(type, class, newSys);
+				currObj->ptrGPS = GPS;
+				add_obj(currObj);
 				mySys->numObjs++;
+				objNdx++;
 				newSys++;
 				assert((newSys = malloc(sizeof(*newSys))) != NULL);
 				break;
@@ -163,6 +207,8 @@ void add_obj (struct map_objS *myObj) {
 			objLoc = myObj->type->landscape->chData;
 	}
 
+
+	printf("%d\n", hit_check(objLoc, myObj->ptrGPS));
 	for(i = 0; i < objLoc->lSize; i++) {
 		for(j = 0; j < objLoc->wSize; j++) {
 			if (objLoc->map[i][j] != ' ')
