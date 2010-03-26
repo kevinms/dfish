@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------
+DFISH - Protocol
+--------------------------------------------------------------------------------
+
+100 - 350 Bytes per eth frame
+
+/* When client connects to server */
+8  B - Planet position
+16 B - Planet texture
+
+/* Each time there is a client update */
+32 B - Opponent ship positions (3)
+   B - Weapon Fire (lasers, missiles, etc)
+   B - Debris
+   B - Ship movement vectors
+
+/* Should be sent only when needed */
+   B - Current opponent ship blueprints (that includes damaged parts etc)
+   B - Damage updates (specific items like lasers)
