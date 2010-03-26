@@ -59,11 +59,6 @@ struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 	return (myObj);
 }
 
-void init_newObjs (struct system_t *mySys, int currObjs, int maxObjs) {
-	
-	
-}
-
 /*************************************************************
  * Initializes a new system map
  *************************************************************/
@@ -74,6 +69,7 @@ void init_newMap(struct system_t *emptySys) {
 	int class, type, xPos, yPos;
 	struct posSys_t *newSys;
 	struct map_objS *currObj;
+	int temp;
 	
 	int i, count = 0, objNdx = 0;
 	for (i = 0; i < emptySys->numObjs; i++) {
@@ -81,8 +77,19 @@ void init_newMap(struct system_t *emptySys) {
 		xPos = get_rand(objNdx, 0, emptySys->ptrGPS->wSize - 50);
 		yPos = get_rand(objNdx, 0, emptySys->ptrGPS->lSize - 50);
 		type = get_rand(objNdx, 0, 2);
-		class = B_CLASS;
-printf("%d %d %d %d\n", emptySys->numObjs, type, xPos, yPos);
+		temp = get_rand(objNdx + 3, 0, 3);
+		switch (temp) {
+			case 0:
+				class = A_CLASS;
+				break;
+			case 1:
+				class = B_CLASS;
+				break;
+			case 2:
+				class = C_CLASS;
+				break;
+		}
+printf("%d %d %d %d %c\n", emptySys->numObjs, type, xPos, yPos, class);
 		assert((newSys = malloc(sizeof(*newSys))) != NULL);
 		newSys->xPos = xPos;
 		newSys->yPos = yPos;
@@ -207,7 +214,12 @@ void add_obj (struct map_objS *myObj) {
 			objLoc = myObj->type->landscape->chData;
 	}
 
-
+	int seed = 0;
+	while (hit_check(objLoc, myObj->ptrGPS) == -1) {
+		objLoc->yPos = get_rand(seed, 0, myObj->ptrGPS->lSize - objLoc->lSize);
+		objLoc->xPos = get_rand(seed, 0, myObj->ptrGPS->wSize - objLoc->wSize);
+		seed++;
+	}
 	printf("%d\n", hit_check(objLoc, myObj->ptrGPS));
 	for(i = 0; i < objLoc->lSize; i++) {
 		for(j = 0; j < objLoc->wSize; j++) {
