@@ -168,14 +168,16 @@ loc->map[i][j] = '*';
 	return 0;
 }
 
-
+/*************************************************************
+ * Checks to see if the two obj structs intersect in any way
+ *************************************************************/
+//implement checking for non-space vacuum chars later on
 int hit_check (struct posSys_t *chData, struct posSys_t *GPS) {
 	int i,j;
 	
 	for (i = 0; i < chData->lSize; i++) {
 		for (j = 0; j < chData->wSize; j++) {
-			if (((GPS->map[i+chData->yPos][j+chData->xPos] == '@')
-					|| (GPS->map[i+chData->yPos][j+chData->xPos] == '*'))
+			if ((GPS->map[i+chData->yPos][j+chData->xPos] != ' ')
 				&& (chData->map[i][j] != ' '))
 				return -1;
 		}

@@ -43,9 +43,11 @@ struct posSys_t *init_map (int lSize, int wSize, char *arg) {
 		for(i = 0; i < lSize; i++) {
 			for(j = 0; j < wSize; j++) {
 				myMap[i][j] = ch;
-				if (!(i % 5)) /* every 5th line is all '-' */
+				//if (!(i % 5)) /* every 5th line is all '-' */
+				if ((i==0) || (i == lSize -1))
 					myMap[i][j] = '-';
-				if (!(j % 5)) /* every 5th column is all '|' */
+				//if (!(j % 5)) /* every 5th column is all '|' */
+				if ((j==0) || (j == wSize -1))
 					myMap[i][j] = '|';
 			}
 		}
