@@ -75,7 +75,10 @@ void init_newMap(struct system_t *emptySys) {
 	for (i = 0; i < emptySys->numObjs; i++) {
 		xPos = get_rand(objNdx, 0, emptySys->ptrGPS->wSize - 50);
 		yPos = get_rand(objNdx, 0, emptySys->ptrGPS->lSize - 50);
-		type = get_rand(objNdx, 0, 2);
+		if (i == 0)
+			type = OBJ_STAR;
+		else 
+			type = get_rand(objNdx, 1, 2); //TODO: add asteroids and nebulae
 		temp = get_rand(objNdx + 3, 0, 3);
 		switch (temp) {
 			case 0:
@@ -87,6 +90,8 @@ void init_newMap(struct system_t *emptySys) {
 			case 2:
 				class = C_CLASS;
 				break;
+			default:
+				class = C_CLASS;
 		}
 printf("%d %d %d %d %c\n", emptySys->numObjs, type, xPos, yPos, class);
 		assert((newSys = malloc(sizeof(*newSys))) != NULL);
