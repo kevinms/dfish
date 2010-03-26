@@ -101,8 +101,9 @@ struct system_t {
 };
 
 int getndx (char *arr[], char *token);
+int get_rand (int x, int max);
 struct map_objS *init_obj (int type, char class, struct posSys_t *loc);
-int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS);
-void add_obj (struct map_objS *myObj, struct posSys_t *GPS);
+int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys);
+void add_obj (struct map_objS *myObj);
 
 #endif /* !OBJ_MAP_H_ */
