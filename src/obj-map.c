@@ -73,7 +73,6 @@ void init_newMap(struct system_t *emptySys) {
 	
 	int i, count = 0, objNdx = 0;
 	for (i = 0; i < emptySys->numObjs; i++) {
-		//init_newObjs(emptySys, count, emptySys->numObjs);
 		xPos = get_rand(objNdx, 0, emptySys->ptrGPS->wSize - 50);
 		yPos = get_rand(objNdx, 0, emptySys->ptrGPS->lSize - 50);
 		type = get_rand(objNdx, 0, 2);
