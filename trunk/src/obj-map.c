@@ -21,13 +21,21 @@ int getndx (char *arr[], char *token) {
 }
 
 /*************************************************************
+ * Returns a random positive int, from the interval [x,max] 
+ *************************************************************/
+int get_rand (int x, int max) {
+	
+	return x;
+}
+
+/*************************************************************
  * Adds objects to map, and creates a map_objS
  *************************************************************/
 struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 	struct map_objS *myObj;
 	assert((myObj = malloc (sizeof(*myObj))) != NULL);
 	assert((myObj->type = malloc(sizeof(*(myObj->type)))) != NULL);
-
+	
 	switch (type) {
 		case OBJ_PLANET:
 			assert((myObj->type->landscape = malloc(sizeof(*(myObj->type->landscape)))) != NULL);
@@ -50,7 +58,14 @@ struct map_objS *init_obj (int type, char class, struct posSys_t *loc) {
 	return (myObj);
 }
 
-int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) {
+
+/*************************************************************
+ * Initializes the system map using data gleaned from the
+ * input file and posts it into the GPS
+ *************************************************************/
+int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys) {
+	mySys->numObjs = 0;
+	
 	int xPos, yPos;
 	int height, width;
 	int numObjs = 0;
@@ -89,7 +104,7 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 					type = OBJ_STAR;
 				comp = "OBJ_PLANET";
 				if (strcmp(temp2, comp) == 0) {
-					mapObjs->archeType = ARCH_LANDSC;
+					mySys->sysObjs->archeType = ARCH_LANDSC;
 					type = OBJ_PLANET;
 				}
 				comp = "OBJ_ASTEROID";
@@ -110,12 +125,13 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 				newSys->yPos = yPos;
 				newSys->lSize = height;
 				newSys->wSize = width;
-				mapObjs->ptrGPS = GPS;
 				
-				mapObjs = init_obj(type, class, newSys);
-				add_obj(mapObjs, GPS);
-				mapObjs++;
-				numObjs++;
+				
+				mySys->sysObjs = init_obj(type, class, newSys);
+				mySys->sysObjs->ptrGPS = GPS;
+				add_obj(mySys->sysObjs);
+				mySys->sysObjs++;
+				mySys->numObjs++;
 				newSys++;
 				assert((newSys = malloc(sizeof(*newSys))) != NULL);
 				break;
@@ -125,25 +141,32 @@ int init_objMap (FILE *objFile, struct map_objS *mapObjs, struct posSys_t *GPS) 
 	return 1;
 }
 
-void add_obj (struct map_objS *myObj, struct posSys_t *GPS) {
+
+/*************************************************************
+ * Adds an object to the GPS
+ *************************************************************/
+void add_obj (struct map_objS *myObj) {
 	int i,j;
 	struct posSys_t *objLoc;
 
-	objLoc = myObj->type->landscape->chData;
-
-/*
-	if (myObj->landscape->chData != NULL)
-		objLoc = myObj->type->landscape->chData;
-	if (myObj->item->chData != NULL)
-		objLoc = myObj->item->chData;
-	if (myObj->unit->chData != NULL)
-		objLoc = myObj->unit->chData;
-*/
+	switch (myObj->archeType) {
+		case ARCH_LANDSC:
+			objLoc = myObj->type->landscape->chData;
+			break;
+		case ARCH_UNIT:
+			objLoc = myObj->type->unit->chData;
+			break;
+		case ARCH_ITEM:
+			objLoc = myObj->type->item->chData;
+			break;
+		default:
+			objLoc = myObj->type->landscape->chData;
+	}
 
 	for(i = 0; i < objLoc->lSize; i++) {
 		for(j = 0; j < objLoc->wSize; j++) {
 			if (objLoc->map[i][j] != ' ')
-				GPS->map[i + objLoc->yPos][j + objLoc->xPos] = objLoc->map[i][j];
+				myObj->ptrGPS->map[i + objLoc->yPos][j + objLoc->xPos] = objLoc->map[i][j];
 		}
 	}
 }

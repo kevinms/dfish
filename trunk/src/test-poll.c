@@ -14,7 +14,7 @@ int main (int argc, char *argv[]) {
 	
 	/* Initializes local and global map */
 	struct posSys_t *GPS, *LPS;
-	if (argc > 0)
+	if (argc > 5)
 		GPS = init_map(lGDefault, wGDefault, argv[1]);
 	else
 		GPS = init_map(lGDefault, wGDefault, nil);
@@ -23,12 +23,12 @@ int main (int argc, char *argv[]) {
 
 	/* Initializing Map Objects */
 	FILE *objFile;
-	struct map_objS *mapObjs;
-	int numObjs;
-	assert((mapObjs = malloc(sizeof(*mapObjs))) != NULL);
+	struct system_t *solSys;
+	assert((solSys = malloc(sizeof(*solSys))) != NULL);
+	assert((solSys->sysObjs = malloc(sizeof(*(solSys->sysObjs)))) != NULL);
 	
 	assert((objFile = fopen("dataz/obj_data.dat", "r")) != NULL);
-	assert((numObjs = init_objMap(objFile, mapObjs, GPS)) != 0);
+	assert((solSys->numObjs = init_objMap(objFile, GPS, solSys)) != 0);
 
 	fclose(objFile);
 
@@ -47,7 +47,7 @@ int main (int argc, char *argv[]) {
 
 	/* Title */
 	SDL_WM_SetCaption( "Dfish", NULL );
-
+	
 	SDL_Event test_event;
 	while(1){
 
