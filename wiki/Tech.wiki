@@ -1,0 +1,28 @@
+# Brainstorm of technologies
+
+= Introduction =
+
+We're planning on implementing large tech trees for this game. We'd like to pool everyone's logic and imagination. Please comment below if you have any ideas. We'd rather have lots of ideas to pick from than not enough.
+
+
+= Details =
+
+4 main "Sectors" of research
+  * *Weapons*
+
+     - technology to hurt your opponent
+  * *Armor*
+
+     - technology to keep from being hurt
+  * *Engines/mobility*
+
+     - technology to move
+  * *Support*
+
+     - communication
+
+     - power management
+
+     - sensors
+
+     - mining
