@@ -83,6 +83,92 @@ Primitives(ideas):
 	Transistor					-
 	Current Source					-
 	Voltage Source					-MRPAL
+	
+--------------------------------------------------------------------------------
+Tech Tree Ideas
+--------------------------------------------------------------------------------
+Add different technologies and compounds to be used in dfish
+
+[WEAPONS]
+	Lasers
+		Different Frequencies
+	Mass Drivers (rail guns)
+	Particle Beams
+	Tractor Beams / Gravity Guns
+	Drones/Fighters
+	Missiles/Bombs
+		Kinetic
+		Nuclear
+			Fusion
+			Fission
+	Plasma
+	Black Hole Devices
+	EMP Devices
+	Flamethrowers/Plasma Ejectors
+	Chemical/Biological Weapons
+		Acid
+		Space Bugs
+	Mines
+	
+[ARMOR]
+	Kinetic Barriers
+	Beam Shields
+		Different Particle Reflectors
+	Reflective Armor
+	Reactive Armor
+	High Energy Absorption Armor
+	Chemical/Biological Retardants
+	ElectronicCounterMeasure Generators
+	Repair
+		Drones
+		Better Compensation for battle damage
+	Personnel Equipment
+		Space/Environmental Hazmat Suits
+		Personal Shields (riot, energy, etc.)
+	
+[SUPPORT TECH]
+	Robotics
+		Drones??
+	Mining/Resource Management
+		Planet
+		Star
+		Asteroid
+		Nebula
+	Sensors
+		Gravimetric
+		Electromagnetic
+		Exotic Particles
+			Muons
+			Neutrinos
+			Bosons
+			Hadrons
+			Dark Energy
+			Dark Matter
+		Scanners
+			Star
+			Asteroid
+			Planet
+			Nebula
+	Power Management
+		Fusion
+		Fission
+	Command Interfaces
+		Ship Slaving
+		Ship Targeting Lasers
+	
+	
+[ENGINES/PROPULSION]
+	Warp Drive
+	Wormhole Devices
+	In-System FTL Drive
+	Combat Propulsion Drives
+		Power Management?? for any??
+	Interdiction Devices
+	Warp Bubble Expanders/Piggybacking Ships
+	
+	
+
+
 
 --------------------------------------------------------------------------------
 Item Format/Loader
