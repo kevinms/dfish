@@ -83,11 +83,10 @@ Primitives(ideas):
 	Transistor					-
 	Current Source					-
 	Voltage Source					-MRPAL
-	
---------------------------------------------------------------------------------
-Tech Tree Ideas
---------------------------------------------------------------------------------
-Add different technologies and compounds to be used in dfish
+[Sensors]
+	Gravimetric
+	Radio Frequency
+	Neutrino, exotic particles
 
 [WEAPONS]
 	Lasers
@@ -181,7 +180,7 @@ Add different technologies and compounds to be used in dfish
 		Power Management?? for any engine??
 	Interdiction Devices
 	Warp Bubble Expanders/Piggybacking Ships
-	
+	Solar Sail
 	
 
 
