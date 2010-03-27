@@ -101,6 +101,7 @@ Add different technologies and compounds to be used in dfish
 		Nuclear
 			Fusion
 			Fission
+		Seismic
 	Plasma
 	Black Hole Devices
 	EMP Devices
@@ -109,6 +110,8 @@ Add different technologies and compounds to be used in dfish
 		Acid
 		Space Bugs
 	Mines
+	Movable Turrets vs Stationary
+	Space-Time Warping Guns??
 	
 [ARMOR]
 	Kinetic Barriers
@@ -119,12 +122,18 @@ Add different technologies and compounds to be used in dfish
 	High Energy Absorption Armor
 	Chemical/Biological Retardants
 	ElectronicCounterMeasure Generators
+	Polarized Shields
 	Repair
 		Drones
 		Better Compensation for battle damage
 	Personnel Equipment
 		Space/Environmental Hazmat Suits
 		Personal Shields (riot, energy, etc.)
+	Point Defense
+		Drones
+		Lasers
+		Chaff/Countermeasures
+	Communication Jammers
 	
 [SUPPORT TECH]
 	Robotics
@@ -155,14 +164,21 @@ Add different technologies and compounds to be used in dfish
 	Command Interfaces
 		Ship Slaving
 		Ship Targeting Lasers
-	
+	Communication
+		Gravimetric
+		Electromagnetic
+		Exotic??
+	Cloaking Devices
+	Scanners
+	Crew Enhancers??
 	
 [ENGINES/PROPULSION]
 	Warp Drive
 	Wormhole Devices
 	In-System FTL Drive
 	Combat Propulsion Drives
-		Power Management?? for any??
+		Ion Drives
+		Power Management?? for any engine??
 	Interdiction Devices
 	Warp Bubble Expanders/Piggybacking Ships
 	
