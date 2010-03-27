@@ -2,8 +2,6 @@
 
 #include "list.h"
 
-struct link_t *g_link;
-
 /* malloc a new list header and initialize it */
 struct list_t *
 list_init(void)
@@ -135,75 +133,4 @@ list_head_to_tail(struct list_t *list)
 		list->tail->next = NULL;
 		list->head->prev = NULL;
 	}
-}
-
-void
-list_set_list_to_iterate(struct list_t *list)
-{
-	if(list)
-		g_link = list->head;
-}
-
-struct link_t *
-list_next_link()
-{
-	if(g_link)
-		return ((g_link = g_link->next));
-
-	return NULL;
-}
-
-struct link_t *
-list_prev_link()
-{
-	if(g_link)
-		return((g_link = g_link->prev));
-
-	return NULL;
-}
-
-void *
-list_next_item()
-{
-	if(g_link)
-		g_link = g_link->next;
-	else
-		return NULL;
-
-	if(g_link)
-		return g_link->item;
-
-	return NULL;
-}
-
-void *
-list_prev_item()
-{
-	if(g_link)
-		g_link = g_link->prev;
-	else
-		return NULL;
-
-	if(g_link)
-		return g_link->prev;
-
-	return NULL;
-}
-
-void *
-list_peek_item()
-{
-	if(g_link)
-		return g_link->item;
-
-	return NULL;
-}
-
-struct link_t *
-list_peek_link()
-{
-	if(g_link)
-		return g_link;
-
-	return NULL;
 }
