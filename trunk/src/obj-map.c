@@ -120,7 +120,7 @@ int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys) {
 	int xPos, yPos;
 	int height, width;
 	int numObjs = 0;
-	char class = A_CLASS;
+	char class = B_CLASS;
 	int type = OBJ_ASTEROID;
 	struct posSys_t *newSys;
 	assert((newSys = malloc(sizeof(*newSys))) != NULL);
@@ -137,7 +137,7 @@ int init_objMap (FILE *objFile, struct posSys_t *GPS, struct system_t *mySys) {
 	char *nameArr[] = {"NUM_OBJS", "TYPE", "XY", "HW", ";", "/escape", NULL};
 	int ndx;
 
-	//assert(fscanf(objFile, "%s", temp) == 1);
+	assert(fscanf(objFile, "%s", temp) == 1);
 	if (strcmp(comp, temp) != 0) {
 		init_newMap(mySys);
 		return mySys->numObjs;
