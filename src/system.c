@@ -6,8 +6,6 @@
 #include "constants.h"
 #include "utils.h"
 
-//#include "teahf.h"
-
 /*************************************************************
  * Initializes a new system map procedurally
  *************************************************************/
@@ -62,12 +60,11 @@ printf("%d %d %d %d %c\n", emptySys->numObjs, type, xPos, yPos, class);
 	return emptySys;
 }
 
-//TODO: once system_init_procedural() working you can get this working as well
 /*************************************************************
  * Initializes the system map using data gleaned from the
  * input file and posts it into the GPS
  *************************************************************/
-struct system_t *system_init_file (FILE *objFile, struct posSys_t *GPS) {
+struct system_t *system_init_file (char *filename, struct posSys_t *GPS) {
 	int objNdx = 0;
 	int xPos, yPos;
 	int height, width;
@@ -83,6 +80,9 @@ struct system_t *system_init_file (FILE *objFile, struct posSys_t *GPS) {
 	char *escape = "/escape";
 	
 	struct object_t *currObj;
+
+	FILE *objFile;
+	assert((objFile = fopen(filename, "r")) != NULL);
 
 	struct system_t *mySys;
 	assert((mySys = malloc(sizeof(*mySys))) != NULL);
@@ -146,6 +146,7 @@ struct system_t *system_init_file (FILE *objFile, struct posSys_t *GPS) {
 				break;
 		}
 	}
+	fclose(objFile);
 
 	return mySys;
 }

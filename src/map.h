@@ -7,8 +7,6 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-//#include "TinyCurses.h"
-
 /* Defines defaults for LPS and GPS structures */
 #define lLDefault 41
 #define wLDefault 61
