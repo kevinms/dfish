@@ -43,6 +43,7 @@ Data that should be stored in a blueprint:
 	other structure including but not limited to ships, bases, weapons, traps,
 	etc... These entities should be stored somehow 
 
+bblocks = entities
 
 Entity position are stored relative to a base piece (e.g. +20x -20y)
 The base piece can be either the visual center or center of mass (we can calculate this)

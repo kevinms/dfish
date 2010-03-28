@@ -4,9 +4,7 @@
  * Implements functions for handling keyboard events
  * 
  ***************************************************/
-
 #include "teahf.h"
-
 
 /***************************************************
  * 
@@ -17,7 +15,6 @@ void upKeyEvent 	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) 
 	
 	
 }
-
 
 /***************************************************
  * 

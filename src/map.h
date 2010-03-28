@@ -4,18 +4,25 @@
  * Declares structs and stuff for the global and local map
  * 
  *************************************************************/
-
 #ifndef MAP_H_
 #define MAP_H_
 
 #include "TinyCurses.h"
-
 
 /* Defines defaults for LPS and GPS structures */
 #define lLDefault 41
 #define wLDefault 61
 #define lGDefault 200
 #define wGDefault 250
+
+/* Positioning System struct */
+struct posSys_t {
+	int lSize;
+	int wSize;
+	int **map;
+	int xPos;
+	int yPos;
+};
 
 void malloc_map(int length, int width, int ***map);
 struct posSys_t *init_map (int lSize, int wSize, char *arg);

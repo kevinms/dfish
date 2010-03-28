@@ -16,15 +16,19 @@ int main (int argc, char *argv[]) {
 	GPS = init_map(lGDefault, wGDefault, argv[1]);
 	LPS = init_map(lLDefault, wLDefault, lps);
 
-
 	/* Initializing Map Objects */
 	FILE *objFile;
 	struct system_t *solSys;
+/*
 	assert((solSys = malloc(sizeof(*solSys))) != NULL);
 	assert((solSys->sysObjs = malloc(sizeof(*(solSys->sysObjs)))) != NULL);
-	
+*/
 	assert((objFile = fopen("dataz/obj_data.dat", "r")) != NULL);
-	init_objMap(objFile, GPS, solSys);
+
+	/* Here are two different ways to generate a solar system */
+	//solSys = system_init_file(objFile, GPS);
+	solSys = system_init_procedural(GPS);
+
 	printf("%d\n", solSys->numObjs);
 	
 	fclose(objFile);
