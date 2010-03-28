@@ -10,19 +10,134 @@ We're planning on implementing large tech trees for this game. We'd like to pool
 4 main "Sectors" of research
   * *Weapons*
 
-     - technology to hurt your opponent
+     _technology to hurt your opponent_
+
+     - Projectiles
+
+       - coil guns (aka  Gauss Cannons)
+
+       - Fire arms (i.e. machine guns )
+
+       - Rail guns
+
+       - Missiles
+
+       - Bombs
+
+       - Mines
+
+       - Attack Drones
+
+       - Particle beams
+
+       - Lasers
+
+       - Tractor / Gravity Beams
+
+       - Plasma
+
+       - Black Hole Device
+
+       - EMP
+
+       - Flamethrower / Plasma thrower
+
+       - Chemical weapon (i.e. acid)
+
+       - Biological weapon
+
+       - Dark Matter / anti matter weapon
+
+       - Nuclear
+
+       - Space-time warping weapon
+
   * *Armor*
 
-     - technology to keep from being hurt
+     _technology to keep from being hurt_
+
+       - Kinetic Barriers (i.e. fat metal hulls)
+
+       - Beam shields 
+
+       - Reactive armor
+
+       - Reflective armor
+
+       - High Energy Absorption Armor
+
+       - Electronic CounterMeasures (ECMs)
+
+         - Magnetic field to deflect coil/rail gun bullets
+
+       - Chemical/Biological Retardants
+
+       - Point Defense
+
+
   * *Engines/mobility*
 
-     - technology to move
+     _technology to move_
+
+       - Warp Drive
+
+       - Wormhole Device
+
+       - In-system FTL drive
+
+       - Ion drives
+
+       - Interdiction Device
+
+       - Solar Sails
+
+       - Magnetic Manipulation
+
+         - Attracts or repulses a planet's or star's magnetic field
+
+
   * *Support*
 
-     - communication
+       - communication
 
-     - power management
+       - power management
 
-     - sensors
+       - sensors
 
-     - mining
+       - mining
+
+       - robotics
+
+       - resource gathering / management
+
+       - Power Management
+
+         - Fusion
+
+         - Fission
+
+         - Containment Fields
+
+         - Superconductivity
+
+         - Chemical energy storage
+
+       - Command Interfaces
+
+         - Ship slaving
+
+         - ship targeting lasers
+
+       - Communication
+
+       - Scanners
+
+       - Crew Enhancers
+
+         - Stimulants
+
+         - Cybernetics
+
+         - Biological Engineering
+
+         - Genetic Engineering
