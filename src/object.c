@@ -1,10 +1,10 @@
 #include "object.h"
 
+#include <assert.h>
+#include <stdlib.h>
 #include "constants.h"
 #include "planet.h"
 #include "star.h"
-
-#include "teahf.h"
 
 /*************************************************************
  * Adds objects to map, and creates a map_objS

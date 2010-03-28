@@ -1,7 +1,6 @@
 #ifndef PLANET_H_
 #define PLANET_H_
 
-#include "TinyCurses.h"
 #include "map.h"
 
 struct planet_t {

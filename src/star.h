@@ -1,7 +1,6 @@
 #ifndef STAR_H_
 #define STAR_H_
 
-#include "TinyCurses.h"
 #include "map.h"
 
 struct star_t {

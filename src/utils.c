@@ -1,6 +1,6 @@
 #include "utils.h"
 
-#include "TinyCurses.h"
+#include "SDL.h"
 
 /*************************************************************
  * Searches a list of names in an array and returns 

@@ -5,7 +5,9 @@
  * 
  ********************************************************/
 
-#include "teahf.h"
+#include <assert.h>
+#include "keys.h"
+#include "system.h"
 
 int main (int argc, char *argv[]) {
 	
@@ -52,7 +54,6 @@ int main (int argc, char *argv[]) {
 	SDL_Event test_event;
 	while(1){
 
-		
 /************************************************************
  * 
  * Put in normal operating functions like AI paths and stuff
@@ -60,7 +61,6 @@ int main (int argc, char *argv[]) {
  * 		it within the functions of the program
  * 
 *************************************************************/
-
 		/* Checks for events posted into the queue */
 		if (SDL_PollEvent(&test_event)) {
 			switch (test_event.type) {

@@ -4,8 +4,13 @@
  * Sets up structs and stuff for the global and local map
  * 
  *************************************************************/
-
-#include "teahf.h"
+#include "map.h"
+//#include "teahf.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include "TinyCurses.h"
 
 /*******************************************************************************
  *

@@ -1,5 +1,7 @@
 #include "star.h"
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "constants.h"
 #include "math.h"
 
