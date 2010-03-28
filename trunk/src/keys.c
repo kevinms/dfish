@@ -4,14 +4,14 @@
  * Implements functions for handling keyboard events
  * 
  ***************************************************/
-#include "teahf.h"
+#include "keys.h"
 
 /***************************************************
  * 
  * Handles Key Releasing Events
  * 
  ***************************************************/
-void upKeyEvent 	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) {
+void upKeyEvent(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) {
 	
 	
 }
@@ -21,7 +21,7 @@ void upKeyEvent 	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) 
  * Handles Key Pressing Events
  * 
  ***************************************************/
-void downKeyEvent	(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) {
+void downKeyEvent(SDL_Event *event, struct posSys_t *GPS, struct posSys_t *LPS) {
 
 	SDL_keysym keyPressed = event->key.keysym;
 	int myNum = 5;

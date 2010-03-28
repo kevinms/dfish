@@ -1,9 +1,10 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
-#include "TinyCurses.h"
+#include <stdio.h>
 #include "list.h"
 #include "object.h"
+#include "map.h"
 
 /* Stats/Status struct */
 /*

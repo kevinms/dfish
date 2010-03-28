@@ -8,6 +8,8 @@
 #define KEY_H_
 
 #include "TinyCurses.h"
+#include "SDL.h"
+#include "map.h"
 
 /* Defines defaults for Map Shifting Events */
 #define numDefault 1

@@ -1,8 +1,12 @@
 #include "system.h"
 
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 #include "constants.h"
+#include "utils.h"
 
-#include "teahf.h"
+//#include "teahf.h"
 
 /*************************************************************
  * Initializes a new system map procedurally
@@ -59,7 +63,6 @@ printf("%d %d %d %d %c\n", emptySys->numObjs, type, xPos, yPos, class);
 }
 
 //TODO: once system_init_procedural() working you can get this working as well
-#if 1
 /*************************************************************
  * Initializes the system map using data gleaned from the
  * input file and posts it into the GPS
@@ -146,7 +149,6 @@ struct system_t *system_init_file (FILE *objFile, struct posSys_t *GPS) {
 
 	return mySys;
 }
-#endif
 
 /*************************************************************
  * Adds an object to the GPS

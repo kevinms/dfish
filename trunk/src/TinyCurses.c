@@ -3,7 +3,6 @@
 /*For more information, see: http://www.gnu.org/copyleft/lgpl.html         */
 /*Version 1.0a                                                             */
 #include "TinyCurses.h"
-#include "map.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -170,7 +169,7 @@ int refresh()
 	txt[0]=' ';
       t=TTF_RenderUNICODE_Blended(TC_Font,txt,c);
   /*************testing**************/
-  t = DoubleWide(t, wLDefault, lLDefault);
+  t = DoubleWide(t, TC_W, TC_H);
   /**********************************/
       s=SDL_DisplayFormat(t);
       SDL_FillRect(s,NULL,TC_Layers[i][j][k][1]);
