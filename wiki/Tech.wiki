@@ -52,6 +52,8 @@ We're planning on implementing large tech trees for this game. We'd like to pool
 
        - Space-time warping weapon
 
+       - radiation
+
   * *Armor*
 
      _technology to keep from being hurt_
