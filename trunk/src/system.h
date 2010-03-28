@@ -23,7 +23,7 @@ struct system_t {
 };
 
 struct system_t *system_init_procedural(struct posSys_t *GPS);
-struct system_t *system_init_file(FILE *objFile, struct posSys_t *GPS);
+struct system_t *system_init_file(char *filename, struct posSys_t *GPS);
 void system_add_obj (struct object_t *myObj, struct posSys_t *GPS);
 
 #endif /* !SYSTEM_H_ */
