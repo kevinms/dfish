@@ -56,6 +56,7 @@ We're planning on implementing large tech trees for this game. We'd like to pool
 
        - the German's "Sun Gun"
 
+       - Rods from God
 
   * *Armor*
 
