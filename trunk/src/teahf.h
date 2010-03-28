@@ -3,13 +3,16 @@
 #ifndef TEAHF_H_
 #define TEAHF_H_
 
+//#include "obj-map.h"
 #include "SDL.h"
 #include "TinyCurses.h"
 #include "math.h"
-#include "obj-map.h"
+#include "utils.h"
 #include "map.h"
 #include "keys.h"
-#include "object-gen/gen-header.h"
+#include "object.h"
+#include "system.h"
+//#include "object-gen/gen-header.h"
 #include <assert.h>
 
 #endif /* !TEAHF_H_ */

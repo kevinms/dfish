@@ -3,7 +3,7 @@
 /*For more information, see: http://www.gnu.org/copyleft/lgpl.html         */
 /*Version 1.0a                                                             */
 #include "TinyCurses.h"
-#include "teahf.h"
+#include "map.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
