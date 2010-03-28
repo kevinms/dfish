@@ -54,6 +54,9 @@ We're planning on implementing large tech trees for this game. We'd like to pool
 
        - radiation
 
+       - the German's "Sun Gun"
+
+
   * *Armor*
 
      _technology to keep from being hurt_
@@ -76,6 +79,7 @@ We're planning on implementing large tech trees for this game. We'd like to pool
 
        - Point Defense
 
+       - Gun jammer
 
   * *Engines/mobility*
 
