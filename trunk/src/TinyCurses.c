@@ -17,7 +17,8 @@ bool TC_LayersShown[7];
 Uint32 TC_Layers[255][255][7][7];
 char *TC_FontName=(char *)"./Font.ttf";
 //int TC_FontSize=14;
-int TC_FontSize=12;
+//int TC_FontSize=12;
+int TC_FontSize=7;
 bool TC_Wait=false;
 bool TC_On=false;
 
@@ -169,7 +170,7 @@ int refresh()
 	txt[0]=' ';
       t=TTF_RenderUNICODE_Blended(TC_Font,txt,c);
   /*************testing**************/
-  t = DoubleWide(t, TC_W, TC_H);
+//  t = DoubleWide(t, TC_W, TC_H);
   /**********************************/
       s=SDL_DisplayFormat(t);
       SDL_FillRect(s,NULL,TC_Layers[i][j][k][1]);
