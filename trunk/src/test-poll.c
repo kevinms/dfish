@@ -32,7 +32,8 @@ int main (int argc, char *argv[]) {
 	refresh();
 	for(i = 0; i < LPS->lSize; i++) {
 		for(j = 0; j < LPS->wSize; j++){
-			printw("%c", LPS->map[i][j]);
+			//printw("%c", LPS->map[i][j]);
+			addchext(LPS->map[i][j],j,i,0,0,0,0,255,0);
 		}
 	}
 	move(0,0);
