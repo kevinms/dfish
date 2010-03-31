@@ -9,16 +9,13 @@
  * Generates a planet for the obj struct
  *************************************************************/
 struct planet_t *gen_planet (char class, struct posSys_t *loc) {
-	FILE *write;
-	write = fopen("out.txt", "w");
-
 	struct planet_t *p;
 	p = (struct planet_t *)malloc(sizeof(*p));
 
 	p->chData = loc;
 	p->class = class;
 
-	int i, j, k, r;
+	int i, j, r;
 	
 	if (class == A_CLASS)
 		r = 6;
@@ -31,31 +28,19 @@ struct planet_t *gen_planet (char class, struct posSys_t *loc) {
 	loc->wSize = loc->lSize /* ratio - 1*/; 
 	malloc_map(loc->lSize, loc->wSize, &(loc->map));
 	
+	float iO, jO;
+	
 	for (i = 0; i < r * 2; i++) {
-		k = sqrt((r * r) - ((i-r) * (i-r))) * ratio;
 		
 		for (j = 0; j < r * ratio * 2; j++) {
-			if(j < 0 + r * ratio) {
-				if(i == r && j == 0)
-					loc->map[i][j] = ' ';
-				else if(j < (r*ratio) - k) {
-					loc->map[i][j] = ' ';
-				}
-				else {
-					loc->map[i][j] = '@';
-				}
-			}
-			else if(j >= r*ratio) {
-				if (i == r && j == r * 2 - 1)
-					loc->map[i][j] = ' ';
-				else if (j < k + r*ratio) {
-				
-					loc->map[i][j] = '@';
-				}
-				else {
-					loc->map[i][j] = ' ';
-				}
-			}
+			//Sets iO and jO to the distance i and j are from 0
+			iO = abs(i-r);
+			jO = abs(j-r);
+			
+			if ((sqrt((iO*iO)+(jO*jO)) < r) || (iO == 0 && jO == 0))
+				loc->map[i][j] = '@';
+			else
+				loc->map[i][j] = ' ';
 		}
 	}
 
