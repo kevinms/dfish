@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "planet.h"
 #include "star.h"
+#include "nebula.h"
 
 /*************************************************************
  * Adds objects to map, and creates a map_objS
@@ -23,6 +24,11 @@ struct object_t *object_init(int type, char class, struct posSys_t *loc) {
 			obj->type = type;
 			obj->data = gen_star(class, loc);
 			obj->chData = ((struct star_t *)obj->data)->chData;
+			break;
+		case OBJ_NEBULA:
+			obj->type = type;
+			obj->data = gen_nebula(class, loc);
+			obj->chData = ((struct nebula_t *)obj->data)->chData;
 			break;
 	}
 

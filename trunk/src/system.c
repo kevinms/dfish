@@ -30,7 +30,7 @@ struct system_t *system_init_procedural(struct posSys_t *GPS) {
 		if (i == 0)
 			type = OBJ_STAR;
 		else 
-			type = get_rand(objNdx, 1, 2); //TODO: add asteroids and nebulae
+			type = get_rand(objNdx, 1, 3); //TODO: add asteroids and nebulae
 		temp = get_rand(objNdx + 3, 0, 3);
 		switch (temp) {
 			case 0:
@@ -113,7 +113,6 @@ struct system_t *system_init_file (char *filename, struct posSys_t *GPS) {
 					type = OBJ_STAR;
 				comp = "OBJ_PLANET";
 				if (strcmp(temp2, comp) == 0) {
-					//mySys->sysObjs[objNdx].archeType = ARCH_LANDSC;
 					type = OBJ_PLANET;
 				}
 				comp = "OBJ_ASTEROID";
