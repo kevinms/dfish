@@ -30,7 +30,7 @@ struct system_t *system_init_procedural(struct posSys_t *GPS) {
 		if (i == 0)
 			type = OBJ_STAR;
 		else 
-			type = get_rand(objNdx, 1, 3); //TODO: add asteroids and nebulae
+			type = get_rand(objNdx + 5, 1, 4); //TODO: add asteroids
 		temp = get_rand(objNdx + 3, 0, 3);
 		switch (temp) {
 			case 0:
