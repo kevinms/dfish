@@ -29,7 +29,7 @@ struct nebula_t *gen_nebula (char class, struct posSys_t *loc) {
 	float iO = r;
 	float jO = r;
 	double myatan, mySin, myCos;
-	int seed = 6;
+	int seed = loc->xPos * loc->yPos;
 	
 	
 	loc->lSize = 2 * r;
