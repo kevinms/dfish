@@ -35,7 +35,7 @@ struct star_t *gen_star (char class, struct posSys_t *loc) {
 	double newR = 0;
 	float iO, jO, mySqrt;
 	double myatan, mySin, myCos;
-	int seed = 6;
+	int seed = loc->xPos * loc->yPos;
 	
 	
 	for (i = 0; i < r * 2; i++) {

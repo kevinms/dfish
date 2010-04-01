@@ -214,7 +214,7 @@ void system_add_obj (struct object_t *myObj, struct posSys_t *GPS) {
 
 	objLoc = myObj->chData;
 
-	int seed = 0;
+	int seed = objLoc->xPos * objLoc->yPos;
 	while (hit_check(objLoc, GPS) == -1) {
 		objLoc->yPos = get_rand(seed, 0, GPS->lSize - objLoc->lSize);
 		objLoc->xPos = get_rand(seed, 0, GPS->wSize - objLoc->wSize);
