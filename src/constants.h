@@ -24,6 +24,10 @@
 #define B_CLASS 'B'
 #define C_CLASS 'C'
 
+/* Procedural Gen Constants */
+#define RATIO_STARBOX	0.20
+#define ASTRO_UNIT		0.05
+
 #define ratio 1
 #define PI 3.141592653589793
 #define BAD_LOC -1

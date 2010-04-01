@@ -20,6 +20,19 @@ int getndx (char *arr[], char *token) {
  *************************************************************/
 int get_rand (int x, int min, int max) {
 	Uint32 y = x;
-	x = (rand_r(&y) % (max - min) + min);
-	return x;
+	int z;
+	z = (rand_r(&y) % (max - min) + min);
+	return z;
+}
+
+/*************************************************************
+ * Returns a random positive or negative 1
+ *************************************************************/
+int get_negpos (int x) {
+	Uint32 y = x;
+	int z;
+	z = (rand_r(&y) % (2 + 1) - 1);
+	if (z != 0)
+		return z;
+	return (get_negpos(x+1));
 }

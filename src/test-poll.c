@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
 	//solSys = system_init_file("dataz/obj_data.dat", GPS);
 	solSys = system_init_procedural(GPS);
 	printf("%d\n", solSys->numObjs);
-
+	
 	LPS = fix_map(GPS, LPS);
 	int i,j;
 	initscrext(wLDefault, lLDefault, false);
