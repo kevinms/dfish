@@ -3,8 +3,11 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "math.h"
 #include "constants.h"
 #include "utils.h"
+#include "map.h"
+#include "star.h"
 
 /*************************************************************
  * Initializes a new system map procedurally
@@ -22,15 +25,63 @@ struct system_t *system_init_procedural(struct posSys_t *GPS) {
 	emptySys->numObjs = get_rand(0, min, max);
 	emptySys->ptrGPS = GPS;
 	emptySys->objects = list_init();
+	
+	//uses lowest system dimensions for radius
+	int temp2 = emptySys->ptrGPS->lSize;
+	if (emptySys->ptrGPS->wSize < emptySys->ptrGPS->lSize)
+		temp2 = emptySys->ptrGPS->wSize;
+	int radius = temp2 * ASTRO_UNIT;
+	int newR = 0;
 
 	int i, count = 0, objNdx = 0;
 	for (i = 0; i < emptySys->numObjs; i++) {
-		xPos = get_rand(objNdx, 0, emptySys->ptrGPS->wSize - 50);
-		yPos = get_rand(objNdx, 0, emptySys->ptrGPS->lSize - 50);
-		if (i == 0)
+		newR = radius * i;
+		if (i == 0) {
 			type = OBJ_STAR;
-		else 
+			xPos = get_rand(objNdx, emptySys->ptrGPS->wSize * RATIO_STARBOX, emptySys->ptrGPS->wSize * (RATIO_STARBOX + 0.5));
+			yPos = get_rand(objNdx, emptySys->ptrGPS->lSize * RATIO_STARBOX, emptySys->ptrGPS->lSize * (RATIO_STARBOX + 0.5));
+		}
+		else {
+			//TODO: maybe make the star ptr more accessible??
+			struct object_t *ptr;
+			struct star_t *ptr2;
+			struct posSys_t *mapptr;
+			ptr = (struct object_t *)emptySys->objects->head->item;
+			ptr2 = (struct star_t *)ptr->data;
+			mapptr = ptr2->chData;
 			type = get_rand(objNdx + 5, 1, 4); //TODO: add asteroids
+			
+			
+			int sentinel = 0;
+			int mySeed = objNdx;
+			while (sentinel == 0) {
+				xPos = get_rand(mySeed + 1337, 0, newR);
+				if (mapptr->xPos - xPos < 0)
+					xPos = mapptr->xPos + get_negpos(mySeed*8) * xPos;
+				else if (xPos + mapptr->xPos > GPS->wSize - 50)
+					xPos = mapptr->xPos - xPos;
+				else
+					xPos = mapptr->xPos + get_negpos(mySeed * 1337) * xPos;
+				int mySqrt = sqrt(newR*newR - (xPos-mapptr->xPos)*(xPos-mapptr->xPos));
+				if (0 > mapptr->yPos - mySqrt)
+					yPos = mapptr->yPos + mySqrt;
+				else if (GPS->lSize - 50 < mapptr->yPos + mySqrt)
+					yPos = mapptr->yPos - mySqrt;
+				else
+					yPos = mapptr->yPos + get_negpos(xPos*5)*mySqrt;
+				
+				//double checks val's
+				if ((xPos < 0) || (xPos > GPS->wSize - 50)
+					|| (0 > mapptr->yPos - mySqrt)
+					|| (GPS->lSize - 50 < mapptr->yPos + mySqrt))
+					sentinel = 0;
+				else {
+					sentinel = 1;
+					printf("%d %d %d %d\n", emptySys->numObjs, type, xPos, yPos);
+				}
+				mySeed++;
+			}
+		}
 		temp = get_rand(objNdx + 3, 0, 3);
 		switch (temp) {
 			case 0:
@@ -45,7 +96,11 @@ struct system_t *system_init_procedural(struct posSys_t *GPS) {
 			default:
 				class = C_CLASS;
 		}
-printf("%d %d %d %d %c\n", emptySys->numObjs, type, xPos, yPos, class);
+		//kills obj generation if the radius has gone outside the box
+		if (yPos > emptySys->ptrGPS->lSize - 50) {
+			printf("fail\n");
+			return emptySys;
+		}
 		assert((newSys = malloc(sizeof(*newSys))) != NULL);
 		newSys->xPos = xPos;
 		newSys->yPos = yPos;
