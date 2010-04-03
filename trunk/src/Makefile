@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-g -Wall -O3 `sdl-config --cflags`
 
 LDFLAGS=`sdl-config --libs` -lSDL_ttf
-SOURCES=TinyCurses.c test-view.c
+SOURCES=TinyCurses.c map.c keys.c system.c object.c utils.c planet.c star.c nebula.c list.c asteroid.c
 OBJECTS=$(SOURCES:.c=.o)
 
 all: $(EXECUTABLE)
@@ -15,11 +15,18 @@ test: $(T_EXECUTABLE)
 	
 
 T_POLL_LDFLAGS=`sdl-config --libs` -lSDL_ttf -lm
-T_POLL_SOURCES=TinyCurses.c test-poll.c map.c keys.c system.c object.c utils.c planet.c star.c nebula.c list.c asteroid.c
+T_POLL_SOURCES=$(SOURCES) test-poll.c
 T_POLL_OBJECTS=$(T_POLL_SOURCES:.c=.o)
 
 test-poll: $(T_POLL_OBJECTS)
 	$(CC) $(T_POLL_LDFLAGS) $(T_POLL_OBJECTS) -o $@
+
+T_BLIT_SOURCES=$(SOURCES) test-blit.c
+T_BLIT_OBJECTS=$(T_BLIT_SOURCES:.c=.o)
+
+test-blit: $(T_BLIT_OBJECTS)
+	$(CC) $(T_POLL_LDFLAGS) $(T_BLIT_OBJECTS) -o $@
+
 
 # Implicit rule to compile all .c to .o
 .c.o:
