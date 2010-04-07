@@ -66,3 +66,6 @@ Bulding Modes
 Weapon Blueprint Editor - This way weapons can have a seperate health bar
 General Blueprint Editor - Can build either static xor moving objects
 
+
+Building Blocks or bblock_t will be a single char piece, this can be anything
+from a single armor piece to a wooden floor piece

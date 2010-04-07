@@ -1,14 +1,83 @@
 ================================================================================
        _ _              __     __    _     _                       _ _____
-     _| (_) ___ __ _  __\ \   / /  _| | __| |_ __  _   _  ___   __| |_   _|     
+     _| (_) ___ __ _  __\ \   / /  _| | __| |_ __  _   _  ___   __| |_   _|
     |__ | |/ _ ' _` |/ _ \ \ / /  |__ |/ _` | '_ \| | | |/ _ \ / _` | | |
      _| | | | | | | | (_) \ V /    _| | | | | |_) | |_| | (_) | | | | | |
     |__/|_|_| |_| |_|\___/ \_/    |__/|_| |_| .__/|_.__/ \___/|_| |_| |_|
                                              \___|
 ================================================================================
 
+Table of Contents
+
+	Window System Features
+	Networking
+	Path Finding|Setting
+	Fabricator
+	Tech Tree
+	Item Format/Loader
+	Space Station Management
+	Name Ideas
+
 --------------------------------------------------------------------------------
-Networking-vomit
+Window System Features
+--------------------------------------------------------------------------------
+[] window refers to the decorated window as a whole.  What you would normally
+   think of as the window.
+[] screen refers to all the seperate views that will be part of the game.  For
+   example, you can put a menu in a screen.  You could put the chat message view
+   in a screen.
+[] Screens are how we organize all the views in the 'toplevel' window.  Teach by
+   example:
+
++----------+-----+    Everything to left as a whole is the window, each view is
+|          |     |    called a screen.
+|   Ship   | menu|    
+|  Editor  |     |    Each screen has a posSys_t, this defines its location on
+|          +-----+    the screen as well as the width and height of it.  There
+|          |     |    is also a section for all the character data.
++----------+stats|    
+| msg bar  |     |    We should let the user decide where to place each window
++----------+-----+    and its size if at all possible.
+
+The windows should be able to change during 'runtime'.  Which means if they want
+to hide the menu or message bar they could do that while trying to build a ship.
+
+Could have a list of all the screens.  Whether they are hidden.  Somehow we need
+to have smart alignment incase there is extra space in the window the screens
+will use it.
+
+struct screen_t {
+	int type; //what kind of data is displayed in the view, we need someway of
+			  //attaching different views to screens.  Or maybe just assigning
+			  //them a screen.
+	struct posSys_t *chData;
+	int visible;
+};
+
+We may want to have multiple windows in the end.  Each window could have its own
+list of screens.  
+
+struct window_t {
+	struct list_t *screens;
+	int w;
+	int h;
+}
+
+After this change is made there will likely be many conflicts in both the map.*
+and key.* to be dealth with.  Maybe there could be a current focused screen
+that accepts input?  Possibly Outline that window with a color or the pipe chars
+when it is in focus.  Changing window focus shouldn't be a tedious task it needs
+to be extremely easy.  There are sometimes when you may want two windows to have
+focus.  For instance the ship view + menu bar so you can move around in ship
+view and then do a series of keys to insert an item.  Then there are times when
+you don't want there to be two views focused.  Like if you are talking in the
+messanger view.  Some MMO's that I have played had the message bar steal all
+focus.  If we do end up doing the focus thing when keys are pressed we can just
+check which view is focused and from there the key presses can be sent to the
+right place.
+
+--------------------------------------------------------------------------------
+Networking
 --------------------------------------------------------------------------------
 [1] server will use select() and not mess with forking or threads
 [2] could setup a master server

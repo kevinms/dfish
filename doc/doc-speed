@@ -6,6 +6,7 @@ Table of Contents
 
 	Square Font         /* In Progess - Mrpal */
 	Font Rendering      
+	LPS Rendering   
 	Send Blueprints     
 	Client Map Download 
 
@@ -24,6 +25,11 @@ Table of Contents
 	Use opengl with character maps
 	This should greatly increase the speed of rendering
 
+--------------------------------------------------------------------------------
+[LPS Rendering]
+--------------------------------------------------------------------------------
+	Right now there is a GPS that holds an entire system. TODO expound upon this
+	hah.
 --------------------------------------------------------------------------------
 [Send Blueprints]
 --------------------------------------------------------------------------------
