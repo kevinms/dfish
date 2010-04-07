@@ -14,6 +14,7 @@ Project Breakup
 1) Rendering of view
 2) Map generation
 	a) static and dynamic object generation
+	b) how much of the map will actually be dynamic
 3) Space station building
 4) Saving
 5) Interface
@@ -30,3 +31,50 @@ Project Breakup
 ) Scripting
 ) Plugins
 ) Networking
+
+--------------------------------------------------------------------------------
+New Project Breakup
+--------------------------------------------------------------------------------
+
+) Networked Multiplayer
+	a) over the internet not just LANs
+) Procedural Map Generation
+	a) must be completely deterministic across multiple platforms
+) Game Engine
+	a) graphics rendering
+	b) physics simulation
+	c) path finding
+	d) sound
+	e) AI
+) Interface Design
+) 
+
+Support for reading files with different endianess
+
+--------------------------------------------------------------------------------
+Engine
+--------------------------------------------------------------------------------
+Input
+Graphics
+	Load/Save .bp (blueprint)
+	TTF Fonts??
+	Character Maps for OpenGL??
+Renderer
+	Blueprint
+	Text
+Audio
+Scripting
+Networking
+	reliable out of order udp
+	unreliable udp
+	Time synchronization between C/S
+	high resolution timers
+	logging system
+Physics
+View
+	Console view
+Texture
+Editor Tools
+	Blueprint editor
+Dev Tools
+	Logging
