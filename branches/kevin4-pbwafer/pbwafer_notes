@@ -1,0 +1,51 @@
+                             pbwafer - Notes
+
+Table of Contents
+
+    1.  Frame Independent Movement
+    2.  Regulating FPS
+    3.  Playing Multiple Sounds at Once
+
+--------------------------------------------------------------------------------
+1.                        Frame Independent Movement
+--------------------------------------------------------------------------------
+Here we define the dot related constants of width, height, and velocity.
+
+Now that we're moving in relation to time instead of frame rate we have to
+change how we handle velocity. Instead of basing velocity per frame we're going
+to base it per second. In the original motion tutorial we had the dot travel 10
+pixels every frame. Since the program ran at 20 frames per second that meant the
+dot moved at a rate of 200 pixels per second.
+
+So now the dot's velocity is 200 pixels per second.
+
+Before we had to cap the frame rate to keep the dot from moving too fast. Here
+we're going to make the dot move based on time instead of frame rate so it moves
+the same no matter what the frame rate is.
+
+--------------------------------------------------------------------------------
+2.                              Regulating FPS
+--------------------------------------------------------------------------------
+When we started the frame, we started a timer to keep track of how much time it
+took to output this frame. In order for this program not to run too fast, each
+frame must take a certain amount of time. Since 20 frames are being shown per
+second, each frame must take no less than 1/20th of a second. If the frame rate
+is at 60 FPS, each frame must take no less than 1/60th of a second. Since this
+demo is running at 20 FPS, that means we should spend 50 milliseconds (1000
+milliseconds / 20 frames) per frame.
+
+To regulate the frame rate, first we check if the frame timer is less than the
+time allowed per frame. If it's more, it means we're either on time or behind
+schedule so we don't have time to wait. If it is less, then we use SDL_Delay()
+to sleep the rest of the frame time.
+
+So if the frame timer in this program is at 20 milliseconds we sleep for 30
+milliseconds. If the frame timer is at 40 milliseconds, we sleep for 10
+milliseconds, etc, etc. 
+
+--------------------------------------------------------------------------------
+3.                     Playing Multiple Sounds at Once
+--------------------------------------------------------------------------------
+SDL_mixer is an extension library that makes using sound braindead easy.
+
+g++ sdltest.c -o sdltest `sdl-config --cflags --libs` -lSDL_mixer
