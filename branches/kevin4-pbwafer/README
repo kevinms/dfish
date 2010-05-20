@@ -1,0 +1,26 @@
+kevin4-pbwafer
+
+This branch contains the new engine dfish will begin using.  It is in a really
+early developement stage so this branch was created to work on the engine
+without messing up all the working code we have in the trunk.
+
+This branch will be merged when at least the window and input systems are
+in working condition.  Soon to follow will be the menu system.
+
+Bellow are a couple things that I want to complete in the near future:
+
+pbwafer - debug macros     [          ]  0/10
+
+pbwafer - window system    [#         ]  1/10
+pbwafer - input            [##        ]  2/10
+pbwafer - menu             [          ]  0/10
+
+pbwafer - buffer i/o       [########  ]  8/10
+pbwafer - udp net library  [          ]  0/10
+pbwafer - protocol         [          ]  0/10
+pbwafer - huffman compress [          ]  0/10
+
+pbwafer - blueprints       [          ]  0/10
+pbwafer - blueprint diff   [          ]  0/10
+pbwafer - physics          [          ]  0/10
+

@@ -1,0 +1,38 @@
+CC=gcc
+CFLAGS=-g -Wall -O3 `sdl-config --cflags`
+
+LDFLAGS=`sdl-config --libs` -lSDL_ttf
+SOURCES=vid_sdl.c
+OBJECTS=$(SOURCES:.c=.o)
+
+all: $(EXECUTABLE)
+	
+
+################################################################################
+# build tests
+################################################################################
+T_EXECUTABLE=test-vidsdl
+
+test: $(T_EXECUTABLE)
+	
+
+T_VIDSDL_SOURCES=$(SOURCES) test-vidsdl.c
+T_VIDSDL_OBJECTS=$(T_VIDSDL_SOURCES:.c=.o)
+
+test-vidsdl: $(T_VIDSDL_OBJECTS)
+	$(CC) $(LDFLAGS) $(T_VIDSDL_OBJECTS) -o $@
+
+################################################################################
+# Implicit rule to compile all .c to .o
+################################################################################
+.c.o:
+	$(CC) -c $(CFLAGS) $< -o $@
+
+################################################################################
+# Cleanup rules
+################################################################################
+clean:
+	rm -fv *.o object-gen/*.o $(EXECUTABLE)  *~
+
+clean-test:
+	rm -fv *.o $(T_EXECUTABLE)  *~
