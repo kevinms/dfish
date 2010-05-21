@@ -1,16 +1,18 @@
-+----------+
-|    1     |   # of views: 2
-|          |
-+----------+
-|    2     |
-+----------+
+#ifndef __VIEW_H
+#define __VIEW_H
 
-Each view could have an xoffset and yoffset
+#include "SDL_ttf.h"
 
-extern int TC_X,TC_Y,TC_R,TC_G,TC_B,TC_FR,TC_FG,TC_FB,TC_A,TC_FA,TC_L
-extern SDL_Surface *TC_Screen;
-extern bool TC_LayersShown[7];
-extern Uint32 TC_Layers[255][255][7][7];
+/*
+if you want to learn all about how tinycurses works just look into:
+	int initscrext(int w,int h,bool real);
+	int addch(int ch)
+	int refresh();
+
+	Also its vital to figure out what all TC_Layers is used for
+*/
+
+//TODO: add a variable for setting which view as focus
 
 typedef struct view_s
 {
@@ -26,18 +28,24 @@ typedef struct view_s
 	int x; // x position of the view on the ROOT WINDOW SDL_Surface
 	int y; // y position of the view on the ROOT WINDOW SDL_Surface
 
+	int cursor_x; // the current x position of the cursor in this view
+	int cursor_y; // the current y position of the cursor in this view
+
 	char *fontname;
 	int fontsize;
 	TTF_Font *font;
+
+	SDL_Surface *screen;
+	//Uint32 layers[255][255][7][7];
+	Uint32 ****layers;
 } view_t;
 
-view_t view_init(int x, int y, int real_w, int real_h, int tile_w, int tile_h);
-void view_update(view_t *v);
-void view_free(view_t *v);
+extern view_t *v;
 
-if you want to learn all about how tinycurses works just look into:
-	int initscrext(int w,int h,bool real);
-	int addch(int ch)
-	int refresh();
+view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen);
+void VIEW_layers_malloc(view_t *v);
+void VIEW_resize(view_t *v);
+void VIEW_update(view_t *v);
+void VIEW_free(view_t *v);
 
-	Also its vital to figure out what all TC_Layers is used for
+#endif /* !__VIEW_H */

@@ -1,9 +1,15 @@
 #ifndef __RENDER_H
 #define __RENDER_H
 
-void r_init(char *fontname, int fontsize);
-void r_char(void);
-void r_string(void);
-void r_blueprint(void);
+#include "view.h"
+
+//TODO: Add all the functionality from TinyCurses
+
+void R_init(void);
+void R_set(view_t *v);
+void R_char(int ch);
+void R_string(const char *s);
+void R_blueprint(void);
+void R_update(void);
 
 #endif /* !__RENDER_H */
