@@ -11,7 +11,7 @@ all: $(EXECUTABLE)
 ################################################################################
 # build tests
 ################################################################################
-T_EXECUTABLE=test-vidsdl test-winsys
+T_EXECUTABLE=test-vidsdl test-input test-winsys
 
 test: $(T_EXECUTABLE)
 	
@@ -21,6 +21,12 @@ T_VIDSDL_OBJECTS=$(T_VIDSDL_SOURCES:.c=.o)
 
 test-vidsdl: $(T_VIDSDL_OBJECTS)
 	$(CC) $(LDFLAGS) $(T_VIDSDL_OBJECTS) -o $@
+
+T_INPUT_SOURCES=input.c test-input.c
+T_INPUT_OBJECTS=$(T_INPUT_SOURCES:.c=.o)
+
+test-input: $(T_INPUT_OBJECTS)
+	$(CC) $(LDFLAGS) $(T_INPUT_OBJECTS) -o $@
 
 T_WINSYS_SOURCES=vid_sdl.c view.c render_sdl.c utils.c test-winsys.c
 T_WINSYS_OBJECTS=$(T_WINSYS_SOURCES:.c=.o)

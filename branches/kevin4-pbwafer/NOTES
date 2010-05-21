@@ -5,6 +5,7 @@ Table of Contents
     1.  Frame Independent Movement
     2.  Regulating FPS
     3.  Playing Multiple Sounds at Once
+    4.  Menu + Input System
 
 --------------------------------------------------------------------------------
 1.                        Frame Independent Movement
@@ -49,3 +50,22 @@ milliseconds, etc, etc.
 SDL_mixer is an extension library that makes using sound braindead easy.
 
 g++ sdltest.c -o sdltest `sdl-config --cflags --libs` -lSDL_mixer
+
+--------------------------------------------------------------------------------
+4.                         Menu + Input System
+--------------------------------------------------------------------------------
+The menu system will really just be a visual represenation of all the hotkeys.
+We don't want to bind commands to keys we want to give the game logic the
+functions needed to do that.
+
+Could just have a giant mapping of all keys and what they do.
+
+menu_t *MENU_new(const char *name);
+void MENU_add_entry(const char *name, keychain_t *kc, void (*callback)());
+void MENU_add_menu(menu_t *);
+
+typedef struct keychain_s
+{
+	// possibly a modifier
+	// some type of series of keys
+} keychain_t;
