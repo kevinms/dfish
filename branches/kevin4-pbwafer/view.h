@@ -35,6 +35,12 @@ typedef struct view_s
 	int fontsize;
 	TTF_Font *font;
 
+	char showcursor;
+	char cursor_color[3];
+	int numl; // Number of layers that exist
+	char *layer_visible; // Array of bools to set whether to render a layer
+	int l; // The current layer to render things on
+
 	SDL_Surface *screen;
 	//Uint32 layers[255][255][7][7];
 	Uint32 ****layers;
@@ -42,7 +48,7 @@ typedef struct view_s
 
 extern view_t *v;
 
-view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen);
+view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl);
 void VIEW_layers_malloc(view_t *v);
 void VIEW_resize(view_t *v);
 void VIEW_update(view_t *v);

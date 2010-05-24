@@ -1,7 +1,7 @@
 #include "view.h"
 #include "utils.h"
 
-view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen)
+view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl)
 {
 	view_t *v = (view_t *)malloc(sizeof(*v));
 	if(!v)
@@ -32,6 +32,10 @@ view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int font
 	v->cursor_x = 0;
 	v->cursor_y = 0;
 
+	// Get all the layers ready
+	v->numl = numl;
+	v->layer_visible = (char *)malloc(sizeof(char) * numl);
+	v->l = 0;
 	VIEW_layers_malloc(v);
 
 	return v;
@@ -46,8 +50,8 @@ void VIEW_layers_malloc(view_t *v)
 	for(i=0;i<v->fake_w;i++) {
 		v->layers[i] = (Uint32 ***)malloc(size * v->fake_h);
 		for(j=0;j<v->fake_h;j++) {
-			v->layers[i][j] = (Uint32 **)malloc(size * 7);
-			for(k=0;k<7;k++) {
+			v->layers[i][j] = (Uint32 **)malloc(size * v->numl);
+			for(k=0;k<v->numl;k++) {
 				v->layers[i][j][k] = (Uint32 *)malloc(sizeof(Uint32) * 7);
 			}
 		}
