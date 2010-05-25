@@ -22,6 +22,7 @@ void R_showcursor(char b);
 void R_setch(int ch);
 void R_addch(int ch);
 void R_string(const char *s);
+void R_stringln(const char *s);
 void R_move(int x,int y);
 void R_moveby(int x,int y);
 void R_updatelayer(int l);

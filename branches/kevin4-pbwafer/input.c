@@ -20,8 +20,8 @@ input_handle()
 		switch(event.type){
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
-				input_display_state(&event.key);
-				input_display_modifiers(&event.key);
+				//input_display_state(&event.key);
+				//input_display_modifiers(&event.key);
 				input_display_key(&event.key);
 				break;
 			case SDL_QUIT:
@@ -31,6 +31,26 @@ input_handle()
 	}
 
 	return running;
+}
+
+void input_check()
+{
+	SDL_Event event;
+
+	while(SDL_PollEvent(&event)) {
+		switch(event.type){
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+				input_display_state(&event.key);
+				input_display_modifiers(&event.key);
+				input_display_key(&event.key);
+				break;
+			case SDL_QUIT:
+				break;
+		}
+	}
+
+	//return event;
 }
 
 void

@@ -4,6 +4,7 @@
 #include "vid.h"
 #include "view.h"
 #include "render.h"
+#include "menu.h"
 
 int main(void)
 {
@@ -14,7 +15,7 @@ int main(void)
 	vm.bpp = 32;
 	VID_init();
 	VID_init_mode(&vm);
-	VID_set_caption("pbwafer");
+	VID_set_caption("pbwafer - test driver");
 
 	atexit(SDL_Quit);
 
@@ -27,9 +28,18 @@ int main(void)
 	v2 = VIEW_init(0,280,500,200,"./Font.ttf",7,vm.screen,7);
 	v3 = VIEW_init(500,0,200,480,"./Font_default.ttf",10,vm.screen,7);
 
+	R_color(0,0,0,0,0,255);
+
 	// render the menu
 	R_set(v3);
-	R_string("Main Menu");
+	menu_t *menu;
+	keychain_t kc = {'b','l'};
+	menu = MENU_init("Main Menu");
+		menu = MENU_add_entry(menu,"Clear View",kc,NULL);
+			menu = MENU_add_entry(menu,"Main View",kc,NULL);
+			menu = MENU_add_entry(menu->par,"Chat View",kc,NULL);
+		menu = MENU_add_entry(menu->par->par,"Generate Galaxy",kc,NULL);
+	MENU_load(menu->par);
 	R_update();
 
 	// render text in both views

@@ -6,6 +6,7 @@ Table of Contents
     2.  Regulating FPS
     3.  Playing Multiple Sounds at Once
     4.  Menu + Input System
+    5.  Game Loop Psuedo-code
 
 --------------------------------------------------------------------------------
 1.                        Frame Independent Movement
@@ -70,3 +71,34 @@ typedef struct keychain_s
 	// some type of series of keys
 } keychain_t;
 
+--------------------------------------------------------------------------------
+5.                         Game Loop Psuedo-code
+--------------------------------------------------------------------------------
+
+done = 0
+init vid sys
+init render sys
+init sound sys
+init all default views
+	main, chat, stats, ship editor, etc.
+
+while(!done)
+{
+	if there is input
+		check global keychains (should one of the modifiers: ctl, alt, mod4)
+		check which view gets the input
+			check view keychains
+			check current menu keychains
+	if there is data to recv
+	if there is data to send
+
+	update game internals
+		physics, stats, etc.
+	resolve collisions
+	draw graphics
+	if main view visible
+		render main view
+	if ship editor visible
+		render ship editor
+	
+}

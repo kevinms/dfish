@@ -13,6 +13,7 @@ if you want to learn all about how tinycurses works just look into:
 */
 
 //TODO: add a variable for setting which view as focus
+//TODO: get view resizing working so you can do things like hide the menu view
 
 typedef struct view_s
 {

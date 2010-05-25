@@ -25,9 +25,9 @@ p_strsplit(char *buf, char **seg)
 }
 
 char *
-p_strcpy(char *str)
+p_strcpy(const char *str)
 {
-        //allocates and copies a string
+	//allocates and copies a string
 	char *new = malloc (sizeof (char) * strlen (str));
 	strcpy (new, str);
 	return new;
@@ -48,7 +48,7 @@ search_match(char **tree, char *apple)
 double
 getTime()
 {
-        //check and return time
+	//check and return time
 	struct timeval curTime;
 	(void) gettimeofday (&curTime, (struct timezone *) NULL);
 	return (((((double) curTime.tv_sec) * 1000000.0) 
@@ -66,10 +66,10 @@ int fsize(const char *f) {
 	struct stat st; 
 
 	if (stat(f, &st) == 0)
-                //return file size
+		//return file size
 		return st.st_size;
 
-        //return error
+	//return error
 	return -1; 
 }
 
@@ -79,14 +79,14 @@ fcheck_for_user(const char *user)
 	struct stat st;
 	char *path = "/home/";
 	char *folder = NULL;
-        //build location of home directory
+	//build location of home directory
 	folder = (char *)malloc(strlen(path)+strlen(user)+1);
 	memset(folder,0,strlen(path)+strlen(user)+1);
 
 	strcat(folder,path);
 	strcat(folder,user);
 	strcat(folder,"/");
-        //check if present
+	//check if present
 	if(stat(folder,&st) == 0) {
 		printf(" %s is present\n", folder);
 		free(folder);
@@ -94,7 +94,7 @@ fcheck_for_user(const char *user)
 	}
 
 	free(folder);
-        //return error
+	//return error
 	return -1; 
 }
 
@@ -114,19 +114,19 @@ fcheck_for_file(const char *file)
 //Take path of file EX: '/this/is/a/test.txt' an return 'test.txt'
 char *
 fileFromPath(char * path) {
-    int len = strlen(path);
-    int j = 0;
-    int i = len;
+	int len = strlen(path);
+	int j = 0;
+	int i = len;
 
-    while(i != 0 && path[i] != '/'){
-        j++;
-        i--;
-    }
-    if(path[i] == '/') {
-        j--;
-    }
-    char * result = malloc(j);
-    strncpy(result, path + (len - j), j);
+	while(i != 0 && path[i] != '/'){
+		j++;
+		i--;
+	}
+	if(path[i] == '/') {
+		j--;
+	}
+	char * result = malloc(j);
+	strncpy(result, path + (len - j), j);
 
-    return result;
+	return result;
 }

@@ -58,6 +58,13 @@ void R_string(const char *s)
 		R_addch(s[i]);
 }
 
+void R_stringln(const char *s)
+{
+	R_string(s);
+	v->cursor_y++;
+	v->cursor_x = 0;
+}
+
 void R_move(int x, int y)
 {
 	if(0 >= x && x < v->fake_w) {
