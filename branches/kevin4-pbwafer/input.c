@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 int input_chain[6];
+input_t g_chain;
 
 void
 input_init()
@@ -19,11 +20,11 @@ input_handle()
 	while(SDL_PollEvent(&event)) {
 		switch(event.type){
 			case SDL_KEYDOWN:
-			case SDL_KEYUP:
-				//input_display_state(&event.key);
-				//input_display_modifiers(&event.key);
-				input_display_key(&event.key);
 				break;
+			case SDL_KEYUP:
+				g_chain.sym = event.key.keysym.sym;
+				g_chain.mod = event.key.keysym.mod;
+				return 2;
 			case SDL_QUIT:
 				running = 0;
 				break;
@@ -33,17 +34,19 @@ input_handle()
 	return running;
 }
 
-void input_check()
+#if 0
+int input_check()
 {
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)) {
 		switch(event.type){
 			case SDL_KEYDOWN:
-			case SDL_KEYUP:
 				input_display_state(&event.key);
 				input_display_modifiers(&event.key);
 				input_display_key(&event.key);
+				break;
+			case SDL_KEYUP:
 				break;
 			case SDL_QUIT:
 				break;
@@ -51,6 +54,17 @@ void input_check()
 	}
 
 	//return event;
+}
+#endif
+
+int input_diff(input_t *in1, input_t *in2)
+{
+	if(in1->sym == in2->sym) {
+		if(in1->mod == in2->mod) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
 void
@@ -60,7 +74,6 @@ input_display_state(SDL_KeyboardEvent *key)
 		printf("RELEASED: ");
 	else
 		printf("PRESSED: ");
-	
 }
 
 void
@@ -85,3 +98,9 @@ input_display_key(SDL_KeyboardEvent *key)
 {
 	printf( "%s\n", SDL_GetKeyName(key->keysym.sym));
 }
+
+char *input_getkeyname(input_t *i)
+{
+	return SDL_GetKeyName(i->sym);
+}
+

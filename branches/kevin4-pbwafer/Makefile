@@ -28,7 +28,7 @@ T_INPUT_OBJECTS=$(T_INPUT_SOURCES:.c=.o)
 test-input: $(T_INPUT_OBJECTS)
 	$(CC) $(LDFLAGS) $(T_INPUT_OBJECTS) -o $@
 
-T_WINSYS_SOURCES=vid_sdl.c view.c render_sdl.c utils.c list.c menu.c test-winsys.c
+T_WINSYS_SOURCES=vid_sdl.c view.c render_sdl.c input.c cmd.c utils.c list.c menu.c test-winsys.c
 T_WINSYS_OBJECTS=$(T_WINSYS_SOURCES:.c=.o)
 
 test-winsys: $(T_WINSYS_OBJECTS)

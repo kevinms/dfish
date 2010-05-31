@@ -96,8 +96,6 @@ void R_updatelayer(int l)
 	SDL_Color c;
 	Uint16 txt[2] = {'\0','\0'};
 
-	printf("fake_w=%d\nfake_h=%d\n",v->fake_w,v->fake_h);
-
 	if(l<0||l>=v->numl) {
 		fprintf(stderr,"Bad layer: %d\n",l);
 		return;
@@ -165,6 +163,8 @@ void R_clear(void)
 	int i;
 	for(i=0; i<v->numl; i++)
 		R_clearlayer(i);
+
+	R_move(0,0);
 }
 
 void R_color(char r,char g,char b,char fr,char fg,char fb)
