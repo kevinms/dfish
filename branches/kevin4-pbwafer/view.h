@@ -3,17 +3,11 @@
 
 #include "SDL_ttf.h"
 
-/*
-if you want to learn all about how tinycurses works just look into:
-	int initscrext(int w,int h,bool real);
-	int addch(int ch)
-	int refresh();
-
-	Also its vital to figure out what all TC_Layers is used for
-*/
-
-//TODO: add a variable for setting which view as focus
+//TODO: add a variable for setting which view has focus
 //TODO: get view resizing working so you can do things like hide the menu view
+
+//TODO: Need some type of configuration file.  This is so the user can customize
+//      all the views to their liking (size, location)
 
 typedef struct view_s
 {
@@ -43,7 +37,6 @@ typedef struct view_s
 	int l; // The current layer to render things on
 
 	SDL_Surface *screen;
-	//Uint32 layers[255][255][7][7];
 	Uint32 ****layers;
 } view_t;
 

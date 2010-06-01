@@ -77,7 +77,6 @@ menu_t *MENU_do_key(menu_t *root, input_t *in)
 	m = root->cur;
 
 	for(tmp = m->entry_list->head; tmp != NULL; tmp = tmp->next) {
-		printf("yo: %d\n",((menu_t *)tmp->item)->c.i.sym);
 		if(!input_diff(&(((menu_t *)tmp->item)->c.i),in)) {
 			printf("menu_load\n");
 			CMD_do(&((menu_t *)tmp->item)->c);

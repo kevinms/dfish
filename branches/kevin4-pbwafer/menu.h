@@ -3,13 +3,16 @@
 
 #include "list.h"
 
-//TODO: get the input system working for at the very least the keyboard events
-//TODO: get keychains up and running, make sure it is robust enough
-//TODO: get some sort of command structure running
-
 #include "input.h"
 #include "cmd.h"
 #include "view.h"
+
+//TODO: Things that need to be handled by the menu system:
+//          - Menu name or entry name is too long to fit in the view...
+//          - There are too many entries to fit in the view vertically...
+//          - Not all menu's may want to have a cancel option...
+
+//TODO: Cleanup unused functions
 
 typedef struct menu_s
 {

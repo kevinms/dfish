@@ -5,6 +5,7 @@
 //TODO: remove this include, on here for debugging
 #include <stdio.h>
 
+//TODO: return -1 if malloc fails
 void buf_init(fixedbuf_t *b, int size)
 {
 	b->maxsize = size;
