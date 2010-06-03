@@ -6,14 +6,23 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 //#include <errno.h>
 //#include <netinet/in.h>
 //#include <arpa/inet.h>
 
-// Simulator Variables
-char state;
-unsigned int opt;
+fixedbuf_t g_buf;
+int g_sockfd;
+struct sockaddr_storage g_addr;
+size_t g_addrlen;
+
+void NET_init()
+{
+	buf_init(&g_buf,512);
+	g_sockfd = 0;
+	g_addrlen = sizeof(g_addr);
+}
 
 net_t *NET_socket_server(const char *node, const char *service)
 {
@@ -62,10 +71,15 @@ net_t *NET_socket_server(const char *node, const char *service)
 		return NULL;
 	}
 
+	// Set the socket to non-blocking
+	fcntl(n->sockfd, F_SETFL, fcntl(n->sockfd, F_GETFL)|O_NONBLOCK);
+
 	// Store the sockaddr and length in the net_t
-	n->addr = (struct sockaddr *)malloc(p->ai_addrlen);
-	memcpy(n->addr, p->ai_addr, p->ai_addrlen);
+	memcpy(&n->addr, p->ai_addr, p->ai_addrlen);
 	n->addrlen = p->ai_addrlen;
+
+	// Store the global recieve sockfd
+	g_sockfd = n->sockfd;
 
 	// Can go ahead and free servinfo since it is not stored in net_t anymore
 	freeaddrinfo(servinfo);
@@ -107,10 +121,15 @@ net_t *NET_socket_client(const char *node, const char *service)
 		return NULL;
 	}
 
+	// Set the socket to non-blocking
+	fcntl(n->sockfd, F_SETFL, fcntl(n->sockfd, F_GETFL)|O_NONBLOCK);
+
 	// Store the sockaddr and length in the net_t
-	n->addr = (struct sockaddr *)malloc(p->ai_addrlen);
-	memcpy(n->addr, p->ai_addr, p->ai_addrlen);
+	memcpy(&n->addr, p->ai_addr, p->ai_addrlen);
 	n->addrlen = p->ai_addrlen;
+
+	// Store the global recieve sockfd
+	g_sockfd = n->sockfd;
 
 	// Can go ahead and free servinfo since it is not stored in net_t anymore
 	freeaddrinfo(servinfo);
@@ -122,31 +141,64 @@ net_t *NET_socket_client(const char *node, const char *service)
 int NET_send(net_t *n, fixedbuf_t *b)
 {
 	int numbytes;
+	int cursize;
 
-	if ((numbytes = sendto(n->sockfd, b->buf, b->cursize, 0, n->addr, n->addrlen)) == -1) {
+	// Fill in the NET header
+	cursize = b->cursize;
+	buf_reset(b);
+	buf_write_short(b, cursize);
+	buf_write_char(b, RELI_US);
+	buf_write_short(b, n->seq_num);
+	b->cursize = cursize;
+
+	if ((numbytes = sendto(g_sockfd, b->buf, b->cursize, 0, (struct sockaddr *)&n->addr, n->addrlen)) == -1) {
 		perror("talker: sendto");
 	}
 
+	if(numbytes > 0)
+		printf("numbytes sent: %d\n",numbytes);
+	return numbytes;
+}
+
+//TODO: Handle partial sends
+int NET_send_reliable(net_t *n, fixedbuf_t *b)
+{
+	int numbytes;
+	int cursize;
+
+	// Fill in the NET header
+	cursize = b->cursize;
+	buf_reset(b);
+	buf_write_short(b, cursize);
+	buf_write_char(b, RELI_R);
+	buf_write_short(b, n->seq_num);
+	b->cursize = cursize;
+
+	if ((numbytes = sendto(g_sockfd, b->buf, b->cursize, 0, (struct sockaddr *)&n->addr, n->addrlen)) == -1) {
+		perror("talker: sendto");
+	}
+
+	if(numbytes > 0)
+		printf("numbytes sent: %d\n",numbytes);
 	return numbytes;
 }
 
 //TODO: Handle partial recvs
 //TODO: Make sure this is non-blocking so that we can use select()
-int NET_recv(net_t *n, fixedbuf_t *b)
+int NET_recv()
 {
 	int numbytes;
 
-	//TODO: Need to store these in net_t *n somewhere, There server will need to
-	//      keep track of all the clients who connect to them.  Will probably
-	//      use a linked list at first but eventually switch over to a hash map
-	struct sockaddr_storage addr;
-	size_t addrlen;
-
-	addrlen = sizeof(addr);
-	if ((numbytes = recvfrom(n->sockfd, b->buf, b->maxsize , 0, (struct sockaddr *)&addr, &addrlen)) == -1) {
-		perror("recvfrom");
+	buf_clear(&g_buf);
+	if ((numbytes = recvfrom(g_sockfd, g_buf.buf, g_buf.maxsize , 0, (struct sockaddr *)&g_addr, &g_addrlen)) == -1) {
+		//perror("recvfrom");
 	}
-
+	if( numbytes > 0) {
+		printf("numbytes recved: %d\n",numbytes);
+		buf_clear(&g_buf);
+		g_buf.cursize = numbytes;
+		//printf("read_short: %d\n",buf_read_short(&g_buf));
+	}
 	return numbytes;
 }
 

@@ -15,7 +15,7 @@
 
 //TODO: UDP Packet reliability:
 //          - Unreliable
-//          - Unreliable Sequenced
+//          - Unreliable Sequenced  # May only need this one for unreliable
 //          - Reliable
 //          - Reliable   Sequenced  # May not need this one
 //          - Reliable   Ordered    # May not need this one
@@ -31,6 +31,9 @@
 //          - If statements in NET_send() and NET_recv()
 //          - Some kind of state machine
 
+//TODO: Add a way to get the port number and ip in a human readable form from
+//      any incoming packet.  Also need a way to compare ip/port's.
+
 // NET Packet Header
 // +--------+--------+-------------+------------+------+
 // |  UDP   | Packet |   Packet    | Sequence # | Data |
@@ -44,35 +47,45 @@
 #define SIM_RTT 8  // Round Trip Time
 #define SIM_DC  16 // Disconnect
 
+#define RELI_US  0 // Unreliable Sequenced
+#define RELI_R   1 // Reliable
+
 typedef struct net_s
 {
-	int sockfd;                // Socket file descriptor
-	const char *node;          // IP address of server
-	const char *service;       // Port Number (string)
-	unsigned short port;       // Port number
-
-/*
-	struct addrinfo hints;     // Address info IP version agnostic
-	struct addrinfo *servinfo; // Filled after a getaddrinfo()
-	struct addrinfo *p;
-*/
-
-	//TODO: Make sure these are thee only structs needed
-	struct sockaddr *addr;
+	//TODO: Make sure these are the only vars needed
+	int sockfd;
+	struct sockaddr_storage addr;
 	size_t addrlen;
 
-	struct timeval tv;         // 
+	//TODO: Add a queue of un-acked packets that where sent to this host
+
+	unsigned short seq_num;
+
+	struct timeval tv;         // Time till disconnected or RTT
 
 	// Network Simulation Variables
-	int state;
-	unsigned char opt;
+	char state;        // Turn on/off network simulator
+	unsigned char opt; // Which conditions should be simulated
+	int pl;            // Packet Loss
+	int mdr;           // Maximum Data Rate
+	int mtu;           // Maximum Transmission Unit
+	int rtt;           // Round Trip Time
+	char dc;           // Disconnect
 } net_t;
+
+extern fixedbuf_t g_buf;
+extern int g_sockfd;
+extern struct sockaddr_storage g_addr;
+extern size_t g_addrlen;
+
+void NET_init();
 
 // Create and send to/from sockets
 net_t *NET_socket_server(const char *address, const char *service);
 net_t *NET_socket_client(const char *address, const char *service);
 int NET_send(net_t *n, fixedbuf_t *b);
-int NET_recv(net_t *n, fixedbuf_t *b);
+int NET_send_reliable(net_t *n, fixedbuf_t *b);
+int NET_recv();
 void NET_free(net_t *n);
 
 // Simulate a few conditions of a real network

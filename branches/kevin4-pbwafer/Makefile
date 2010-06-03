@@ -11,7 +11,7 @@ all: $(EXECUTABLE)
 ################################################################################
 # build tests
 ################################################################################
-T_EXECUTABLE=test-vidsdl test-input test-winsys test-net
+T_EXECUTABLE=test-vidsdl test-input test-winsys test-net-client test-net-server
 
 test: $(T_EXECUTABLE)
 	
@@ -28,13 +28,13 @@ T_INPUT_OBJECTS=$(T_INPUT_SOURCES:.c=.o)
 test-input: $(T_INPUT_OBJECTS)
 	$(CC) $(LDFLAGS) $(T_INPUT_OBJECTS) -o $@
 
-T_NET_SOURCES=buf.c net.c
+T_NET_SOURCES=buf.c net.c cmd.c input.c proto.c list.c vid_sdl.c utils.c
 T_NET_OBJECTS=$(T_NET_SOURCES:.c=.o)
 
 test-net-client: $(T_NET_OBJECTS) test-net-client.c
-	$(CC) $(LDFLAGS) $(T_NET_OBJECTS) test-net-client.c -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(T_NET_OBJECTS) test-net-client.c -o $@
 test-net-server: $(T_NET_OBJECTS) test-net-server.c
-	$(CC) $(LDFLAGS) $(T_NET_OBJECTS) test-net-server.c -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(T_NET_OBJECTS) test-net-server.c -o $@
 test-net: test-net-client test-net-server
 	
 

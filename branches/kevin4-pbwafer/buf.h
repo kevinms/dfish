@@ -3,6 +3,8 @@
 
 //TODO: Take into account endianess
 
+//TODO: Always malloc 8 extra bytes for the packet header.  One of the NET or
+//      PROTO functions can fill in the header
 typedef struct fixedbuf_s
 {
 	unsigned int curspot;
@@ -12,6 +14,8 @@ typedef struct fixedbuf_s
 } fixedbuf_t;
 
 void buf_init(fixedbuf_t *b, int size);
+void buf_clear(fixedbuf_t *b);
+void buf_reset(fixedbuf_t *b);
 
 unsigned char *buf_memget(fixedbuf_t *b, int size);
 

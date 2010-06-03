@@ -15,6 +15,17 @@ void buf_init(fixedbuf_t *b, int size)
 	b->buf = (unsigned char *)malloc(size);
 }
 
+void buf_clear(fixedbuf_t *b)
+{
+	b->curspot = 0;
+}
+
+void buf_reset(fixedbuf_t *b)
+{
+	b->cursize = 0;
+	b->curspot = 0;
+}
+
 unsigned char *buf_memget(fixedbuf_t *b, int size)
 {
 	if(b->cursize + size > b->maxsize)
