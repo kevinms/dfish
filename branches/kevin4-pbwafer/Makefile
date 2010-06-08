@@ -38,7 +38,7 @@ test-net-server: $(T_NET_OBJECTS) test-net-server.c
 test-net: test-net-client test-net-server
 	
 
-T_WINSYS_SOURCES=vid_sdl.c view.c render_sdl.c input.c cmd.c utils.c list.c menu.c test-winsys.c
+T_WINSYS_SOURCES=vid_sdl.c view.c render_sdl.c input.c cmd.c utils.c list.c menu.c console.c buf.c test-winsys.c
 T_WINSYS_OBJECTS=$(T_WINSYS_SOURCES:.c=.o)
 
 test-winsys: $(T_WINSYS_OBJECTS)

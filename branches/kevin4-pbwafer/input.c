@@ -20,11 +20,11 @@ input_handle()
 	while(SDL_PollEvent(&event)) {
 		switch(event.type){
 			case SDL_KEYDOWN:
-				break;
-			case SDL_KEYUP:
 				g_chain.sym = event.key.keysym.sym;
 				g_chain.mod = event.key.keysym.mod;
 				return 2;
+			case SDL_KEYUP:
+				break;
 			case SDL_QUIT:
 				running = 0;
 				break;

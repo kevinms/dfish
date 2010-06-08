@@ -1,6 +1,8 @@
 #include "view.h"
 #include "utils.h"
 
+view_t *active_view;
+
 view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl)
 {
 	view_t *v = (view_t *)malloc(sizeof(*v));

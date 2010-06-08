@@ -86,12 +86,11 @@ init all default views
 while(!done)
 {
 	if there is input
-		check global keychains (should one of the modifiers: ctl, alt, mod4)
+		check global keychains (should use one of the modifiers: ctl, alt, mod4)
 		check which view gets the input
 			check view keychains
 			check current menu keychains
 	if there is data to recv
-	if there is data to send
 
 	update game internals
 		physics, stats, etc.
@@ -101,7 +100,8 @@ while(!done)
 		render main view
 	if ship editor visible
 		render ship editor
-	
+
+	if there is data to send
 }
 
 --------------------------------------------------------------------------------

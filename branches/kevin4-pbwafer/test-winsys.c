@@ -7,8 +7,21 @@
 #include "menu.h"
 #include "input.h"
 #include "list.h"
+#include "console.h"
 
+menu_t *menu,*tmenu;
 view_t *v1, *v2, *v3;
+
+void mainview_accept_input()
+{
+	// Check the menu commands
+	MENU_do_key(menu,&g_chain);
+}
+
+void gengalaxy()
+{
+	CONSOLE_print("ERROR: this is not implemented yet");
+}
 
 void clearview(void *data)
 {
@@ -51,10 +64,13 @@ int main(void)
 	input_init();
 
 	// initilize 2 different views
-	v1 = VIEW_init(0,0,500,280,"./Font_default.ttf",14,vm.screen,7);
-	v2 = VIEW_init(0,280,500,200,"./Font.ttf",7,vm.screen,7);
+	v1 = VIEW_init(0,0,500,280,"./Font.ttf",7,vm.screen,7);
+	v2 = VIEW_init(0,280,500,200,"./Font_default.ttf",10,vm.screen,7);
 	v3 = VIEW_init(500,0,200,480,"./Font_default.ttf",10,vm.screen,7);
 	menu_view = v3;
+	active_view = v2;
+
+	v1->accept_input = mainview_accept_input;
 
 	R_color(0,0,0,0,0,255);
 
@@ -68,13 +84,13 @@ int main(void)
 
 	// render the menu
 	R_set(v3);
-	menu_t *menu,*tmenu;
 	menu = MENU_init("Main Menu");
 	tmenu = menu;
 		menu = MENU_add_menu(menu,tmenu,"Clear View",KM_NONE,K_v);
 			menu = MENU_add_entry(menu,tmenu,"Main View",KM_NONE,K_m,clearview,v1);
 			menu = MENU_add_entry(menu->par,tmenu,"Chat View",KM_NONE,K_h,clearview,v2);
 		menu = MENU_add_menu(menu->par->par,tmenu,"Generate Galaxy",KM_NONE,K_g);
+			menu = MENU_add_entry(menu,tmenu,"New Galaxy",KM_NONE,K_m,gengalaxy,v1);
 	MENU_load(tmenu);
 	tmenu->cur = tmenu;
 	menu = tmenu;
@@ -89,12 +105,15 @@ int main(void)
 		R_addch(0x00AB);
 	R_update();
 
-	R_set(v2);
-	for(i=0;i<45;i++)
-		R_addch(' ');
-	R_string("dfish - chat window");
-	R_update();
+	//R_set(v3);
 
+	CONSOLE_init("PBwafer Console");
+	CONSOLE_attach_to_view(v2);
+	CONSOLE_print("SUCCESS: This successfully printed to the console");
+	CONSOLE_update();
+
+	R_set(v3);
+	R_update();
 
 	// Input Loop
 	cmd_t *c = NULL;
@@ -108,8 +127,7 @@ int main(void)
 				CMD_do(c);
 			}
 
-			// Check the menu commands
-			MENU_do_key(menu,&g_chain);
+			active_view->accept_input();
 		}
 	}
 

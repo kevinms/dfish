@@ -13,12 +13,12 @@
 //      force I guess.  Although I should be able to detect a bruteforce attack.
 
 // PROTO Packet Header
-// +--------+--------+------+--------+------+
-// |  UDP   |  NET   | Type | Client | Data |
-// | Header | Header |      |   ID   |      |
-// +--------+--------+------+--------+------+
-//     8        5       1       2       n
-// 16 bytes of header data including UDP and NET headers
+// +--------+--------+------+------+
+// |  UDP   |  NET   | Type | Data |
+// | Header | Header |      |      |
+// +--------+--------+------+------+
+//     8        11      1       n
+// 20(!16) bytes of header data including UDP and NET headers
 
 //TODO: Define what the connection process will be:
 //          - 2 Way handshake
@@ -42,8 +42,40 @@
 #define PTYPE_BP        5
 #define PTYPE_BPDIFF    6
 
+#define ERR_CONN_VER  0
+#define ERR_CONN_FULL 1
+
 #define STATE_NOP 0
 #define STATE_CON 1
+
+typedef struct header_s
+{
+	unsigned short size;
+	unsigned short seq_num;
+	unsigned char hid;
+	unsigned short ack;
+	unsigned long ack_bits;
+} header_t;
+
+typedef struct packet_s
+{
+	unsigned short seq_num;
+	fixedbuf_t *b;
+} packet_t;
+
+typedef struct hostinfo_s
+{
+	net_t *n;
+	header_t hdr;
+
+	//TODO: Add a list (hashmap?) of un-acked packets that where sent to this host
+	list_t *unacked_reliable_packets;
+	// Maybe use this when implementing flow control
+	list_t *queue_of_packets_to_send;
+	//TODO: now in header_t
+	unsigned short seq_num;
+
+} hostinfo_t;
 
 // A server will send this information to a client if asked for (usually before
 // the client has connected to any server)
@@ -64,28 +96,40 @@ typedef struct servinfo_s
 typedef struct clientinfo_s
 {
 	int state;
-	unsigned short id;
 	char *name;
 
-	//TODO: Maintain a queue of un acked packets.  This is done to delta
-	//      compress position packets.
+	hostinfo_t *info;
 } clientinfo_t;
 
+extern fixedbuf_t g_buf;
+extern hostinfo_t g_h;
+
 void PROTO_init();
+hostinfo_t *PROTO_host_init();
+
+hostinfo_t *PROTO_socket_client(const char *node, const char *service);
+hostinfo_t *PROTO_socket_server(const char *node, const char *service);
 
 void PROTO_req_servinfo_ip(const char *node, const char *service);
 list_t *PROTO_req_servinfo_broadcast(); // Discover servers on a LAN
 list_t *PROTO_req_servinfo_master(const char *node, const char *service);
-void PROTO_send_servinfo(const char *node, const char *service, servinfo_t *info);
 
 void PROTO_set_servinfo(const char *name, unsigned short max_clients);
 void PROTO_set_clientinfo(int state, char *name);
 
-net_t *PROTO_connect(const char *node, const char *service);
-net_t *PROTO_accept_client();
+hostinfo_t *PROTO_connect(const char *node, const char *service);
 
 // Work horses of parsing functions
 void PROTO_server_parse_DGRAM();
 void PROTO_client_parse_DGRAM();
+
+// Send/recv stuff
+int PROTO_send_reliable(hostinfo_t *h, fixedbuf_t *b);
+int PROTO_send_unreliable(hostinfo_t *h, fixedbuf_t *b);
+int PROTO_send(hostinfo_t *h, fixedbuf_t *b);
+int PROTO_recv();
+
+char PROTO_is_known_host(hostinfo_t *h);
+void PROTO_accept_acks();
 
 #endif /* !__PROTO_H */

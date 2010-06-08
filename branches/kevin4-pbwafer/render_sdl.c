@@ -7,6 +7,7 @@
 view_t *v = NULL;
 SDL_Color g_fg = {255,0,0,255};
 SDL_Color g_bg = {0,0,0,255};
+SDL_Color g_bd = {255,0,0,255};
 
 void R_init(void)
 {
@@ -61,14 +62,30 @@ void R_string(const char *s)
 void R_stringln(const char *s)
 {
 	R_string(s);
+	//R_moveby(0,1);
 	v->cursor_y++;
+	v->cursor_x = 0;
+}
+
+void R_stringn(const char *s,int n)
+{
+	int i;
+
+	for(i = 0; i < n; i++)
+		R_addch(s[i]);
+}
+
+void R_stringnln(const char *s,int n)
+{
+	R_stringn(s,n);
+	R_moveby(0,1);
 	v->cursor_x = 0;
 }
 
 void R_move(int x, int y)
 {
-	if(0 >= x && x < v->fake_w) {
-		if(0 >= y && y < v->fake_h) {
+	if(0 <= x && x < v->fake_w) {
+		if(0 <= y && y < v->fake_h) {
 			v->cursor_x = x;
 			v->cursor_y = y;
 		}
@@ -79,8 +96,8 @@ void R_moveby(int x,int y)
 {
 	x += v->cursor_x;
 	y += v->cursor_y;
-	if(0 >= x && x < v->fake_w) {
-		if(0 >= y && y < v->fake_h) {
+	if(0 <= x && x < v->fake_w) {
+		if(0 <= y && y < v->fake_h) {
 			v->cursor_x = x;
 			v->cursor_y = y;
 		}
@@ -127,6 +144,7 @@ void R_updatelayer(int l)
 		}
 	}
 
+	R_pixel_box(active_view);
 	SDL_Flip(v->screen);
 }
 
@@ -340,4 +358,45 @@ void R_addcolor(int x,int y,int r,int g,int b,int fr,int fg,int fb)
 			v->layers[x][y][v->l][2] = SDL_MapRGBA(v->screen->format,fr,fg,fb,fc[3]);
 		}
 	}
+}
+
+void R_pixel_box(view_t *view)
+{
+	Uint32 color = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
+	// Top line
+	printf("%d, %d, %d, %d\n",view->x, view->y, view->real_w, view->real_h);
+	SDL_Rect rect = {view->x,view->y,view->real_w,1};
+	SDL_FillRect(view->screen, &rect, color);
+
+	// Bottom line
+	SDL_Rect rect1 = {view->x,view->y + view->real_h-1,view->real_w,1};
+	SDL_FillRect(view->screen, &rect1, color);
+
+	// Left line
+	SDL_Rect rect2 = {view->x,view->y,1,view->real_h};
+	SDL_FillRect(view->screen, &rect2, color);
+
+	// Right line
+	SDL_Rect rect3 = {view->x + view->real_w-1,view->y,1,view->real_h};
+	SDL_FillRect(view->screen, &rect3, color);
+
+/*
+	int x, y;
+
+	// Top Line
+	for(x = view->x, y = view->y; x < view->real_w; x++)
+		*(Uint32 *)(view->screen->pixels + x + y) = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
+
+	// Bottom Line
+	for(x = view->x, y = view->real_h; x < view->real_w; x++)
+		*(Uint32 *)(view->screen->pixels + x + y) = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
+
+	// Left Line
+	for(x = view->x, y = view->y; y < view->real_h; y++)
+		*(Uint32 *)(view->screen->pixels + x + y) = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
+
+	// Right Line
+	for(x = view->real_w, y = view->y; y < view->real_h; y++)
+		*(Uint32 *)(view->screen->pixels + x + y) = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
+*/
 }

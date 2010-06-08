@@ -18,19 +18,17 @@ int main()
 	NET_init();
 	PROTO_init();
 
-	net_t *n;
+	hostinfo_t *h;
 
 	PROTO_set_servinfo("pbwafer test server", 3);
 
-	n = NET_socket_server(NULL,"8888");
-	if(!n)
+	h = PROTO_socket_server(NULL,"8888");
+	if(!h)
 		fprintf(stderr,"Error: could not create server socket\n");
 
-	for(;;) {
-		if(g_sockfd != 0) // This tells us if we have any sockets ready to recv on
-			if(NET_recv() > 0)
-				PROTO_server_parse_DGRAM();
-	}
+	for(;;)
+		if(PROTO_recv() > 0)
+			PROTO_server_parse_DGRAM();
 
 	return 0;
 }

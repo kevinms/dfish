@@ -23,6 +23,8 @@ void R_setch(int ch);
 void R_addch(int ch);
 void R_string(const char *s);
 void R_stringln(const char *s);
+void R_stringn(const char *s,int n);
+void R_stringnln(const char *s,int n);
 void R_move(int x,int y);
 void R_moveby(int x,int y);
 void R_updatelayer(int l);
@@ -56,5 +58,6 @@ void R_setlayer(char l);
 void R_setlayershown(char l,char s);
 void R_setcolor(int x,int y,char r,char g,char b,char fr,char fg,char fb);
 void R_addcolor(int x,int y,int r,int g,int b,int fr,int fg,int fb);
+void R_pixel_box();
 
 #endif /* !__RENDER_H */

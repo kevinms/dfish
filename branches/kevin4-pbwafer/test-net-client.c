@@ -52,17 +52,6 @@ int main()
 
 	input_init();
 
-/*
-	net_t *n;
-	fixedbuf_t b;
-	int rv;
-
-	buf_init(&b,512);
-	buf_write_string(&b, "Hello World!");
-
-	rv = NET_send(n, &b);
-	printf("Number of bytes sent: %d\n", rv);
-*/
 	// Game Loop
 	cmd_t *c = NULL;
 	int ret;
@@ -70,12 +59,8 @@ int main()
 	PROTO_set_clientinfo(STATE_NOP,"pughar");
 
 	for(;;) {
-		//printf("%d\n",g_sockfd);
-		if(g_sockfd != 0) // This tells us if we have any sockets ready to recv on
-			if(NET_recv() > 0) {
-				PROTO_client_parse_DGRAM();
-			//printf("bob");
-		}
+		if(PROTO_recv() > 0)
+			PROTO_client_parse_DGRAM();
 
 		ret = input_handle();
 			if(ret == 2) {

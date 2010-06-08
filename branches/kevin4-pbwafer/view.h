@@ -38,9 +38,13 @@ typedef struct view_s
 
 	SDL_Surface *screen;
 	Uint32 ****layers;
+
+	// Callback functions
+	void (*accept_input)();
+	void (*update)();
 } view_t;
 
-extern view_t *v;
+extern view_t *active_view;
 
 view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl);
 void VIEW_layers_malloc(view_t *v);

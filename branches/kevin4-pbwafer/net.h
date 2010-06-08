@@ -5,6 +5,7 @@
 #include <sys/time.h>
 
 #include "buf.h"
+#include "list.h"
 
 //TODO: Add in some options to simulate different network conditions
 //          - Max data rate
@@ -35,11 +36,13 @@
 //      any incoming packet.  Also need a way to compare ip/port's.
 
 // NET Packet Header
-// +--------+--------+-------------+------------+------+
-// |  UDP   | Packet |   Packet    | Sequence # | Data |
-// | Header |  Size  | Reliability | (Optional) |      |
-// +--------+--------+-------------+------------+------+
-//     8        2           1            2         n
+// +--------+---------+------+--------+----------+------+
+// | Packet | seq_num | Host |  ack   |   ack    | Data |
+// |  Size  |         |  ID  | offset | bitfield |      |
+// +--------+---------+------+--------+----------+------+
+//     2         2        1      2         4        n
+
+//TODO: Determine if the ack bitfield needs to be 4 or 2 bytes
 
 #define SIM_PL  1  // Packet Loss
 #define SIM_MDR 2  // Maximum Data Rate
@@ -50,19 +53,8 @@
 #define RELI_US  0 // Unreliable Sequenced
 #define RELI_R   1 // Reliable
 
-typedef struct net_s
+typedef struct netsim_s
 {
-	//TODO: Make sure these are the only vars needed
-	int sockfd;
-	struct sockaddr_storage addr;
-	size_t addrlen;
-
-	//TODO: Add a queue of un-acked packets that where sent to this host
-
-	unsigned short seq_num;
-
-	struct timeval tv;         // Time till disconnected or RTT
-
 	// Network Simulation Variables
 	char state;        // Turn on/off network simulator
 	unsigned char opt; // Which conditions should be simulated
@@ -71,12 +63,20 @@ typedef struct net_s
 	int mtu;           // Maximum Transmission Unit
 	int rtt;           // Round Trip Time
 	char dc;           // Disconnect
-} net_t;
+} netsim_t;
 
-extern fixedbuf_t g_buf;
-extern int g_sockfd;
-extern struct sockaddr_storage g_addr;
-extern size_t g_addrlen;
+typedef struct net_s
+{
+	//TODO: Make sure these are the only vars needed
+	int sockfd;
+	struct sockaddr_storage addr;
+	size_t addrlen;
+
+	struct timeval to; // 
+	struct timeval tv; // Time till disconnected or RTT
+
+	netsim_t ns;
+} net_t;
 
 void NET_init();
 
@@ -85,7 +85,13 @@ net_t *NET_socket_server(const char *address, const char *service);
 net_t *NET_socket_client(const char *address, const char *service);
 int NET_send(net_t *n, fixedbuf_t *b);
 int NET_send_reliable(net_t *n, fixedbuf_t *b);
-int NET_recv();
+int NET_recv(net_t *n, fixedbuf_t *b);
+void NET_copy(net_t *dest, net_t *src);
+
+int NET_ipcmp(net_t *n1, net_t *n2);
+int NET_portcmp(net_t *n1, net_t *n2);
+void NET_print(net_t *n);
+
 void NET_free(net_t *n);
 
 // Simulate a few conditions of a real network
