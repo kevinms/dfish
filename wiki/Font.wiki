@@ -1,0 +1,30 @@
+#Font discussion
+
+= Introduction =
+
+I'm unhappy with the current font. It looks *bolded* and bloated.
+
+
+= Details =
+
+Options
+  * find another font
+    * Pros
+       * Don't have to work on the font
+    * Cons
+       * I've looked and haven't found a suitable font
+  * go back and unbold each symbol
+    * Pros
+       * We will have a font
+    * Cons
+       * Takes Time
+  * create a new one from scratch
+    * Pros
+       * Will be customized to what we want
+    * Cons
+       * Takes more time than the second option
+  * enlist an artsy, font-savvy friend to help
+    * Pros
+       * More community involvement
+    * Cons
+       * I don't know any font-savvy people
