@@ -62,9 +62,16 @@ int input_check()
 int input_diff(input_t *in1, input_t *in2)
 {
 	if(in1->sym == in2->sym) {
-		if(in1->mod == in2->mod) {
+		if(in1->mod == in2->mod)
 			return 0;
-		}
+
+		// This is currently Needed.  It is an odd little exception.  On some
+		// machines no modifier being pressed is 4096 and others it is 0.
+		// According to SDL its KM_NONE is always 0.  This makes input_diff
+		// to fail any time a modifier key is not pressed.  This is just a
+		// bad hack!
+		else if(in1->mod == in2->mod - 4096 || in1->mod - 4096 == in2->mod)
+			return 0;
 	}
 	return 1;
 }

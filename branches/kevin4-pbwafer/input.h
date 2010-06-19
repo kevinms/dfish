@@ -153,8 +153,7 @@
 #define K_POWER        SDLK_POWER
 #define K_EURO         SDLK_EURO
 
-//#define KM_NONE        KMOD_NONE
-#define KM_NONE 4096
+#define KM_NONE        KMOD_NONE
 #define KM_NUM         KMOD_NUM
 #define KM_CAPS        KMOD_CAPS
 #define KM_LCTRL       KMOD_LCTRL
