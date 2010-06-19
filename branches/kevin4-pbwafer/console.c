@@ -311,6 +311,7 @@ void CONSOLE_parse_cmd(char *s)
 	console_cmd_t *cc = NULL;
 	char *tok;
 	int i;
+	char **string_array;
 
 	//TODO: Read string until ' '
 	tok = strtok(s," ");
@@ -330,7 +331,14 @@ void CONSOLE_parse_cmd(char *s)
 		return;
 	}
 
+	string_array = (char **)malloc(sizeof(char *)*cc->argc);
+
+	//read all the strings into an array of strings.
 	for(i = 0; i < cc->argc; i++) {
-		
+		string_array[i] = strdup(strtok(NULL," "));
 	}
+
+	//TODO: print out usage if the wrong number of args was given
+
+	cc->callback(cc->argc, string_array);
 }

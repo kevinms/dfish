@@ -27,7 +27,7 @@ typedef struct console_s
 	link_t **prevlines;
 	link_t **curlines;
 
-	void (*default_callback)(const char *s);
+	void (*default_callback)();
 
 	view_t *v;
 } console_t;

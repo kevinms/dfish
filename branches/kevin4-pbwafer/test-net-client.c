@@ -164,6 +164,9 @@ int main(void)
 
 	PROTO_set_clientinfo(STATE_NOP,"pughar");
 
+	CONSOLE_register_cmd("/name",1,PROTO_req_name,"string name (no spaces)");
+	CONSOLE_register_cmd("/connect",2,PROTO_connect_ip,"IP PORT");
+
 	// Input Loop
 	cmd_t *c = NULL;
 	int ret;

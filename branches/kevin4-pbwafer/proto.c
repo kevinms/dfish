@@ -126,6 +126,24 @@ hostinfo_t *PROTO_connect(const char *node, const char *service)
 	return h;
 }
 
+void PROTO_connect_ip(int count, const char **s)
+{
+	PROTO_connect(s[0],s[1]);
+}
+
+void PROTO_req_name(int n, const char **s)
+{
+	fixedbuf_t b;
+
+	// Setup header
+	buf_init(&b, 512);
+	buf_memget(&b, 11);
+	buf_write_char(&b, PTYPE_NAME);
+	buf_write_string(&b, s[0]);
+
+	PROTO_send_reliable(clientinfo.info, &b);
+}
+
 // This function should only see packets from known hosts or connection requests
 void PROTO_server_parse_DGRAM()
 {
@@ -239,6 +257,16 @@ void PROTO_server_parse_DGRAM()
 		PROTO_server_send_chat(c,s);
 		//free(s);
 	}
+	else if(type == PTYPE_NAME) {
+		// set name
+		c->name = buf_read_string(&g_buf);
+
+		buf_memget(&b, 11);
+		buf_write_char(&b, PTYPE_NAME);
+		buf_write_string(&b, c->name);
+
+		PROTO_send_reliable(c->info, &b);
+	}
 }
 
 void PROTO_client_parse_DGRAM()
@@ -326,10 +354,14 @@ void PROTO_client_parse_DGRAM()
 		
 	}
 	//TODO: Check if we are connected to this server
-	if(type == PTYPE_MSG) {
+	else if(type == PTYPE_MSG) {
 		s = buf_read_string(&g_buf);
 		s2 = buf_read_string(&g_buf);
 		CONSOLE_print("%s: %s",s,s2);
+	}
+	else if(type == PTYPE_NAME) {
+		clientinfo.name = buf_read_string(&g_buf);
+		CONSOLE_print("Name changed to: %s",clientinfo.name);
 	}
 }
 

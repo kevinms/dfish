@@ -120,6 +120,9 @@ void PROTO_set_servinfo(const char *name, unsigned short max_clients);
 void PROTO_set_clientinfo(int state, char *name);
 
 hostinfo_t *PROTO_connect(const char *node, const char *service);
+void PROTO_connect_ip(int count, const char **s);
+
+void PROTO_req_name(int n, const char **s);
 
 // Work horses of parsing functions
 void PROTO_server_parse_DGRAM();
