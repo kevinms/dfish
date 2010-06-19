@@ -30,6 +30,7 @@
 //TODO: Client blocking based off of:
 //          - IP
 //          - IP Range
+//          - User Name (offensive aliases)
 
 #include "list.h"
 #include "net.h"
@@ -41,6 +42,7 @@
 #define PTYPE_MSG       4
 #define PTYPE_BP        5
 #define PTYPE_BPDIFF    6
+#define PTYPE_NAME      7
 
 #define ERR_CONN_VER  0
 #define ERR_CONN_FULL 1
@@ -128,6 +130,11 @@ int PROTO_send_reliable(hostinfo_t *h, fixedbuf_t *b);
 int PROTO_send_unreliable(hostinfo_t *h, fixedbuf_t *b);
 int PROTO_send(hostinfo_t *h, fixedbuf_t *b);
 int PROTO_recv();
+
+//void PROTO_send_chat(hostinfo_t *h, const char *s);
+void PROTO_client_send_chat(const char *s);
+void PROTO_server_send_chat(clientinfo_t *c, const char *s);
+void PROTO_change_name(const char *s);
 
 char PROTO_is_known_host(hostinfo_t *h);
 void PROTO_accept_acks();

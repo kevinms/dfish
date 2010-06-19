@@ -6,19 +6,10 @@
 
 int main()
 {
-/*
-	int rv;
-
-	rv = NET_recv(n,&b);
-	printf("Number of bytes recved: %d\n",rv);
-
-	printf("%s\n",b.buf);
-*/
+	hostinfo_t *h;
 
 	NET_init();
 	PROTO_init();
-
-	hostinfo_t *h;
 
 	PROTO_set_servinfo("pbwafer test server", 3);
 

@@ -54,24 +54,26 @@ void R_addch(int ch)
 void R_string(const char *s)
 {
 	int i;
-	int len = strlen(s);
-	for(i = 0; i < len; i++)
+	//int len = strlen(s);
+	//TODO: check for null char instead, it will be faster
+	for(i = 0; s[i] != '\0' ; i++)
 		R_addch(s[i]);
 }
 
 void R_stringln(const char *s)
 {
 	R_string(s);
-	//R_moveby(0,1);
-	v->cursor_y++;
+	R_moveby(0,1);
+	//v->cursor_y++;
 	v->cursor_x = 0;
 }
 
 void R_stringn(const char *s,int n)
 {
 	int i;
+	//int len = strlen(s);
 
-	for(i = 0; i < n; i++)
+	for(i = 0; s[i] != '\0' && i < n; i++)
 		R_addch(s[i]);
 }
 
@@ -139,12 +141,13 @@ void R_updatelayer(int l)
 
 			SDL_BlitSurface(s,NULL,v->screen,&r);
 
-			SDL_FreeSurface(s);
-			SDL_FreeSurface(t);
+			//TODO:VITAL: You need to figure this out! 
+			//SDL_FreeSurface(s);
+			//SDL_FreeSurface(t);
 		}
 	}
 
-	R_pixel_box(active_view);
+	R_box(active_view);
 	SDL_Flip(v->screen);
 }
 
@@ -165,8 +168,15 @@ void R_clearlayer(int l)
 	int i,j;
 	char tmp = g_fg.unused;
 	char tmpl = v->l;
+	SDL_Rect r;
 	R_setlayer(l);
 	R_setalpha(0);
+
+	r.x=v->x;
+	r.y=v->y;
+	r.w=v->real_w;
+	r.h=v->real_h;
+	SDL_FillRect(v->screen,&r,SDL_MapRGB(v->screen->format,0,0,0));
 
 	for(i=0; i < v->fake_w; i++)
 		for(j=0; j < v->fake_h; j++)
@@ -360,11 +370,11 @@ void R_addcolor(int x,int y,int r,int g,int b,int fr,int fg,int fb)
 	}
 }
 
-void R_pixel_box(view_t *view)
+void R_box(view_t *view)
 {
 	Uint32 color = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
 	// Top line
-	printf("%d, %d, %d, %d\n",view->x, view->y, view->real_w, view->real_h);
+	//printf("%d, %d, %d, %d\n",view->x, view->y, view->real_w, view->real_h);
 	SDL_Rect rect = {view->x,view->y,view->real_w,1};
 	SDL_FillRect(view->screen, &rect, color);
 
@@ -399,4 +409,26 @@ void R_pixel_box(view_t *view)
 	for(x = view->real_w, y = view->y; y < view->real_h; y++)
 		*(Uint32 *)(view->screen->pixels + x + y) = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
 */
+}
+
+void R_boxext(view_t *view,char r,char g,char b)
+{
+	Uint32 color = SDL_MapRGBA(view->screen->format,r,g,b,255);
+
+	// Top line
+	//printf("%d, %d, %d, %d\n",view->x, view->y, view->real_w, view->real_h);
+	SDL_Rect rect = {view->x,view->y,view->real_w,1};
+	SDL_FillRect(view->screen, &rect, color);
+
+	// Bottom line
+	SDL_Rect rect1 = {view->x,view->y + view->real_h-1,view->real_w,1};
+	SDL_FillRect(view->screen, &rect1, color);
+
+	// Left line
+	SDL_Rect rect2 = {view->x,view->y,1,view->real_h};
+	SDL_FillRect(view->screen, &rect2, color);
+
+	// Right line
+	SDL_Rect rect3 = {view->x + view->real_w-1,view->y,1,view->real_h};
+	SDL_FillRect(view->screen, &rect3, color);
 }

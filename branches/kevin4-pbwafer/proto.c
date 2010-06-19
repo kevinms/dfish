@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include "utils.h"
 #include "version.h"
+#include "console.h"
 
 list_t *servinfo_list; // used by client
 list_t *clientinfo_list; // used by server
@@ -30,9 +31,7 @@ hostinfo_t *PROTO_host_copy(hostinfo_t *src)
 {
 	hostinfo_t *h;
 
-	h = (hostinfo_t *)malloc(sizeof(*h));
-	h->unacked_reliable_packets = list_init();
-	h->queue_of_packets_to_send = list_init();
+	h = PROTO_host_init();
 
 	h->n = (net_t *)malloc(sizeof(*h->n));
 	NET_copy(h->n, g_h.n);
@@ -134,6 +133,7 @@ void PROTO_server_parse_DGRAM()
 	link_t *tmp;
 	clientinfo_t *c;
 	fixedbuf_t b;
+	char *s;
 
 	buf_init(&b, 512);
 
@@ -183,7 +183,8 @@ void PROTO_server_parse_DGRAM()
 			c = (clientinfo_t *)malloc(sizeof(*c));
 			c->name = buf_read_string(&g_buf);
 
-			c->info = (hostinfo_t *)malloc(sizeof(*c->info));
+			//c->info = (hostinfo_t *)malloc(sizeof(*c->info));
+			c->info = PROTO_host_init();
 			c->info->n = (net_t *)malloc(sizeof(*c->info->n));
 			NET_copy(c->info->n, g_h.n);
 			c->info->hdr.hid = 10; //TODO: Generate a host id and move this to the payload
@@ -193,6 +194,7 @@ void PROTO_server_parse_DGRAM()
 			// Build and send a reply packet
 			buf_memget(&b, 11);
 			buf_write_char(&b, PTYPE_CONNECT);
+			buf_write_char(&b, 10); //TODO: Generate a host id
 
 			//TODO: send packet and set reliability type to (reliable)
 			//TODO: check rv to make sure there were no errors
@@ -210,6 +212,8 @@ void PROTO_server_parse_DGRAM()
 		return;
 	}
 
+	printf("Before\n");
+
 	// Check if the packet is from a known host
 	for(tmp = clientinfo_list->head; tmp != NULL; tmp = tmp->next) {
 		if(PROTO_is_known_host(((clientinfo_t *)tmp->item)->info))
@@ -219,13 +223,21 @@ void PROTO_server_parse_DGRAM()
 	if(tmp == NULL)
 		return;
 
+	printf("After\n");
+
 	c = (clientinfo_t *)tmp->item;
-	PROTO_accept_acks(c->info);
+	//PROTO_accept_acks(c->info);
 
 	if(type == PTYPE_KEEPALIVE) {
 		//TODO: This was a reply from a server KEEPALIVE packet.  The reply
 		//      tells the server that the client is still connected and we
 		//      should reset the timeout for the client.
+	}
+	else if(type == PTYPE_MSG) {
+		s = buf_read_string(&g_buf);
+		printf("PTYPE_MSG: '%s'\n",s);
+		PROTO_server_send_chat(c,s);
+		//free(s);
 	}
 }
 
@@ -234,6 +246,7 @@ void PROTO_client_parse_DGRAM()
 	int i;
 	char type;
 	servinfo_t *info;
+	char *s, *s2;
 
 	printf("PROTO_client_parse\n");
 
@@ -263,18 +276,19 @@ void PROTO_client_parse_DGRAM()
 		list_add(servinfo_list, info);
 
 		//TODO: remove this eventually, just a test print
-		printf("----------Server Info---------\n");
-		printf("name: %s\n", info->name);
-		printf("version: %d\n", info->major_version);
-		printf("version: %d\n", info->minor_version);
-		printf("max_clients: %d\n", info->max_clients);
-		printf("num_clients: %d\n", info->num_clients);
-		printf("clients: ");
+		CONSOLE_print_no_update("----------Server Info---------");
+		CONSOLE_print_no_update("name: %s", info->name);
+		CONSOLE_print_no_update("version: %d", info->major_version);
+		CONSOLE_print_no_update("version: %d", info->minor_version);
+		CONSOLE_print_no_update("max_clients: %d", info->max_clients);
+		CONSOLE_print_no_update("num_clients: %d", info->num_clients);
+		CONSOLE_print_no_update("clients: ");
 		for(i = 0; i < info->num_clients; i++)
-			printf("%s, ", info->clients[i]);
-		printf("\n");
+			CONSOLE_print_no_update("    %s, ", info->clients[i]);
+		//printf("\n");
 		//printf("ping: %d\n", info->ping);
-		printf("------------------------------\n");
+		CONSOLE_print_no_update("------------------------------");
+		CONSOLE_update();
 		return;
 	}
 
@@ -295,14 +309,15 @@ void PROTO_client_parse_DGRAM()
 	if(!PROTO_is_known_host(clientinfo.info))
 		return;
 
-	PROTO_accept_acks(c_host);
+	//PROTO_accept_acks(c_host);
 
 	if(type == PTYPE_CONNECT) {
 		printf("PTYPE_CONNECT\n");
-		printf("hid: %d\n",g_h.hdr.hid);
 
 		clientinfo.state = STATE_CON;
-		clientinfo.info->hdr.hid = g_h.hdr.hid;
+		//clientinfo.info->hdr.hid = g_h.hdr.hid;
+		clientinfo.info->hdr.hid = buf_read_char(&g_buf);
+		printf("hid: %d\n",clientinfo.info->hdr.hid);
 
 		return;
 	}
@@ -311,6 +326,11 @@ void PROTO_client_parse_DGRAM()
 		
 	}
 	//TODO: Check if we are connected to this server
+	if(type == PTYPE_MSG) {
+		s = buf_read_string(&g_buf);
+		s2 = buf_read_string(&g_buf);
+		CONSOLE_print("%s: %s",s,s2);
+	}
 }
 
 int PROTO_send_reliable(hostinfo_t *h, fixedbuf_t *b)
@@ -375,6 +395,39 @@ int PROTO_recv()
 	return rv;
 }
 
+void PROTO_client_send_chat(const char *s)
+{
+	//CONSOLE_print_no_update(s);
+
+	fixedbuf_t b;
+
+	// Setup header
+	buf_init(&b, 512);
+	buf_memget(&b, 11);
+	buf_write_char(&b, PTYPE_MSG);
+	buf_write_string(&b, s);
+
+	PROTO_send_reliable(clientinfo.info, &b);
+}
+
+void PROTO_server_send_chat(clientinfo_t *c, const char *s)
+{
+	fixedbuf_t b;
+	link_t *tmp;
+
+	// Setup header
+	buf_init(&b, 512);
+	buf_memget(&b, 11);
+	buf_write_char(&b, PTYPE_MSG);
+	buf_write_string(&b, c->name);
+	buf_write_string(&b, s);
+
+	// Check if the packet is from a known host
+	for(tmp = clientinfo_list->head; tmp != NULL; tmp = tmp->next) {
+		PROTO_send_reliable(((clientinfo_t *)tmp->item)->info, &b);
+	}
+}
+
 char PROTO_is_known_host(hostinfo_t *h)
 {
 	printf("---------IsKnownHost----------\n");
@@ -382,17 +435,21 @@ char PROTO_is_known_host(hostinfo_t *h)
 	// Check IPs
 	if(NET_ipcmp(h->n, g_h.n))
 		return 0;
+	printf("IP Match\n");
 
 	// Check Ports
 	if(NET_portcmp(h->n, g_h.n))
 		return 0;
+	printf("PORT Match\n");
 
 	//TODO: put this as the first conditional statement because it has the least
 	//      runtime of the 3 and should always be able to tell apart hosts
 	//      unless they are forging thier HID or there is an error
 	// Check HID
+	printf("%d == %d\n",h->hdr.hid,g_h.hdr.hid);
 	if(h->hdr.hid != g_h.hdr.hid)
 		return 0;
+	printf("HID Match\n");
 
 	printf("------------------------------\n");
 
@@ -410,9 +467,10 @@ void PROTO_accept_acks(hostinfo_t *h)
 	ack = g_h.hdr.ack;
 	ack_bits = g_h.hdr.ack_bits;
 
-	// Go through unacked packet list and git rid of acked packets (need a hasmap)
+	// Go through unacked packet list and git rid of acked packets (need a hashmap)
 	size = sizeof(ack_bits);
 	for(i = 0; i < size; i++) {
+		//printf("%c",((ack_bits >> i) & 0x1));
 		if(((ack_bits >> i) & 0x1)) {
 			for(tmp = h->unacked_reliable_packets->head; tmp != NULL; tmp = tmp->next) {
 				if( ((packet_t *)tmp->item)->seq_num == ack-i ) {
@@ -422,4 +480,5 @@ void PROTO_accept_acks(hostinfo_t *h)
 			}
 		}
 	}
+	printf("\n");
 }

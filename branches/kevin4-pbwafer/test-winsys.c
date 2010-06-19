@@ -39,7 +39,6 @@ void clearmain()
 
 void chatprint(void *s)
 {
-
 	printf("%s\n",(char *)s);
 	R_set(v2);
 	R_string((char *)s);
@@ -68,7 +67,8 @@ int main(void)
 	v2 = VIEW_init(0,280,500,200,"./Font_default.ttf",10,vm.screen,7);
 	v3 = VIEW_init(500,0,200,480,"./Font_default.ttf",10,vm.screen,7);
 	menu_view = v3;
-	active_view = v2;
+	VIEW_focus(v1);
+	//active_view = v2;
 
 	v1->accept_input = mainview_accept_input;
 
@@ -76,10 +76,11 @@ int main(void)
 
 	char *bob = "bob";
 	// setup global commands
-	cmd_t g_cmds[2] = 
+	cmd_t g_cmds[3] = 
 	{
 		{{KM_NONE,K_c},clearmain,NULL},
-		{{KM_NONE,K_p},chatprint,(void *)bob}
+		{{KM_NONE,K_p},chatprint,(void *)bob},
+		{{KM_NONE,K_BACKQUOTE},CONSOLE_toggle,NULL}
 	};
 
 	// render the menu
@@ -110,7 +111,38 @@ int main(void)
 	CONSOLE_init("PBwafer Console");
 	CONSOLE_attach_to_view(v2);
 	CONSOLE_print("SUCCESS: This successfully printed to the console");
-	CONSOLE_update();
+
+	CONSOLE_print("----------Console Guide----------");
+	CONSOLE_print("` key will toggle between the main view and console view");
+	CONSOLE_print("Any printable key can be typed into the console");
+	CONSOLE_print("Up Arrow Key will go back in the history of commands you typed");
+	CONSOLE_print("Down Arrow Key will go forward in the history of commands you typed");
+	CONSOLE_print("Backspace will delete the most recent typed character");
+	CONSOLE_print("Page Up will scroll up one page of lines (All the junk that was printed to the console and should wrap around");
+	CONSOLE_print("Page Down will scroll down one page of lines");
+	CONSOLE_print("1");
+	CONSOLE_print("2");
+	CONSOLE_print("3");
+	CONSOLE_print("4");
+	CONSOLE_print("5");
+	CONSOLE_print("6");
+	CONSOLE_print("7");
+	CONSOLE_print("8");
+	CONSOLE_print("9");
+	CONSOLE_print("10");
+	CONSOLE_print("11");
+	CONSOLE_print("12");
+	CONSOLE_print("13");
+	CONSOLE_print("14");
+	CONSOLE_print("15");
+	CONSOLE_print("16");
+	CONSOLE_print("17");
+	CONSOLE_print("18");
+	CONSOLE_print("19");
+	CONSOLE_print("20");
+	CONSOLE_print("%d",5);
+
+	//CONSOLE_update();
 
 	R_set(v3);
 	R_update();
@@ -122,12 +154,12 @@ int main(void)
 	{
 		if(ret == 2) {
 			// Check the global commands
-			c = CMD_find_key_array(g_cmds,&g_chain,2);
+			c = CMD_find_key_array(g_cmds,&g_chain,3);
 			if(c != NULL) {
 				CMD_do(c);
+			} else {
+				active_view->accept_input();
 			}
-
-			active_view->accept_input();
 		}
 	}
 

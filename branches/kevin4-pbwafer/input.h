@@ -171,6 +171,7 @@ typedef struct input_s
 {
 	SDLMod mod;
 	SDLKey sym;
+	Uint16 uni;
 #if 0
 	int modifier;
 	int key;

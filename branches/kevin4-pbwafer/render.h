@@ -58,6 +58,7 @@ void R_setlayer(char l);
 void R_setlayershown(char l,char s);
 void R_setcolor(int x,int y,char r,char g,char b,char fr,char fg,char fb);
 void R_addcolor(int x,int y,int r,int g,int b,int fr,int fg,int fb);
-void R_pixel_box();
+void R_box(view_t *view);
+void R_boxext(view_t *view,char r,char g,char b);
 
 #endif /* !__RENDER_H */

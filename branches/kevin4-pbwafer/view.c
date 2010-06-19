@@ -2,6 +2,7 @@
 #include "utils.h"
 
 view_t *active_view;
+view_t *prev_view;
 
 view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl)
 {
@@ -17,7 +18,7 @@ view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int font
 
 	v->screen = screen;
 
-	v->fontname = p_strcpy(fontname);
+	v->fontname = strdup(fontname);
 	v->fontsize = fontsize;
 
 	v->font = TTF_OpenFont(v->fontname,v->fontsize);
@@ -68,6 +69,16 @@ void VIEW_resize(view_t *v)
 void VIEW_update(view_t *v)
 {
 
+}
+
+void VIEW_focus(view_t *view)
+{
+	if(active_view != NULL)
+		prev_view = active_view;
+	else
+		prev_view = view;
+
+	active_view = view;
 }
 
 void VIEW_free(view_t *v)

@@ -9,6 +9,7 @@ void
 input_init()
 {
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_EnableUNICODE(1);
 }
 
 int
@@ -22,6 +23,7 @@ input_handle()
 			case SDL_KEYDOWN:
 				g_chain.sym = event.key.keysym.sym;
 				g_chain.mod = event.key.keysym.mod;
+				g_chain.uni = event.key.keysym.unicode;
 				return 2;
 			case SDL_KEYUP:
 				break;

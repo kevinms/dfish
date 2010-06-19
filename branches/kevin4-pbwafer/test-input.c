@@ -1,10 +1,3 @@
-/********************************************************
- * test-poll.c
- * 
- * Tests event gets with while loops
- * 
- ********************************************************/
-
 #include <stdio.h>
 #include "SDL.h"
 #include "input.h"

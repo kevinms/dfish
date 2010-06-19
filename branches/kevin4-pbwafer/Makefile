@@ -28,7 +28,7 @@ T_INPUT_OBJECTS=$(T_INPUT_SOURCES:.c=.o)
 test-input: $(T_INPUT_OBJECTS)
 	$(CC) $(LDFLAGS) $(T_INPUT_OBJECTS) -o $@
 
-T_NET_SOURCES=buf.c net.c cmd.c input.c proto.c list.c vid_sdl.c utils.c
+T_NET_SOURCES=buf.c net.c cmd.c input.c proto.c list.c vid_sdl.c utils.c view.c render_sdl.c menu.c console.c
 T_NET_OBJECTS=$(T_NET_SOURCES:.c=.o)
 
 test-net-client: $(T_NET_OBJECTS) test-net-client.c
