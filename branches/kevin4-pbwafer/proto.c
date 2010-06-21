@@ -90,6 +90,30 @@ void PROTO_req_servinfo_ip(const char *node, const char *service)
 	PROTO_send_reliable(h, &b);
 }
 
+void PROTO_req_servinfo_broadcast(const char *service)
+{
+	hostinfo_t *h;
+	fixedbuf_t b;
+	int broadcast = 1;
+
+	h = PROTO_socket_client("255.255.255.255", service);
+	//TODO: if(!h)
+
+	printf("req_servinfo_broadcast\n");
+
+	// Set sock opt SO_BROADCAST so we can broadcast addresses
+	if (setsockopt(h->n->sockfd, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast) == -1) {
+		perror("setsockopt (SO_BROADCAST)");
+	}
+
+	// Setup header
+	buf_init(&b, 512);
+	buf_memget(&b, 11);
+	buf_write_char(&b, PTYPE_INFO);
+
+	PROTO_send_reliable(h, &b);
+}
+
 void PROTO_set_servinfo(const char *name, unsigned short max_clients)
 {
 	servinfo.name = p_strcpy(name);
@@ -286,6 +310,10 @@ void PROTO_client_parse_DGRAM()
 	if(type == PTYPE_INFO)
 	{
 		info = (servinfo_t *)malloc(sizeof(*info));
+
+		info->ip = NET_get_ip(g_h.n);
+		info->port = NET_get_port(g_h.n);
+
 		info->name =        buf_read_string(&g_buf);
 		info->major_version = buf_read_char(&g_buf);
 		info->minor_version = buf_read_char(&g_buf);
@@ -305,6 +333,7 @@ void PROTO_client_parse_DGRAM()
 
 		//TODO: remove this eventually, just a test print
 		CONSOLE_print_no_update("----------Server Info---------");
+		CONSOLE_print_no_update("%s:%d",info->ip,info->port);  //TODO: free the ip string
 		CONSOLE_print_no_update("name: %s", info->name);
 		CONSOLE_print_no_update("version: %d", info->major_version);
 		CONSOLE_print_no_update("version: %d", info->minor_version);

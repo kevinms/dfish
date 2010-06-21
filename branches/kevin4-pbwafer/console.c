@@ -61,12 +61,13 @@ void CONSOLE_accept_input()
 
 		CONSOLE_add_to_history(s);
 
-		//TODO: do command
+		// Do command
 		if(s[0] == '/') {
 			CONSOLE_print(s);
 			CONSOLE_parse_cmd(s);
-		} else {
-			//TODO: else send as a chat message instead
+		}
+		// Or do the default action (chat message usually)
+		else {
 			if(console.default_callback != NULL)
 				console.default_callback(s);
 			CONSOLE_update();
@@ -123,24 +124,13 @@ void CONSOLE_accept_input()
 
 		//TODO: change what items from list_t *lines gets displayed on the screen
 		if(console.prevlines != NULL) {
-			//console.nextlines = console.curlines;
-			//console.curlines = console.prevlines;
-			//console.prevlines = NULL;
-
 			// Get the next prevlines
-			//printf("h: %d, '%s'\n",console.v->fake_h-2, (char *)(*console.nextlines)->item);
 			for(i=1, tmp=(*console.curlines); i < console.v->fake_h-2 && tmp != NULL; tmp=tmp->next) {
-				//printf("prev: '%s'\n",(char *)tmp->item);
 				console.prevlines = &tmp;
-				//printf("console: '%s'\n",(char *)(*console.prevlines)->item);
 				i += (strlen((char *)tmp->item) / (console.v->fake_w-1) + 1);
 			}
 
-//printf("consola: '%s'\n",(char *)(*console.prevlines)->item);
-
 			if(tmp == NULL) {
-				//printf("4, %d\n",i);
-				//console.prevlines = NULL;
 				console.nextlines = console.curlines;
 				console.curlines = &console.lines->tail;
 				console.prevlines = NULL;
@@ -148,7 +138,6 @@ void CONSOLE_accept_input()
 				console.nextlines = console.curlines;
 				console.curlines = console.prevlines;
 				console.prevlines = NULL;
-				//printf("%d: '%s'\n",i,(char *)(*console.prevlines)->item);
 			}
 		}
 		CONSOLE_update();
@@ -313,7 +302,7 @@ void CONSOLE_parse_cmd(char *s)
 	int i;
 	char **string_array;
 
-	//TODO: Read string until ' '
+	// Read string until ' '
 	tok = strtok(s," ");
 
 	for(tmp = console.commands->tail; tmp != NULL; tmp = tmp->prev) {
@@ -333,12 +322,21 @@ void CONSOLE_parse_cmd(char *s)
 
 	string_array = (char **)malloc(sizeof(char *)*cc->argc);
 
-	//read all the strings into an array of strings.
+	// Read all the args into an array of strings.
 	for(i = 0; i < cc->argc; i++) {
-		string_array[i] = strdup(strtok(NULL," "));
-	}
+		tok = strtok(NULL," ");
 
-	//TODO: print out usage if the wrong number of args was given
+		// Not enough args given, print usage
+		if(tok == NULL) {
+			if(cc->usage != NULL)
+				CONSOLE_print("Usage: %s %s",cc->s,cc->usage);
+			else
+				CONSOLE_print("Usage: %s",cc->s);
+			return;
+		}
+
+		string_array[i] = strdup(tok);
+	}
 
 	cc->callback(cc->argc, string_array);
 }

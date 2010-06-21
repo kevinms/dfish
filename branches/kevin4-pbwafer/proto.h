@@ -83,6 +83,8 @@ typedef struct hostinfo_s
 // the client has connected to any server)
 typedef struct servinfo_s
 {
+	const char *ip;
+	unsigned short port;
 	const char *name;
 	char major_version;
 	char minor_version;
@@ -113,7 +115,7 @@ hostinfo_t *PROTO_socket_client(const char *node, const char *service);
 hostinfo_t *PROTO_socket_server(const char *node, const char *service);
 
 void PROTO_req_servinfo_ip(const char *node, const char *service);
-list_t *PROTO_req_servinfo_broadcast(); // Discover servers on a LAN
+void PROTO_req_servinfo_broadcast(); // Discover servers on a LAN
 list_t *PROTO_req_servinfo_master(const char *node, const char *service);
 
 void PROTO_set_servinfo(const char *name, unsigned short max_clients);

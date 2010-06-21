@@ -91,6 +91,8 @@ void NET_copy(net_t *dest, net_t *src);
 int NET_ipcmp(net_t *n1, net_t *n2);
 int NET_portcmp(net_t *n1, net_t *n2);
 void NET_print(net_t *n);
+char *NET_get_ip(net_t *n);
+unsigned short NET_get_port(net_t *n);
 
 void NET_free(net_t *n);
 

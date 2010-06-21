@@ -31,6 +31,20 @@ void req_servinfo()
 	printf("hi\n");
 }
 
+void req_servinfo_ip(int count, const char **s)
+{
+	printf("'%s' '%s'\n",s[0],s[1]);
+	PROTO_req_servinfo_ip(s[0], s[1]);
+	printf("hi\n");
+}
+
+
+void req_servinfo_broadcast(int count, const char **s)
+{
+	PROTO_req_servinfo_broadcast(s[0]);
+	printf("hi\n");
+}
+
 void req_connect()
 {
 	netserv = NET_socket_client("127.0.0.1","8888");
@@ -166,6 +180,8 @@ int main(void)
 
 	CONSOLE_register_cmd("/name",1,PROTO_req_name,"string name (no spaces)");
 	CONSOLE_register_cmd("/connect",2,PROTO_connect_ip,"IP PORT");
+	CONSOLE_register_cmd("/info",2,req_servinfo_ip,"IP PORT");
+	CONSOLE_register_cmd("/info-bcast",1,req_servinfo_broadcast,"PORT");
 
 	// Input Loop
 	cmd_t *c = NULL;

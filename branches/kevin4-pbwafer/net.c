@@ -250,6 +250,48 @@ void NET_print(net_t *n)
 	}
 }
 
+char *NET_get_ip(net_t *n)
+{
+	char ip[INET6_ADDRSTRLEN];
+
+	// IPv4 use sockaddr_in
+	if(((struct sockaddr *)&n->addr)->sa_family == AF_INET) {
+		if(inet_ntop(AF_INET, &(((struct sockaddr_in *)&n->addr)->sin_addr), ip, INET6_ADDRSTRLEN) != NULL)
+			return strdup(ip);
+	}
+	// IPv6 use sockaddr_in6
+	else if(((struct sockaddr *)&n->addr)->sa_family == AF_INET6) {
+		if(inet_ntop(AF_INET6, &(((struct sockaddr_in6 *)&n->addr)->sin6_addr.s6_addr), ip, INET6_ADDRSTRLEN) != NULL)
+			return strdup(ip);
+	}
+	// Address family unkown
+	printf("Address family unkown!\n");
+	return NULL;
+}
+
+unsigned short NET_get_port(net_t *n)
+{
+	unsigned short port;
+
+	// IPv4 use sockaddr_in
+	if(((struct sockaddr *)&n->addr)->sa_family == AF_INET) {
+		port = htons(((struct sockaddr_in *)&n->addr)->sin_port);
+		return port;
+		printf(":%d\n", port);
+	}
+	// IPv6 use sockaddr_in6
+	else if(((struct sockaddr *)&n->addr)->sa_family == AF_INET6) {
+		port = htons(((struct sockaddr_in6 *)&n->addr)->sin6_port);
+		return port;
+		printf(":%d\n", port);
+	}
+	// Address family unkown
+	else {
+		printf("Address family unkown!\n");
+		return -1;
+	}
+}
+
 void NET_free(net_t *n)
 {
 	
