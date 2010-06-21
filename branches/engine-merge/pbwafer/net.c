@@ -158,7 +158,7 @@ int NET_recv(net_t *n, fixedbuf_t *b)
 	int numbytes;
 
 	buf_clear(b);
-	if ((numbytes = recvfrom(n->sockfd, b->buf, b->maxsize , 0, (struct sockaddr *)&n->addr, &n->addrlen)) == -1) {
+	if ((numbytes = recvfrom(n->sockfd, b->buf, b->maxsize , 0, (struct sockaddr *)&n->addr, n->addrlen)) == -1) {
 		//perror("recvfrom");
 	}
 
