@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "buf.h"
-#include "net.h"
-#include "proto.h"
+#include "pbwafer/buf.h"
+#include "pbwafer/net.h"
+#include "pbwafer/proto.h"
 
 int main()
 {

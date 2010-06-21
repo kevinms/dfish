@@ -1,48 +1,41 @@
 CC=gcc
 CFLAGS=-g -Wall -O3 `sdl-config --cflags`
-
 LDFLAGS=`sdl-config --libs` -lSDL_ttf
-SOURCES=vid_sdl.c
-OBJECTS=$(SOURCES:.c=.o)
+
+EXECUTABLE=engine client server
 
 all: $(EXECUTABLE)
 	
 
 ################################################################################
-# build tests
+# Build PBWafer
 ################################################################################
-T_EXECUTABLE=test-vidsdl test-input test-winsys test-net-client test-net-server
+PBW_DIR=pbwafer/
+PBW_SOURCES=$(addprefix pbwafer/,buf.c net.c cmd.c input.c proto.c list.c\
+              vid_sdl.c utils.c view.c render_sdl.c menu.c console.c)
+PBW_OBJECTS=$(PBW_SOURCES:.c=.o)
+
+engine: $(PBW_OBJECTS)
+	
+
+################################################################################
+# Build Client and Server
+################################################################################
+SOURCES=
+OBJECTS=$(SOURCES:.c=.o)
+
+client: $(OBJECTS) client.c
+	$(CC) $(CFLAGS) $(LDFLAGS) $(PBW_OBJECTS) $(OBJECTS) client.c -o $@
+server: $(OBJECTS) server.c 
+	$(CC) $(CFLAGS) $(LDFLAGS) $(PBW_OBJECTS) $(OBJECTS) server.c -o $@
+
+################################################################################
+# Build tests
+################################################################################
+T_EXECUTABLE=
 
 test: $(T_EXECUTABLE)
 	
-
-T_VIDSDL_SOURCES=vid_sdl.c test-vidsdl.c
-T_VIDSDL_OBJECTS=$(T_VIDSDL_SOURCES:.c=.o)
-
-test-vidsdl: $(T_VIDSDL_OBJECTS)
-	$(CC) $(LDFLAGS) $(T_VIDSDL_OBJECTS) -o $@
-
-T_INPUT_SOURCES=input.c test-input.c
-T_INPUT_OBJECTS=$(T_INPUT_SOURCES:.c=.o)
-
-test-input: $(T_INPUT_OBJECTS)
-	$(CC) $(LDFLAGS) $(T_INPUT_OBJECTS) -o $@
-
-T_NET_SOURCES=buf.c net.c cmd.c input.c proto.c list.c vid_sdl.c utils.c view.c render_sdl.c menu.c console.c
-T_NET_OBJECTS=$(T_NET_SOURCES:.c=.o)
-
-test-net-client: $(T_NET_OBJECTS) test-net-client.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $(T_NET_OBJECTS) test-net-client.c -o $@
-test-net-server: $(T_NET_OBJECTS) test-net-server.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $(T_NET_OBJECTS) test-net-server.c -o $@
-test-net: test-net-client test-net-server
-	
-
-T_WINSYS_SOURCES=vid_sdl.c view.c render_sdl.c input.c cmd.c utils.c list.c menu.c console.c buf.c test-winsys.c
-T_WINSYS_OBJECTS=$(T_WINSYS_SOURCES:.c=.o)
-
-test-winsys: $(T_WINSYS_OBJECTS)
-	$(CC) -g $(LDFLAGS) $(T_WINSYS_OBJECTS) -o $@
 
 ################################################################################
 # Implicit rule to compile all .c to .o
@@ -54,7 +47,7 @@ test-winsys: $(T_WINSYS_OBJECTS)
 # Cleanup rules
 ################################################################################
 clean:
-	rm -fv *.o object-gen/*.o $(EXECUTABLE) $(T_EXECUTABLE) *~
+	rm -fv *.o object-gen/*.o $(PBW_DIR)*.o $(EXECUTABLE) $(T_EXECUTABLE) *~
 
 clean-test:
 	rm -fv *.o $(T_EXECUTABLE)  *~
