@@ -1,17 +1,16 @@
 #include <stdio.h>
-#include "SDL.h"
 
-#include "vid.h"
-#include "view.h"
-#include "render.h"
-#include "menu.h"
-#include "input.h"
-#include "list.h"
-#include "console.h"
-#include "buf.h"
-#include "cmd.h"
-#include "net.h"
-#include "proto.h"
+#include "pbwafer/vid.h"
+#include "pbwafer/view.h"
+#include "pbwafer/render.h"
+#include "pbwafer/menu.h"
+#include "pbwafer/input.h"
+#include "pbwafer/list.h"
+#include "pbwafer/console.h"
+#include "pbwafer/buf.h"
+#include "pbwafer/cmd.h"
+#include "pbwafer/net.h"
+#include "pbwafer/proto.h"
 
 net_t *netserv;
 
