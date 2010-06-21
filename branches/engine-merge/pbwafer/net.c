@@ -177,7 +177,7 @@ int NET_recv(net_t *n, fixedbuf_t *b)
 void NET_copy(net_t *dest, net_t *src)
 {
 	dest->sockfd = src->sockfd;
-	memcpy((void *)&(dest->addr), (void *)&src->addr, src->addrlen);
+	memcpy((void *)&(dest->addr), (void *)&src->addr, &src->addrlen);
 	dest->addrlen = src->addrlen;
 }
 
