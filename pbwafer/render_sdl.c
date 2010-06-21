@@ -317,8 +317,8 @@ void R_setalpha(char a)
 {
 	g_bg.unused = a;
 	g_fg.unused = a;
-	CLAMP(g_bg.unused);
-	CLAMP(g_fg.unused);
+	CLAMP((char)g_bg.unused);
+	CLAMP((char)g_fg.unused);
 }
 
 void R_setlayer(char l)
