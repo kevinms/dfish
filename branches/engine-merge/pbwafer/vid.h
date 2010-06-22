@@ -13,8 +13,8 @@ typedef struct vidmode_s
 
 void VID_init(void);
 void VID_shutdown(void);
-void VID_init_mode(vidmode_t *mode);
-void VID_set_caption(char *name);
+vidmode_t *VID_init_mode(int w,int h,int bpp,const char *s);
+void VID_set_caption(const char *name);
 void VID_new_screen();
 
 #endif /* !__VID_H */

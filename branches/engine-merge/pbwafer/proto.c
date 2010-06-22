@@ -43,6 +43,7 @@ void PROTO_init()
 {
 	servinfo_list = list_init();
 	clientinfo_list = list_init();
+	clientinfo.state = STATE_NOP;
 
 	buf_init(&g_buf,512);
 	g_h.n = (net_t *)malloc(sizeof(*g_h.n));
@@ -131,6 +132,9 @@ hostinfo_t *PROTO_connect(const char *node, const char *service)
 	hostinfo_t *h;
 	fixedbuf_t b;
 
+	if(clientinfo.state == STATE_CON)
+		PROTO_disconnect();
+
 	h = PROTO_socket_client(node, service);
 	//TODO: if(!n)
 
@@ -147,12 +151,28 @@ hostinfo_t *PROTO_connect(const char *node, const char *service)
 
 	PROTO_send_reliable(clientinfo.info, &b);
 
+	CONSOLE_print("Connecting...");
+
 	return h;
 }
 
 void PROTO_connect_ip(int count, const char **s)
 {
 	PROTO_connect(s[0],s[1]);
+}
+
+void PROTO_disconnect()
+{
+	fixedbuf_t b;
+
+	// Setup header
+	buf_init(&b, 512);
+	buf_memget(&b, 11);
+	buf_write_char(&b, PTYPE_DC);
+
+	PROTO_send_reliable(clientinfo.info, &b);
+
+	clientinfo.state = STATE_NOP;
 }
 
 void PROTO_req_name(int n, const char **s)
@@ -291,6 +311,16 @@ void PROTO_server_parse_DGRAM()
 
 		PROTO_send_reliable(c->info, &b);
 	}
+	else if(type == PTYPE_DC) {
+		printf("PTYPE_DC\n");
+		buf_memget(&b, 11);
+		buf_write_char(&b, PTYPE_DC);
+
+		PROTO_send_reliable(c->info, &b);
+
+		// Remove client
+		list_del_item(clientinfo_list, (void *)c);
+	}
 }
 
 void PROTO_client_parse_DGRAM()
@@ -375,11 +405,11 @@ void PROTO_client_parse_DGRAM()
 		//clientinfo.info->hdr.hid = g_h.hdr.hid;
 		clientinfo.info->hdr.hid = buf_read_char(&g_buf);
 		printf("hid: %d\n",clientinfo.info->hdr.hid);
-
+		CONSOLE_print("Connected");
 		return;
 	}
 
-	if(type == PTYPE_KEEPALIVE) {
+	else if(type == PTYPE_KEEPALIVE) {
 		
 	}
 	//TODO: Check if we are connected to this server
@@ -391,6 +421,11 @@ void PROTO_client_parse_DGRAM()
 	else if(type == PTYPE_NAME) {
 		clientinfo.name = buf_read_string(&g_buf);
 		CONSOLE_print("Name changed to: %s",clientinfo.name);
+	}
+	else if(type == PTYPE_DC) {
+		clientinfo.state = STATE_NOP;
+		CONSOLE_print("Disconnected");
+		//TODO: clean up allocated memory, finish the dc process
 	}
 }
 

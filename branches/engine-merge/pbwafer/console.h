@@ -38,6 +38,7 @@ typedef struct console_cmd_s
 	int argc;
 	void (*callback)();
 	const char *usage;
+	const char *descr;
 } console_cmd_t;
 
 extern console_t console;
@@ -53,8 +54,9 @@ void CONSOLE_print_err(const char *s,...);
 void CONSOLE_toggle();
 void CONSOLE_clear();
 void CONSOLE_help();
+void CONSOLE_cmdlist();
 
-void CONSOLE_register_cmd(const char *s,int argc,void (*callback)(),const char *usage);
+void CONSOLE_register_cmd(const char *s,int argc,void (*callback)(),const char *usage,const char *descr);
 void CONSOLE_parse_cmd(char *s);
 
 //TODO: Dump console lines to a file, maybe also dump the console history

@@ -26,12 +26,9 @@ void CONSOLE_init(const char *s,void (*callback)())
 
 	//CONSOLE_register_cmd("/kick","%s",PROTO_kick);
 	//CONSOLE_register_cmd("/login","%s%s",PROTO_login);
-	//CONSOLE_register_cmd("/info-bcast",0,PROTO_req_servinfo_broadcast,NULL);
-	//CONSOLE_register_cmd("/info-master",0,PROTO_req_servinfo_master,NULL);
-	//CONSOLE_register_cmd("/info-ip",2,PROTO_req_servinfo_ip,"IP PORT");
-	//CONSOLE_register_cmd("/connect",2,PROTO_connect,"IP PORT");
-	CONSOLE_register_cmd("/help",0,CONSOLE_help,NULL);
-	CONSOLE_register_cmd("/clear",0,CONSOLE_clear,NULL);
+	CONSOLE_register_cmd("/help",0,CONSOLE_help,NULL,"Tells how to use the console");
+	CONSOLE_register_cmd("/clear",0,CONSOLE_clear,NULL,"Clear the console");
+	CONSOLE_register_cmd("/cmdlist",0,CONSOLE_cmdlist,NULL,"List all the commands");
 }
 
 void CONSOLE_attach_to_view(view_t *v)
@@ -220,7 +217,6 @@ void CONSOLE_print_no_update(const char *s,...)
 	vsprintf(buf,s,va);
 	va_end (va);
 
-	printf("consoleprint:'%s'\n",buf);
 	list_add(console.lines, (void *)strdup(buf));
 
 	if(console.lines->len > CONSOLE_MAX_LINES)
@@ -236,7 +232,6 @@ void CONSOLE_print(const char *s,...)
 	vsprintf(buf,s,va);
 	va_end (va);
 
-	printf("consoleprint:'%s'\n",buf);
 	list_add(console.lines, (void *)strdup(buf));
 
 	if(console.lines->len > CONSOLE_MAX_LINES)
@@ -279,7 +274,22 @@ void CONSOLE_help()
 	CONSOLE_update();
 }
 
-void CONSOLE_register_cmd(const char *s,int argc,void (*callback)(),const char *usage)
+void CONSOLE_cmdlist()
+{
+	link_t *tmp;
+	console_cmd_t *cc;
+
+	for(tmp = console.commands->tail; tmp != NULL; tmp = tmp->prev) {
+		cc = (console_cmd_t *)tmp->item;
+		if(!cc->usage)
+			CONSOLE_print_no_update("%s - %s",cc->s,cc->descr);
+		else
+			CONSOLE_print_no_update("%s %s - %s",cc->s,cc->usage,cc->descr);
+	}
+	CONSOLE_update();
+}
+
+void CONSOLE_register_cmd(const char *s,int argc,void (*callback)(),const char *usage,const char *descr)
 {
 	console_cmd_t *cc = (console_cmd_t *)malloc(sizeof(*cc));
 
@@ -290,6 +300,11 @@ void CONSOLE_register_cmd(const char *s,int argc,void (*callback)(),const char *
 		cc->usage = NULL;
 	else
 		cc->usage = strdup(usage);
+
+	if(!descr)
+		cc->descr = NULL;
+	else
+		cc->descr = strdup(descr);
 
 	list_add(console.commands,(void *)cc);
 }

@@ -37,12 +37,13 @@
 
 #define PTYPE_INFO      0
 #define PTYPE_CONNECT   1
-#define PTYPE_KEEPALIVE 2
-#define PTYPE_ERROR     3
-#define PTYPE_MSG       4
-#define PTYPE_BP        5
-#define PTYPE_BPDIFF    6
-#define PTYPE_NAME      7
+#define PTYPE_DC        2
+#define PTYPE_KEEPALIVE 3
+#define PTYPE_ERROR     4
+#define PTYPE_MSG       5
+#define PTYPE_BP        6
+#define PTYPE_BPDIFF    7
+#define PTYPE_NAME      8
 
 #define ERR_CONN_VER  0
 #define ERR_CONN_FULL 1
@@ -123,6 +124,7 @@ void PROTO_set_clientinfo(int state, char *name);
 
 hostinfo_t *PROTO_connect(const char *node, const char *service);
 void PROTO_connect_ip(int count, const char **s);
+void PROTO_disconnect();
 
 void PROTO_req_name(int n, const char **s);
 

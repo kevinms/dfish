@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "pbwafer/pbwafer.h"
 #include "pbwafer/buf.h"
 #include "pbwafer/net.h"
 #include "pbwafer/proto.h"
@@ -8,8 +9,7 @@ int main()
 {
 	hostinfo_t *h;
 
-	NET_init();
-	PROTO_init();
+	PBWAFER_init(INIT_NET|INIT_PROTO);
 
 	PROTO_set_servinfo("pbwafer test server", 3);
 
