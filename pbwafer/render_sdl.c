@@ -5,14 +5,29 @@
 #include <stdio.h>
 
 view_t *v = NULL;
-SDL_Color g_fg = {255,0,0,255};
-SDL_Color g_bg = {0,0,0,255};
-SDL_Color g_bd = {255,0,0,255};
+SDL_Color g_fg;
+SDL_Color g_bg;
+SDL_Color g_bd;
 
 void R_init(void)
 {
 	TTF_Init();
 	SDL_EnableUNICODE(1);
+
+	g_fg.r = 255;
+	g_fg.g = 0;
+	g_fg.b = 0;
+	g_fg.unused = 255;
+
+	g_bg.r = 0;
+	g_bg.g = 0;
+	g_bg.b = 0;
+	g_bg.unused = 255;
+
+	g_bd.r = 255;
+	g_bd.g = 0;
+	g_bd.b = 0;
+	g_bd.unused = 255;
 }
 
 void R_set(view_t *view)

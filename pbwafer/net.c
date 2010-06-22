@@ -158,7 +158,7 @@ int NET_recv(net_t *n, fixedbuf_t *b)
 	int numbytes;
 
 	buf_clear(b);
-	if ((numbytes = recvfrom(n->sockfd, b->buf, b->maxsize , 0, (struct sockaddr *)&n->addr, n->addrlen)) == -1) {
+	if ((numbytes = recvfrom(n->sockfd, b->buf, b->maxsize , 0, (struct sockaddr *)&n->addr, &n->addrlen)) == -1) {
 		//perror("recvfrom");
 	}
 
@@ -177,7 +177,7 @@ int NET_recv(net_t *n, fixedbuf_t *b)
 void NET_copy(net_t *dest, net_t *src)
 {
 	dest->sockfd = src->sockfd;
-	memcpy((void *)&(dest->addr), (void *)&src->addr, &src->addrlen);
+	memcpy((void *)&(dest->addr), (void *)&src->addr, src->addrlen);
 	dest->addrlen = src->addrlen;
 }
 

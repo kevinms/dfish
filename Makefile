@@ -12,7 +12,7 @@ all: $(EXECUTABLE)
 ################################################################################
 PBW_DIR=pbwafer/
 PBW_SOURCES=$(addprefix pbwafer/,buf.c net.c cmd.c input.c proto.c list.c\
-              vid_sdl.c utils.c view.c render_sdl.c menu.c console.c)
+              vid_sdl.c utils.c view.c render_sdl.c menu.c console.c pbwafer.c)
 PBW_OBJECTS=$(PBW_SOURCES:.c=.o)
 
 engine: $(PBW_OBJECTS)
@@ -21,7 +21,7 @@ engine: $(PBW_OBJECTS)
 ################################################################################
 # Build Client and Server
 ################################################################################
-SOURCES=
+SOURCES= view_space.c view_console.c
 OBJECTS=$(SOURCES:.c=.o)
 
 client: $(OBJECTS) client.c
