@@ -110,7 +110,7 @@ hostinfo_t *PROTO_socket_server(const char *node, const char *service)
 void PROTO_req_servinfo_ip(const char *node, const char *service)
 {
 	hostinfo_t *h;
-	fixedbuf_t b;
+	fixedbuf_t *b;
 
 	// Create a new socket for the client to communicate on
 	h = PROTO_socket_client(node, service);
@@ -120,13 +120,14 @@ void PROTO_req_servinfo_ip(const char *node, const char *service)
 	}
 
 	// Setup header
-	buf_init(&b, 512);
-	buf_memget(&b, 11);
-	buf_write_char(&b, PTYPE_INFO);
+	//buf_init(&b, 512);
+	b = buf_new_init(512);
+	buf_memget(b, 11);
+	buf_write_char(b, PTYPE_INFO);
 
 	clientinfo.state = STATE_WAIT_ON_INFO;
 
-	PROTO_send_reliable(h, &b);
+	PROTO_send_reliable(h, b);
 }
 
 // Used by the client to request server info from all servers running on this
@@ -134,7 +135,7 @@ void PROTO_req_servinfo_ip(const char *node, const char *service)
 void PROTO_req_servinfo_broadcast(const char *service)
 {
 	hostinfo_t *h;
-	fixedbuf_t b;
+	fixedbuf_t *b;
 	int broadcast = 1;
 
 	// Create a new socket for the client to communicate on
@@ -151,13 +152,13 @@ void PROTO_req_servinfo_broadcast(const char *service)
 	}
 
 	// Write packet
-	buf_init(&b, 512);
-	buf_memget(&b, 11);
-	buf_write_char(&b, PTYPE_INFO);
+	b = buf_new_init(512);
+	buf_memget(b, 11);
+	buf_write_char(b, PTYPE_INFO);
 
 	clientinfo.state = STATE_WAIT_ON_INFO;
 
-	PROTO_send_reliable(h, &b);
+	PROTO_send_reliable(h, b);
 }
 
 // Used by the server to set the global servinfo
@@ -218,7 +219,7 @@ void PROTO_connect_ip(int count, const char **s)
 // Used by client to tell the server it is disconnecting
 void PROTO_disconnect()
 {
-	fixedbuf_t b;
+	fixedbuf_t *b;
 
 	// If the client is not connected to a server stop
 	if(clientinfo.state == STATE_NOP) {
@@ -227,11 +228,11 @@ void PROTO_disconnect()
 	}
 
 	// Write packet
-	buf_init(&b, 512);
-	buf_memget(&b, 11);
-	buf_write_char(&b, PTYPE_DC);
+	b = buf_new_init(512);
+	buf_memget(b, 11);
+	buf_write_char(b, PTYPE_DC);
 
-	PROTO_send_reliable(clientinfo.info, &b);
+	PROTO_send_reliable(clientinfo.info, b);
 
 	// Now that it send the disconnect packet, set the client to the disconnected state
 	clientinfo.state = STATE_NOP;
@@ -241,7 +242,7 @@ void PROTO_disconnect()
 // Used by client to send a request for a name change to the server
 void PROTO_req_name(int n, const char **s)
 {
-	fixedbuf_t b;
+	fixedbuf_t *b;
 
 	// If the client is not connected to a server stop
 	if(clientinfo.state == STATE_NOP) {
@@ -250,12 +251,12 @@ void PROTO_req_name(int n, const char **s)
 	}
 
 	// Write packet
-	buf_init(&b, 512);
-	buf_memget(&b, 11);
-	buf_write_char(&b, PTYPE_NAME);
-	buf_write_string(&b, s[0]);
+	b = buf_new_init(512);
+	buf_memget(b, 11);
+	buf_write_char(b, PTYPE_NAME);
+	buf_write_string(b, s[0]);
 
-	PROTO_send_reliable(clientinfo.info, &b);
+	PROTO_send_reliable(clientinfo.info, b);
 }
 
 // This function will parse packets sent to the server
@@ -264,10 +265,11 @@ void PROTO_server_parse_DGRAM()
 	int type;
 	link_t *tmp;
 	clientinfo_t *c;
-	fixedbuf_t b;
+	fixedbuf_t *b;
 	char *s;
 
-	buf_init(&b, 512);
+	//buf_init(&b, 512);
+	b = buf_new_init(512);
 
 	// Read the packet type from the global recieve buffer
 	type = buf_read_char(&g_buf);
@@ -278,22 +280,22 @@ void PROTO_server_parse_DGRAM()
 		printf("PTYPE_INFO\n");
 
 		// Setup header
-		buf_memget(&b, 11);
-		buf_write_char(&b, PTYPE_INFO);
+		buf_memget(b, 11);
+		buf_write_char(b, PTYPE_INFO);
 
 		// Write packet data
-		buf_write_string(&b, servinfo.name);
-		buf_write_char(&b, MAJOR_VERSION);
-		buf_write_char(&b, MINOR_VERSION);
-		buf_write_short(&b, servinfo.max_clients);
+		buf_write_string(b, servinfo.name);
+		buf_write_char(b, MAJOR_VERSION);
+		buf_write_char(b, MINOR_VERSION);
+		buf_write_short(b, servinfo.max_clients);
 
 		// Write all client names currently connected to the server
-		buf_write_short(&b, clientinfo_list->len);
+		buf_write_short(b, clientinfo_list->len);
 		for(tmp = clientinfo_list->head; tmp != NULL; tmp = tmp->next)
-			buf_write_string(&b, ((clientinfo_t *)tmp->item)->name);
+			buf_write_string(b, ((clientinfo_t *)tmp->item)->name);
 
 		//TODO: check rv to make sure there were no errors
-		PROTO_send(&g_h, &b);
+		PROTO_send(&g_h, b);
 	}
 
 	// Host is requeseting to connect
@@ -302,11 +304,11 @@ void PROTO_server_parse_DGRAM()
 
 		// Check if there are any slots available on the server
 		if(clientinfo_list->len == servinfo.max_clients) {
-			buf_memget(&b, 11);
-			buf_write_char(&b, PTYPE_ERROR);
-			buf_write_char(&b, ERR_CONN_FULL);
+			buf_memget(b, 11);
+			buf_write_char(b, PTYPE_ERROR);
+			buf_write_char(b, ERR_CONN_FULL);
 
-			PROTO_send(&g_h, &b);
+			PROTO_send(&g_h, b);
 		}
 		// Check if the client is using the same game version
 		else if(buf_read_char(&g_buf) == MAJOR_VERSION && buf_read_char(&g_buf) == MINOR_VERSION) {
@@ -324,25 +326,28 @@ void PROTO_server_parse_DGRAM()
 			list_add(clientinfo_list, (void *)c);
 
 			// Write packet
-			buf_memget(&b, 11);
-			buf_write_char(&b, PTYPE_CONNECT);
-			buf_write_char(&b, c->info->hdr.hid); //TODO: Generate a host id
+			buf_memget(b, 11);
+			buf_write_char(b, PTYPE_CONNECT);
+			buf_write_char(b, c->info->hdr.hid); //TODO: Generate a host id
 
 			// Manage reciever and sender acks
 			PROTO_update_acks(c->info);
 			PROTO_accept_acks(c->info);
 
+			// Reset the keepalive timer
+			TIMER_init(&c->info->keepalive,TIMEOUT);
+
 			//TODO: check rv to make sure there were no errors
-			PROTO_send_reliable(c->info, &b);
+			PROTO_send_reliable(c->info, b);
 		} else {
 			// Write error packet, client has a different version
-			buf_memget(&b, 11);
-			buf_write_char(&b, PTYPE_ERROR);
-			buf_write_char(&b, ERR_CONN_VER);
-			buf_write_char(&b, MAJOR_VERSION);
-			buf_write_char(&b, MINOR_VERSION);
+			buf_memget(b, 11);
+			buf_write_char(b, PTYPE_ERROR);
+			buf_write_char(b, ERR_CONN_VER);
+			buf_write_char(b, MAJOR_VERSION);
+			buf_write_char(b, MINOR_VERSION);
 
-			PROTO_send(&g_h, &b);
+			PROTO_send(&g_h, b);
 		}
 		return;
 	}
@@ -363,11 +368,18 @@ void PROTO_server_parse_DGRAM()
 	PROTO_update_acks(c->info);
 	PROTO_accept_acks(c->info);
 
+	// Reset the keepalive timer
+	TIMER_init(&c->info->keepalive,TIMEOUT);
+
 	// Client wants to keep the connection alive
 	if(type == PTYPE_KEEPALIVE) {
 		//TODO: This was a reply from a server KEEPALIVE packet.  The reply
 		//      tells the server that the client is still connected and we
 		//      should reset the timeout for the client.
+		buf_memget(b, 11);
+		buf_write_char(b, PTYPE_KEEPALIVE);
+
+		PROTO_send_reliable(c->info, b);
 	}
 	// Client sent a chat message
 	else if(type == PTYPE_MSG) {
@@ -383,11 +395,11 @@ void PROTO_server_parse_DGRAM()
 		c->name = buf_read_string(&g_buf);
 
 		// Write packet
-		buf_memget(&b, 11);
-		buf_write_char(&b, PTYPE_NAME);
-		buf_write_string(&b, c->name);
+		buf_memget(b, 11);
+		buf_write_char(b, PTYPE_NAME);
+		buf_write_string(b, c->name);
 
-		PROTO_send_reliable(c->info, &b);
+		PROTO_send_reliable(c->info, b);
 	}
 	// Client is disconnecting
 	else if(type == PTYPE_DC) {
@@ -462,6 +474,9 @@ void PROTO_client_parse_DGRAM()
 		PROTO_update_acks(clientinfo.info);
 		PROTO_accept_acks(clientinfo.info);
 
+		// Reset the keepalive timer
+		TIMER_init(&clientinfo.info->keepalive,TIMEOUT);
+
 		CONSOLE_print("Connected");
 		return;
 	}
@@ -490,6 +505,10 @@ void PROTO_client_parse_DGRAM()
 	// Manage reciever and sender acks
 	PROTO_update_acks(clientinfo.info);
 	PROTO_accept_acks(clientinfo.info);
+
+	// Reset the keepalive timer
+	TIMER_init(&clientinfo.info->keepalive,TIMEOUT);
+
 
 	// Server wants to keep the connection alive
 	if(type == PTYPE_KEEPALIVE) {
@@ -528,7 +547,7 @@ int PROTO_send_reliable(hostinfo_t *h, fixedbuf_t *b)
 	p = (packet_t *)malloc(sizeof(*p));
 	p->seq_num = h->hdr.seq_num;
 	p->b = b;
-	TIMER_init(&p->timer,900); // This timeout may depend on certain network conditions or may need to be set to some 'good' value
+	TIMER_init(&p->timer,DROP_TIME); // This timeout may depend on certain network conditions or may need to be set to some 'good' value
 
 	// Add the new packet_t to the list of unacked_reliable_packets
 	list_add(h->unacked_reliable_packets, (void *)p);
@@ -547,21 +566,26 @@ int PROTO_send_unreliable(hostinfo_t *h, fixedbuf_t *b)
 int PROTO_send(hostinfo_t *h, fixedbuf_t *b)
 {
 	printf("PROTO_send()\n");
-	int cursize;
 	int rv;
+
+	// Reset the keepalive timer
+	TIMER_init(&h->keepalive,TIMEOUT);
 
 	// Increment your seq_num
 	h->hdr.seq_num++;
 
 	// Write packet header
-	cursize = b->cursize;
+	h->hdr.size = b->cursize;
 	buf_reset(b);
-	buf_write_short(b, cursize);
+	buf_write_short(b, h->hdr.size);
 	buf_write_short(b, h->hdr.seq_num);
 	buf_write_char(b, h->hdr.hid);
 	buf_write_short(b, h->hdr.ack);
 	buf_write_long(b, h->hdr.ack_bits);
-	b->cursize = cursize;
+	b->cursize = h->hdr.size;
+
+	PROTO_print_header_t(&h->hdr);
+	PROTO_print_header(b->buf);
 
 	rv = NET_send(h->n, b);
 	//TODO: check rv to make sure NET_send() sent the whole packet
@@ -601,6 +625,9 @@ int PROTO_recv()
 
 		printf("PROTO_recv()\n");
 
+		PROTO_print_header_t(&g_h.hdr);
+		PROTO_print_header(g_buf.buf);
+
 		printf("\tG seq_num[%d], ack[%d], ack_bits[",g_h.hdr.seq_num,g_h.hdr.ack);
 		print_bits32(g_h.hdr.ack_bits);
 		printf("]\n");
@@ -612,7 +639,7 @@ int PROTO_recv()
 // Used by the client to send a chat message to the server
 void PROTO_client_send_chat(const char *s)
 {
-	fixedbuf_t b;
+	fixedbuf_t *b;
 
 	// If the client is not connected to a server then don't send a message
 	if(clientinfo.state == STATE_NOP) {
@@ -621,30 +648,31 @@ void PROTO_client_send_chat(const char *s)
 	}
 
 	// Write packet
-	buf_init(&b, 512);
-	buf_memget(&b, 11);
-	buf_write_char(&b, PTYPE_MSG);
-	buf_write_string(&b, s);
+	//buf_init(&b, 512);  GWACAMOLY!#$!
+	b = buf_new_init(512);
+	buf_memget(b, 11);
+	buf_write_char(b, PTYPE_MSG);
+	buf_write_string(b, s);
 
-	PROTO_send_reliable(clientinfo.info, &b);
+	PROTO_send_reliable(clientinfo.info, b);
 }
 
 // Used by the server to send a chat message recieved from a client to ALL clients
 void PROTO_server_send_chat(clientinfo_t *c, const char *s)
 {
-	fixedbuf_t b;
+	fixedbuf_t *b;
 	link_t *tmp;
 
 	// Write packet
-	buf_init(&b, 512);
-	buf_memget(&b, 11);
-	buf_write_char(&b, PTYPE_MSG);
-	buf_write_string(&b, c->name);
-	buf_write_string(&b, s);
+	b = buf_new_init(512);
+	buf_memget(b, 11);
+	buf_write_char(b, PTYPE_MSG);
+	buf_write_string(b, c->name);
+	buf_write_string(b, s);
 
 	// Send the chat message to all clients connected to the server
 	for(tmp = clientinfo_list->head; tmp != NULL; tmp = tmp->next)
-		PROTO_send_reliable(((clientinfo_t *)tmp->item)->info, &b);
+		PROTO_send_reliable(((clientinfo_t *)tmp->item)->info, b);  //TODO:URGENT: b needs to be copied each time, so it can be freed each time a client acks
 }
 
 // Check if the last packet was from a known host
@@ -713,7 +741,8 @@ void PROTO_accept_acks(hostinfo_t *h)
 			list_del_item(h->unacked_reliable_packets,tmp->prev->item);
 			remove_prev_packet = 0;
 		}
-		printf("\t((packet_t *)tmp->item)->seq_num = %d\n",((packet_t *)tmp->item)->seq_num);
+		printf("\t");
+		PROTO_print_header(((packet_t *)tmp->item)->b->buf);
 		if( ((packet_t *)tmp->item)->seq_num == ack ) {
 			remove_prev_packet = 1;
 			break;
@@ -756,12 +785,14 @@ void PROTO_handle_timeout(hostinfo_t *h)
 	int remove_prev_packet = 0;
 
 	// Go through all the packets that have not been ack'ed by this host
+	assert(h != NULL);
+	assert(h->unacked_reliable_packets != NULL);
 	for(tmp = h->unacked_reliable_packets->head; tmp != NULL; tmp = tmp->next) {
 		if(remove_prev_packet == 1) {
 			printf("h->unacked_reliable_packets->len = %d\n",h->unacked_reliable_packets->len);
 			fflush(stdout);
 			printf("First\n");
-			list_del_item(h->unacked_reliable_packets,tmp->item); //TODO: implement list_del_link() which will be able to remove in O(1)
+			list_del_item(h->unacked_reliable_packets,tmp->prev->item); //TODO: implement list_del_link() which will be able to remove in O(1)
 			remove_prev_packet = 0;
 		}
 
@@ -771,7 +802,8 @@ void PROTO_handle_timeout(hostinfo_t *h)
 		// If a timeout occured the packet is assumed to have been dropped and needs to be resent
 		if(TIMER_is_timeout(&p->timer)) {
 			printf("TIMEOUT\n");
-			printf("\tp->seq_num: %d,%d\n",p->seq_num,*(unsigned short *)(p->b->buf+2));
+			printf("\t");
+			PROTO_print_header(p->b->buf);
 			PROTO_queue_packet(h,p);
 			remove_prev_packet = 1;
 		}
@@ -803,7 +835,7 @@ void PROTO_send_packets(hostinfo_t *h)
 	// Send any packets in the queue and remove them from it
 	while (h->packet_queue->head != NULL) {
 		p = (packet_t *)h->packet_queue->head->item;
-		printf("\tp->seq_num: %d,%d\n",p->seq_num,*(unsigned short *)(p->b->buf+2));
+		PROTO_print_header(p->b->buf);
 		//*(unsigned short *)(p->b->buf+2) = p->seq_num;
 		PROTO_send_reliable(h,p->b);
 
@@ -817,6 +849,7 @@ void PROTO_client_send_packets()
 	if(clientinfo.state == STATE_CON) {
 		PROTO_handle_timeout(clientinfo.info);
 		PROTO_send_packets(clientinfo.info);
+		PROTO_client_keepalive();
 	}
 }
 
@@ -825,7 +858,42 @@ void PROTO_server_send_packets()
 {
 	link_t *tmp;
 
-	for(tmp = clientinfo_list->head; tmp != NULL; tmp = tmp->next)
-		PROTO_handle_timeout(clientinfo.info);
-	PROTO_send_packets(clientinfo.info);
+	for(tmp = clientinfo_list->head; tmp != NULL; tmp = tmp->next) {
+		PROTO_handle_timeout(((clientinfo_t *)tmp->item)->info);
+		PROTO_send_packets(((clientinfo_t *)tmp->item)->info);
+	}
+}
+
+void PROTO_client_keepalive()
+{
+	fixedbuf_t *b;
+
+	if(TIMER_is_timeout(&clientinfo.info->keepalive)) {
+		// Write packet
+		b = buf_new_init(512);
+		buf_memget(b, 11);
+		buf_write_char(b, PTYPE_KEEPALIVE);
+
+		PROTO_send_reliable(clientinfo.info, b);
+	}
+}
+
+void PROTO_print_header_t(header_t *h)
+{
+	printf("header[%d,%d,%d,%d,%d]\n",h->size,
+	                                  h->seq_num,
+	                                  h->hid,
+	                                  h->ack,
+	                                  h->ack_bits
+	                                  );
+}
+
+void PROTO_print_header(unsigned char *buf)
+{
+	printf("header[%d,%d,%u,%d,%d]\n",buf[0]<<8 | buf[1],
+	                                  buf[2]<<8 | buf[3],
+	                                  buf[4],
+	                                  buf[5]<<8 | buf[6],
+	                                  buf[7]<<24 | buf[8]<<16 | buf[9]<<8 | buf[10]
+	                                  );
 }

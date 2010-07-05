@@ -33,7 +33,7 @@ list_add(list_t *list, void *entity)
 		list->head = newlink;
 		list->tail = newlink;
 	} else {
-		printf("added to a list");
+		printf("added to a list\n");
 		newlink->prev = list->tail;
 		list->tail->next = newlink;
 		list->tail = newlink;

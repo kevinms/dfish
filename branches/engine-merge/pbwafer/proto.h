@@ -45,6 +45,9 @@
 #define STATE_WAIT_ON_CON  2
 #define STATE_CON          3
 
+#define TIMEOUT   1000
+#define DROP_TIME 1500
+
 // Holds all header info
 typedef struct header_s
 {
@@ -69,6 +72,8 @@ typedef struct hostinfo_s
 {
 	net_t *n;
 	header_t hdr;
+
+	pwtimer_t keepalive;
 
 	list_t *unacked_reliable_packets; //TODO: change to hashmap
 	list_t *packet_queue; // Maybe use this when implementing flow control
@@ -114,6 +119,8 @@ void PROTO_update_acks(hostinfo_t *h);
 void PROTO_accept_acks(hostinfo_t *h);
 void PROTO_handle_timeout(hostinfo_t *h);
 void PROTO_queue_packet(hostinfo_t *h, packet_t *p);
+void PROTO_print_header_t(header_t *h);
+void PROTO_print_header(unsigned char *buf);
 
 // Used by client
 void PROTO_set_clientinfo(int state, char *name);
@@ -131,6 +138,7 @@ void PROTO_client_send_chat(const char *s);
 void PROTO_server_send_chat(clientinfo_t *c, const char *s);
 void PROTO_change_name(const char *s);
 void PROTO_client_send_packets();
+void PROTO_client_keepalive();
 
 // Used by server
 void PROTO_set_servinfo(const char *name, unsigned short max_clients);
