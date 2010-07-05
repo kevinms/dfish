@@ -1,6 +1,7 @@
 #include "view_console.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "pbwafer/console.h"
 #include "pbwafer/proto.h"
@@ -10,6 +11,8 @@ view_t *v_console;
 void VCONSOLE_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl)
 {
 	v_console = VIEW_init(x,y,real_w,real_h,fontname,fontsize,screen,numl);
+	v_console->showcursor = 1;
+	v_console->cursor = '_';
 
 	// Initialize the console
 	CONSOLE_init("PBwafer Console",PROTO_client_send_chat);
@@ -21,6 +24,7 @@ void VCONSOLE_init(int x, int y, int real_w, int real_h, char *fontname, int fon
 	CONSOLE_register_cmd("/disconnect",0,PROTO_disconnect,NULL,"Disonnect from a server");
 	CONSOLE_register_cmd("/info",2,CB_req_servinfo_ip,"IP PORT","Request info from a server");
 	CONSOLE_register_cmd("/info-bcast",1,CB_req_servinfo_broadcast,"PORT","Get info from all servers on LAN");
+	CONSOLE_register_cmd("/netsim",1,CB_netsim,NULL,"Tells how to use the console");
 
 	// Print a message for the user to see.
 	CONSOLE_print("Type /help for the console guide.");
@@ -36,4 +40,9 @@ void CB_req_servinfo_ip(int count, const char **s)
 void CB_req_servinfo_broadcast(int count, const char **s)
 {
 	PROTO_req_servinfo_broadcast(s[0]);
+}
+
+void CB_netsim(int count, const char **s)
+{
+	PROTO_client_netsim(atoi(s[0]),SIM_DC|SIM_PL);
 }

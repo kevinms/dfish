@@ -41,6 +41,14 @@ view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int font
 	v->l = 0;
 	VIEW_layers_malloc(v);
 
+	// Cursor defaults (off)
+	v->showcursor = 0;
+	v->cursor = 'X';
+	v->cursor_color[0] = 255;
+	v->cursor_color[1] = 205;
+	v->cursor_color[2] = 0;
+	v->cursor_color[3] = 255;
+
 	return v;
 }
 

@@ -6,6 +6,22 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 
+void print_bits32(int n)
+{
+	int i;
+	for(i = 0; i < 32; i++) {
+		printf("%d",(n>>(31-i)) & 0x1);
+	}
+}
+
+/* returns random number in range of 0 to n */
+int rand_max(int n)
+{
+	int i = rand();
+	//printf("r[%d,%d,%d]\n",(i % n), i, n);
+	return (i % n);
+}
+
 int
 p_strsplit(char *buf, char **seg)
 {

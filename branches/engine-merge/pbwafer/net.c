@@ -8,19 +8,22 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <arpa/inet.h>
+#include <time.h>
 
-//#include <errno.h>
-//#include <netinet/in.h>
+#include "console.h"
+#include "utils.h"
 
 //TODO:URGENT: Get the reliability layer working
 //TODO:URGENT: Get KEEPALIVE msg type working to test the reliability layer
 //TODO:URGENT: Get a basic flow control algorithm working based of a few metrics
 
+// Initilizes the NET module, called by PBWAFER_init()
 void NET_init()
 {
 	
 }
 
+// Create a socket for the server to communicate on and fill a net_t
 net_t *NET_socket_server(const char *node, const char *service)
 {
 	net_t *n;
@@ -32,11 +35,13 @@ net_t *NET_socket_server(const char *node, const char *service)
 
 	n = (net_t *)malloc(sizeof(*n));
 
+	// Fill the hints struct with IP version agnostic constants and UDP socktype
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_DGRAM;
-	hints.ai_flags = AI_PASSIVE;
+	hints.ai_flags = AI_PASSIVE; // Says that it will be a server
 
+	// Get a listing of interfaces we may be able to bind to
 	if ((rv = getaddrinfo(node, service, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(rv));
 		return NULL;
@@ -44,13 +49,12 @@ net_t *NET_socket_server(const char *node, const char *service)
 
 	// loop through all the results and bind to the first we can
 	for(p = servinfo; p != NULL; p = p->ai_next) {
-		printf("haha\n");
-		printf("%d == %d\n",p->ai_family, AF_INET);
 		if ((n->sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
 			perror("server: socket");
 			continue;
 		}
 
+		// Lets us bind to a socket even if it appears to be in use by another program
 		if (setsockopt(n->sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
 			perror("setsockopt");
 			return NULL;
@@ -66,7 +70,7 @@ net_t *NET_socket_server(const char *node, const char *service)
 	}
 
 	if (p == NULL) {
-		fprintf(stderr, "listener: failed to bind socket\n");
+		fprintf(stderr, "Error: server failed to bind socket\n");
 		return NULL;
 	}
 
@@ -77,14 +81,18 @@ net_t *NET_socket_server(const char *node, const char *service)
 	memcpy(&n->addr, p->ai_addr, p->ai_addrlen);
 	n->addrlen = p->ai_addrlen;
 
-	NET_print(n);
+	// Set the initial state of the network simulator to off
+	n->ns.state = 0;
 
 	// Can go ahead and free servinfo since it is not stored in net_t anymore
 	freeaddrinfo(servinfo);
 
+	//NET_print(n);
+
 	return n;
 }
 
+// Create a socket for the server to communicate on and fill a net_t
 net_t *NET_socket_client(const char *node, const char *service)
 {
 	net_t *n;
@@ -95,10 +103,12 @@ net_t *NET_socket_client(const char *node, const char *service)
 
 	n = (net_t *)malloc(sizeof(*n));
 
+	// Fill the hints struct with IP version agnostic constants and UDP socktype
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_DGRAM;
 
+	// Get a listing of interfaces we may be able to make a socket on
 	if ((rv = getaddrinfo(node, service, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(rv));
 		return NULL;
@@ -115,7 +125,7 @@ net_t *NET_socket_client(const char *node, const char *service)
 	}
 
 	if (p == NULL) {
-		fprintf(stderr, "talker: failed to bind socket\n");
+		fprintf(stderr, "Error: client failed to bind socket\n");
 		return NULL;
 	}
 
@@ -126,10 +136,13 @@ net_t *NET_socket_client(const char *node, const char *service)
 	memcpy(&n->addr, p->ai_addr, p->ai_addrlen);
 	n->addrlen = p->ai_addrlen;
 
-	NET_print(n);
+	// Set the initial state of the network simulator to off
+	n->ns.state = 0;
 
 	// Can go ahead and free servinfo since it is not stored in net_t anymore
 	freeaddrinfo(servinfo);
+
+	//NET_print(n);
 
 	return n;
 }
@@ -137,22 +150,43 @@ net_t *NET_socket_client(const char *node, const char *service)
 //TODO: Handle partial sends
 int NET_send(net_t *n, fixedbuf_t *b)
 {
+	//printf("NET_send()\n");
 	int numbytes;
 
-	NET_print(n);
+	//NET_print(n);
 
-	if ((numbytes = sendto(n->sockfd, b->buf, b->cursize, 0, (struct sockaddr *)&n->addr, n->addrlen)) == -1) {
-		perror("talker: sendto");
+	if(n->ns.state == 1)
+		return b->cursize;
+/*
+	// Simulate a few network conditions
+	//NET_sim(n);
+	if(n->ns.state) {
+		printf("########################################\n");
+		if(1) {
+		//if(n->ns.dc == 1) {
+			printf("disconnecting (pretend)\n");
+			return b->cursize;
+		}
+		if(n->ns.pl > 0) {
+			printf("numbytes sent(pretend): %d\n",b->cursize);
+			return b->cursize;
+		}
 	}
+*/
+	printf("\tabout to send data\n");
+	if ((numbytes = sendto(n->sockfd, b->buf, b->cursize, 0, (struct sockaddr *)&n->addr, n->addrlen)) == -1) {
+		perror("Error: sendto failed");
+	}
+	printf("\tsent data\n");
 
 	if(numbytes > 0)
-		printf("numbytes sent: %d\n",numbytes);
+		printf("\tnumbytes sent: %d\n",numbytes);
 
 	return numbytes;
 }
 
 //TODO: Handle partial recvs
-//TODO: Make sure this is non-blocking so that we can use select(): should be good now!
+//TODO: Do we want a nonblocking socket or or nonblocking recv?
 int NET_recv(net_t *n, fixedbuf_t *b)
 {
 	int numbytes;
@@ -165,7 +199,7 @@ int NET_recv(net_t *n, fixedbuf_t *b)
 	if(numbytes <= 0)
 		return numbytes;
 
-	NET_print(n);
+	//NET_print(n);
 
 	printf("numbytes recved: %d\n",numbytes);
 	buf_clear(b);
@@ -174,6 +208,8 @@ int NET_recv(net_t *n, fixedbuf_t *b)
 	return numbytes;
 }
 
+// Creates a copy of src and puts it in dest, dest needs to be allocated memory
+// outside of this function
 void NET_copy(net_t *dest, net_t *src)
 {
 	dest->sockfd = src->sockfd;
@@ -181,6 +217,7 @@ void NET_copy(net_t *dest, net_t *src)
 	dest->addrlen = src->addrlen;
 }
 
+// Compare the ip's of two net_t structs
 int NET_ipcmp(net_t *n1, net_t *n2)
 {
 	int rv = 1;
@@ -199,6 +236,7 @@ int NET_ipcmp(net_t *n1, net_t *n2)
 	return rv;
 }
 
+// Compare the port's of two net_t structs
 int NET_portcmp(net_t *n1, net_t *n2)
 {
 	int rv = 1;
@@ -223,6 +261,7 @@ int NET_portcmp(net_t *n1, net_t *n2)
 	return rv;
 }
 
+// Print the IP address and Port number to stdout
 void NET_print(net_t *n)
 {
 	char ip[INET6_ADDRSTRLEN];
@@ -250,6 +289,7 @@ void NET_print(net_t *n)
 	}
 }
 
+// Gets a human readable string representation of the IP
 char *NET_get_ip(net_t *n)
 {
 	char ip[INET6_ADDRSTRLEN];
@@ -269,6 +309,7 @@ char *NET_get_ip(net_t *n)
 	return NULL;
 }
 
+// Gets a human readable unsigned short of the PORT
 unsigned short NET_get_port(net_t *n)
 {
 	unsigned short port;
@@ -292,24 +333,49 @@ unsigned short NET_get_port(net_t *n)
 	}
 }
 
+// Free all memory in a net_t
 void NET_free(net_t *n)
 {
 	
 }
 
+// Simulate certain network conditions
 void NET_sim(net_t *n)
 {
+	int i = 0;
+
+	// If the netsim is turned off return
 	if(!n->ns.state)
 		return;
 
-	if(n->ns.opt & SIM_PL) {
-	}
-	if(n->ns.opt & SIM_MDR) {
-	}
-	if(n->ns.opt & SIM_MTU) {
-	}
-	if(n->ns.opt & SIM_RTT) {
-	}
+	// Depending on what bits are set in the opt bitfield run different simulationss
 	if(n->ns.opt & SIM_DC) {
+		// Supposedly 1 in 100 chance of disconnecting
+		if(rand_max(100) == 2)
+			n->ns.dc = 1;
+		CONSOLE_print("dc = %d", n->ns.dc);
+	}
+	if(n->ns.opt & SIM_PL) {
+		// Since packet loss is usually more than one packet when it happens
+		// this will result in a series of lost packets
+		if(n->ns.pl > 0)
+			n->ns.pl--;
+		else if((i = rand_max(100)) < 10)
+			n->ns.pl = 1;
+			//n->ns.pl = i;
+		CONSOLE_print("pl = %d", n->ns.pl);
+	}
+}
+
+// Set the state and options bitfield for a network simulation
+void NET_sim_state(net_t *n, char state, unsigned char opt)
+{
+	n->ns.state = state;
+	n->ns.opt  = opt;
+
+	if(state) {
+		srand(time(NULL));
+		n->ns.dc = 0;
+		n->ns.pl = 0;
 	}
 }

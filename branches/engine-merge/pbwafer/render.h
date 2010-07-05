@@ -2,13 +2,11 @@
 #define __RENDER_H
 
 #include "view.h"
-
-//TODO: render the cursor
+#include "blueprint.h"
 
 #define CLAMP(x) if((x) < 0) (x) = 0; else if((x) > 255) (x) = 255;
 
 //TODO: Implement robust blueprint rendering
-void R_blueprint(void);
 
 // Initialize render module and set view
 void R_init(void);
@@ -25,7 +23,9 @@ void R_string(const char *s);
 void R_stringln(const char *s);
 void R_stringn(const char *s,int n);
 void R_stringnln(const char *s,int n);
+void R_blueprint(bp_t *b);
 void R_move(int x,int y);
+void R_movetocenter();
 void R_moveby(int x,int y);
 void R_updatelayer(int l);
 void R_update(void);

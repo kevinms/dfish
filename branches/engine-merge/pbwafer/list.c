@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "list.h"
 
@@ -27,10 +28,12 @@ list_add(list_t *list, void *entity)
 	newlink->prev = NULL;
 	newlink->item = entity;
 
-	if(list->head == NULL) {
+	if(list->head == NULL && list->tail == NULL) {
+		printf("added to an empty list\n");
 		list->head = newlink;
 		list->tail = newlink;
 	} else {
+		printf("added to a list");
 		newlink->prev = list->tail;
 		list->tail->next = newlink;
 		list->tail = newlink;
@@ -42,6 +45,8 @@ list_add(list_t *list, void *entity)
 void
 list_del_item(list_t *list, void *item)
 {
+	printf("del_item---------------------------------------\n");
+	fflush(stdout);
 	link_t *templink;
 
 	if(list == NULL)
@@ -55,18 +60,25 @@ list_del_item(list_t *list, void *item)
 		return;
 
 	if(templink == list->tail && templink == list->head) {
+		fprintf(stderr,"del 1\n");
 		list->head = NULL;
 		list->tail = NULL;
 	} else if(templink == list->tail) {
-		templink->prev->next = templink->next;
+		fprintf(stderr,"del 2\n");
+		list->tail = templink->prev;
+		list->tail->next = NULL;
 	} else if(templink == list->head) {
-		templink->next->prev = templink->prev;
+		fprintf(stderr,"del 3\n");
+		list->head = templink->next;
+		list->head->prev = NULL;
 	} else {
+		fprintf(stderr,"del 4\n");
 		templink->prev->next = templink->next;
 		templink->next->prev = templink->prev;
 	}
 
 	free(templink);
+
 	list->len--;
 }
 
@@ -79,16 +91,47 @@ int list_del_head(list_t *list)
 	if(!list->head)
 		return -1;
 
-	if(list->head->item)
-		free(list->head->item);
+	tmp = list->head;
 
-	tmp = list->head->next;
-	free(list->head);
+	if(list->len == 1) {
+		list->tail = NULL;
+		list->head = NULL;
+	} else {
+		tmp->next->prev = NULL;
+		list->head = tmp->next;
+	}
 
-	if(tmp)
-		tmp->prev = NULL;
+	free(tmp);
 
-	list->head = tmp;
+
+	list->len--;
+	return 0;
+}
+
+int list_del_tail(list_t *list)
+{
+	link_t *tmp;
+
+	if(!list)
+		return -1;
+	if(!list->tail)
+		return -1;
+
+	tmp = list->tail;
+
+	if(list->len == 1) {
+		printf("1\n");
+		list->tail = NULL;
+		list->head = NULL;
+	} else {
+		printf("2\n");
+		tmp->prev->next = NULL;
+		list->tail = tmp->prev;
+	}
+
+	free(tmp);
+
+	list->len--;
 	return 0;
 }
 
@@ -98,7 +141,8 @@ list_del(list_t *list)
 {
 	if(!list)
 		return;
-	while(!list_del_head(list));
+	while(!list_del_head(list))
+		list->len--;
 
 	free(list);
 }
@@ -139,7 +183,7 @@ list_head_to_tail(list_t *list)
 int
 list_is_in(list_t *list, void *item) {
 
-    	link_t *templink;
+		link_t *templink;
 
 	if(list == NULL)
 		return 0;

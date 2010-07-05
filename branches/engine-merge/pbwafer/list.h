@@ -20,6 +20,7 @@ list_t *list_init(void);
 void list_add(list_t *list, void *item);
 void list_del_item(list_t *list, void *entity);
 int list_del_head(list_t *list);
+int list_del_tail(list_t *list);
 void list_del(list_t *list);
 void list_tail_to_head(list_t *list);
 void list_head_to_tail(list_t *list);

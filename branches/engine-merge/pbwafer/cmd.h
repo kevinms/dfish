@@ -8,7 +8,9 @@ typedef struct cmd_s
 {
 	input_t i;
 	void (*callback)();
-	void *data;
+	void *data; // pointer to pass to callback
+	int data_type;
+	int n;      // int to pass to callback
 } cmd_t;
 
 int CMD_compare_key(cmd_t *c, input_t *in);

@@ -14,7 +14,7 @@ extern vspace_t *vspace;
 
 void VSPACE_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl);
 void VSPACE_menu_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl);
-
+void VSPACE_update();
 void VSPACE_accept_input();
 
 // Space view callbacks

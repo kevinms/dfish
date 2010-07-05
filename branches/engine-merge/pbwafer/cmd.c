@@ -19,7 +19,7 @@ cmd_t *CMD_find_key_array(cmd_t c[], input_t *in,int len)
 {
 	int i;
 	for(i = 0; i < len; i++){
-		if(!input_diff(&(c[i].i),in)){
+		if(!input_diff(&(c[i].i),in)) {
 			//fprintf(stderr,"test: %d %d\n",c[i].i.sym, c[i].i.mod);
 			return &c[i];
 		}
@@ -35,6 +35,10 @@ void CMD_do(cmd_t *c)
 	if(c->data) {
 		printf("called CMD_do() with data\n");
 		c->callback(c->data);
+	}
+	else if(c->data_type == 1) {
+		printf("called CMD_do() with data\n");
+		c->callback(c->n);
 	}
 	else
 		c->callback();

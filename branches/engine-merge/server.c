@@ -11,7 +11,7 @@ int main()
 
 	PBWAFER_init(INIT_NET|INIT_PROTO);
 
-	PROTO_set_servinfo("pbwafer test server", 3);
+	PROTO_set_servinfo("pbwafer test server", 200);
 
 	h = PROTO_socket_server(NULL,"8888");
 	if(!h)

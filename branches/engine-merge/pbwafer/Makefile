@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -O3 `sdl-config --cflags`
+CFLAGS=-g -Wall -O0 `sdl-config --cflags`
 
 LDFLAGS=`sdl-config --libs` -lSDL_ttf
 

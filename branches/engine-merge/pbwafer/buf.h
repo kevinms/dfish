@@ -14,6 +14,7 @@ typedef struct fixedbuf_s
 } fixedbuf_t;
 
 void buf_init(fixedbuf_t *b, int size);
+fixedbuf_t *buf_new_init(int size);
 void buf_clear(fixedbuf_t *b);
 void buf_reset(fixedbuf_t *b);
 

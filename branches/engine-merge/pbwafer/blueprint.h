@@ -44,21 +44,66 @@ Building Blocks or bblock_t will be a single char piece, this can be anything
 from a single armor piece to a wooden floor piece
 */
 
-typedef struct bblock_s
+#define DELTA_ADD 0
+#define DELTA_DMG 1
+#define DELTA_DEL 2
+#define DELTA_MOD 4
+#define DELTA_POS 8
+
+// There are basically 3 data structures in a blueprint...
+//   - 2D Doubly-linked list
+//   - Doubly-linked list
+//   - Hash table
+
+//TODO: Find if there is a good easy way to loop through a 2D Doubly-linked list
+
+typedef struct entity_s
 {
 	unsigned short id;
-	int mass;
-	int health;
-	int link_id;
-} bblock_t;
+	unsigned int mass;
+	unsigned int health;
 
-typedef struct blueprint_s
+	struct entity_s *n;
+	struct entity_s *s;
+	struct entity_s *e;
+	struct entity_s *w;
+
+	int offset_x; // These could hashed and stored in a table
+	int offset_y; // It would enable a much faster search
+
+	struct entity_s *next; // Doubly linked list, will speed up looping through
+
+	char ch;
+} entity_t;
+
+typedef struct bp_s {
+	entity_t *head;
+
+	entity_t *center[3];
+
+	entity_t *hull; // Just a pointer to a hull piece, this will hopefully speed
+	                // up collision detection
+
+	unsigned int mass;
+
+	int x;
+	int y;
+} bp_t;
+
+// Firing a weapon - [shot origin] [type] (speed)
+
+typedef struct delta_s
 {
-	int mass;
-	int health;
-	int center;
+	
+} delta_t;
 
-	list_t *bblock;
-} blueprint_t;
+bp_t *BP_init();
+entity_t *BP_add_entity(bp_t *b, int id);
+
+void BP_render_ent(entity_t *e,int x, int y);
+void BP_render(bp_t *b);
+
+delta_t *BP_delta(bp_t *bp1,bp_t *bp2);
+void BP_apply_delta(bp_t *bp,delta_t *delta);
 
 #endif /* !__BLUEPRINT_H */

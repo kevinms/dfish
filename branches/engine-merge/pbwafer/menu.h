@@ -34,6 +34,10 @@ menu_t *MENU_init(const char *name);
 menu_t *MENU_add_menu(menu_t *par,menu_t *root,const char *name,int mod, int sym);
 menu_t *MENU_init_entry(menu_t *par,menu_t *root,const char *name,int mod,int sym,void (*callback)(),void *data);
 menu_t *MENU_add_entry(menu_t *par,menu_t *root,const char *name,int mod,int sym,void (*callback)(),void *data);
+
+menu_t *MENU_init_entry_int(menu_t *par,menu_t *root,const char *name,int mod,int sym,void (*callback)(),int n);
+menu_t *MENU_add_entry_int(menu_t *par,menu_t *root,const char *name,int mod,int sym,void (*callback)(),int n);
+
 menu_t *MENU_do_key(menu_t *root, input_t *in);
 void MENU_load(menu_t *m);
 void MENU_free(menu_t *m);
