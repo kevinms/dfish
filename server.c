@@ -17,9 +17,11 @@ int main()
 	if(!h)
 		fprintf(stderr,"Error: could not create server socket\n");
 
-	for(;;)
+	for(;;) {
 		if(PROTO_recv() > 0)
 			PROTO_server_parse_DGRAM();
 
+		PROTO_server_send_packets();
+	}
 	return 0;
 }

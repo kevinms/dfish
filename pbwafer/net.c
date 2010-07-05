@@ -150,20 +150,15 @@ net_t *NET_socket_client(const char *node, const char *service)
 //TODO: Handle partial sends
 int NET_send(net_t *n, fixedbuf_t *b)
 {
-	//printf("NET_send()\n");
+	printf("NET_send()\n");
 	int numbytes;
 
-	//NET_print(n);
+	NET_print(n);
 
-	if(n->ns.state == 1)
-		return b->cursize;
-/*
 	// Simulate a few network conditions
-	//NET_sim(n);
+	NET_sim(n);
 	if(n->ns.state) {
-		printf("########################################\n");
-		if(1) {
-		//if(n->ns.dc == 1) {
+		if(n->ns.dc == 1) {
 			printf("disconnecting (pretend)\n");
 			return b->cursize;
 		}
@@ -172,12 +167,10 @@ int NET_send(net_t *n, fixedbuf_t *b)
 			return b->cursize;
 		}
 	}
-*/
-	printf("\tabout to send data\n");
+
 	if ((numbytes = sendto(n->sockfd, b->buf, b->cursize, 0, (struct sockaddr *)&n->addr, n->addrlen)) == -1) {
 		perror("Error: sendto failed");
 	}
-	printf("\tsent data\n");
 
 	if(numbytes > 0)
 		printf("\tnumbytes sent: %d\n",numbytes);
@@ -350,8 +343,8 @@ void NET_sim(net_t *n)
 
 	// Depending on what bits are set in the opt bitfield run different simulationss
 	if(n->ns.opt & SIM_DC) {
-		// Supposedly 1 in 100 chance of disconnecting
-		if(rand_max(100) == 2)
+		// Supposedly 1 in 1000 chance of disconnecting
+		if(rand_max(1000) == 2)
 			n->ns.dc = 1;
 		CONSOLE_print("dc = %d", n->ns.dc);
 	}
@@ -361,8 +354,7 @@ void NET_sim(net_t *n)
 		if(n->ns.pl > 0)
 			n->ns.pl--;
 		else if((i = rand_max(100)) < 10)
-			n->ns.pl = 1;
-			//n->ns.pl = i;
+			n->ns.pl = i;
 		CONSOLE_print("pl = %d", n->ns.pl);
 	}
 }
