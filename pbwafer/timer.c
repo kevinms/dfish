@@ -1,5 +1,19 @@
 #include "timer.h"
 
+void TIMER_init(pwtimer_t *t,Uint32 interval)
+{
+	t->interval = interval;
+	t->end_time = SDL_GetTicks() + interval;
+}
+
+char TIMER_is_timeout(pwtimer_t *t)
+{
+	if(t->end_time > SDL_GetTicks())
+		return 0;
+	return 1;
+}
+
+/*
 double
 getTime()
 {
@@ -38,3 +52,4 @@ timeval_subtract (result, x, y)
 	// Return 1 if result is negative.
 	return x->tv_sec < y->tv_sec;
 }
+*/

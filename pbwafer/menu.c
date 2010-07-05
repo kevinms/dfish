@@ -49,7 +49,7 @@ menu_t *MENU_init_entry(menu_t *par,menu_t *root,const char *name,int mod,int sy
 
 	m->c.i.mod = mod;
 	m->c.i.sym = sym;
-	printf("mod: %d, sys: %d\n",m->c.i.mod,m->c.i.sym);
+	//printf("mod: %d, sys: %d\n",m->c.i.mod,m->c.i.sym);
 	m->c.callback = callback;
 	m->c.data = data;
 	m->root = root;
@@ -70,6 +70,41 @@ menu_t *MENU_add_entry(menu_t *par,menu_t *root,const char *name,int mod,int sym
 	return m;
 }
 
+menu_t *MENU_init_entry_int(menu_t *par,menu_t *root,const char *name,int mod,int sym,void (*callback)(),int n)
+{
+	menu_t *m;
+	m = (menu_t *)malloc(sizeof(*m));
+
+	m->id = id;
+	m->par = par;
+	m->name = p_strcpy(name);
+	m->entry_list = NULL;
+
+	m->c.i.mod = mod;
+	m->c.i.sym = sym;
+	//printf("mod: %d, sys: %d\n",m->c.i.mod,m->c.i.sym);
+	m->c.callback = callback;
+	m->c.data = NULL;
+	m->c.data_type = 1;
+	m->c.n = n;
+	m->root = root;
+	m->cancel = NULL;
+
+	id++;
+
+	return m;
+}
+
+menu_t *MENU_add_entry_int(menu_t *par,menu_t *root,const char *name,int mod,int sym,void (*callback)(),int n)
+{
+	menu_t *m;
+
+	m = MENU_init_entry_int(par,root,name,mod,sym,callback,n);
+	list_add(par->entry_list,(void *)m);
+
+	return m;
+}
+
 menu_t *MENU_do_key(menu_t *root, input_t *in)
 {
 	link_t *tmp;
@@ -78,14 +113,14 @@ menu_t *MENU_do_key(menu_t *root, input_t *in)
 
 	for(tmp = m->entry_list->head; tmp != NULL; tmp = tmp->next) {
 		if(!input_diff(&(((menu_t *)tmp->item)->c.i),in)) {
-			printf("menu_load\n");
+			//printf("menu_load\n");
 			CMD_do(&((menu_t *)tmp->item)->c);
 			return (menu_t *)tmp;
 		}
 	}
 
 	if(m->cancel && !input_diff(&(m->cancel->c.i),in)) {
-		printf("cmd_do\n");
+		//printf("cmd_do\n");
 		CMD_do(&m->cancel->c);
 		return m->cancel;
 	}

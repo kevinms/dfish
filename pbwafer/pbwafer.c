@@ -19,3 +19,10 @@ void PBWAFER_init(char mask)
 	if(mask & INIT_INPUT)
 		input_init();
 }
+
+void PBWFAER_quit()
+{
+	VID_shutdown();
+	printf("So long, and thanks for all the fish.\n");
+	exit(1);
+}

@@ -8,5 +8,6 @@
 #define INIT_INPUT   16
 
 void PBWAFER_init(char mask);
+void PBWFAER_quit();
 
 #endif /* !__PBWAFER_H */

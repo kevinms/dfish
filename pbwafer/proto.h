@@ -1,29 +1,20 @@
 #ifndef __PROTO_H
 #define __PROTO_H
 
-//TODO: Be able to conect to a server through both LAN Broadcast and Known IP
-//      Will need to maintain a list of currently connected users.  There will
-//      need to be a way to distinguish between multiple clients behind NATs.
-//      This will be done through Client IDs and Port #s I believe.
-
-//      Maybe create a signature for each client that connects and they will
-//      send that signature to the server in each packet.  This way malicious
-//      users cannot easily spoof packets from other clients. Unless they can
-//      capture another clients packets to determinee the correct ID.  Or brute
-//      force I guess.  Although I should be able to detect a bruteforce attack.
-
 // PROTO Packet Header
-// +--------+--------+------+------+
-// |  UDP   |  NET   | Type | Data |
-// | Header | Header |      |      |
-// +--------+--------+------+------+
-//     8        11      1       n
-// 20(!16) bytes of header data including UDP and NET headers
+// +--------+--------+---------+------+--------+----------+------+------+
+// |  UDP   | Packet | seq_num | Host |  ack   |   ack    | Type | Data |
+// | Header |  Size  |         |  ID  |        | bitfield |      |      |
+// +--------+--------+---------+------+--------+----------+------+------+
+//     8         2        2        1      2         4        n
+// 20(!16) bytes of header data including UDP header
 
-//TODO: Define what the connection process will be:
-//          - 2 Way handshake
-//          - Client: Send version #(short), username(String)
-//          - Server: Send new client id(short) or error # Maybe
+// To understand some of this code figure out who you are.  Are you the client
+// or the server?  Whoever you are, your buddy is the opposite.
+// h->hdr.seq_num  : Your seq_num
+// h->hdr.ack      : Should be the last seq_num you saw from your buddy (we are updating this)
+// g_h.hdr.seq_num : Buddies seq_num
+// g_h.hdr.ack     : The seq_num of the last packet your buddy saw
 
 //TODO: Generate a random unique client ID
 
@@ -34,6 +25,7 @@
 
 #include "list.h"
 #include "net.h"
+#include "timer.h"
 
 #define PTYPE_INFO      0
 #define PTYPE_CONNECT   1
@@ -48,9 +40,12 @@
 #define ERR_CONN_VER  0
 #define ERR_CONN_FULL 1
 
-#define STATE_NOP 0
-#define STATE_CON 1
+#define STATE_NOP          0
+#define STATE_WAIT_ON_INFO 1
+#define STATE_WAIT_ON_CON  2
+#define STATE_CON          3
 
+// Holds all header info
 typedef struct header_s
 {
 	unsigned short size;
@@ -60,24 +55,23 @@ typedef struct header_s
 	unsigned long ack_bits;
 } header_t;
 
+// Used to store a copy of a packet to possibly resend later
+//TODO: add a timer to this packet
 typedef struct packet_s
 {
 	unsigned short seq_num;
 	fixedbuf_t *b;
+	pwtimer_t timer;
 } packet_t;
 
+// Every host will store its info in this, server and client
 typedef struct hostinfo_s
 {
 	net_t *n;
 	header_t hdr;
 
-	//TODO: Add a list (hashmap?) of un-acked packets that where sent to this host
-	list_t *unacked_reliable_packets;
-	// Maybe use this when implementing flow control
-	list_t *queue_of_packets_to_send;
-	//TODO: now in header_t
-	unsigned short seq_num;
-
+	list_t *unacked_reliable_packets; //TODO: change to hashmap
+	list_t *packet_queue; // Maybe use this when implementing flow control
 } hostinfo_t;
 
 // A server will send this information to a client if asked for (usually before
@@ -91,8 +85,7 @@ typedef struct servinfo_s
 	char minor_version;
 	unsigned short max_clients;
 	unsigned short num_clients;
-	const char **clients;  //TODO: turn this into some sort of list or retrieve
-	                       //      it from the clientinfo list
+	const char **clients;
 	unsigned short ping;
 } servinfo_t;
 
@@ -109,41 +102,40 @@ typedef struct clientinfo_s
 extern fixedbuf_t g_buf;
 extern hostinfo_t g_h;
 
+// Used by client and server
 void PROTO_init();
 hostinfo_t *PROTO_host_init();
-
-hostinfo_t *PROTO_socket_client(const char *node, const char *service);
-hostinfo_t *PROTO_socket_server(const char *node, const char *service);
-
-void PROTO_req_servinfo_ip(const char *node, const char *service);
-void PROTO_req_servinfo_broadcast(); // Discover servers on a LAN
-list_t *PROTO_req_servinfo_master(const char *node, const char *service);
-
-void PROTO_set_servinfo(const char *name, unsigned short max_clients);
-void PROTO_set_clientinfo(int state, char *name);
-
-hostinfo_t *PROTO_connect(const char *node, const char *service);
-void PROTO_connect_ip(int count, const char **s);
-void PROTO_disconnect();
-
-void PROTO_req_name(int n, const char **s);
-
-// Work horses of parsing functions
-void PROTO_server_parse_DGRAM();
-void PROTO_client_parse_DGRAM();
-
-// Send/recv stuff
 int PROTO_send_reliable(hostinfo_t *h, fixedbuf_t *b);
 int PROTO_send_unreliable(hostinfo_t *h, fixedbuf_t *b);
 int PROTO_send(hostinfo_t *h, fixedbuf_t *b);
 int PROTO_recv();
+char PROTO_is_known_host(hostinfo_t *h);
+void PROTO_update_acks(hostinfo_t *h);
+void PROTO_accept_acks(hostinfo_t *h);
+void PROTO_handle_timeout(hostinfo_t *h);
+void PROTO_queue_packet(hostinfo_t *h, packet_t *p);
 
-//void PROTO_send_chat(hostinfo_t *h, const char *s);
+// Used by client
+void PROTO_set_clientinfo(int state, char *name);
+void PROTO_client_netsim(char state, unsigned char opt);
+hostinfo_t *PROTO_socket_client(const char *node, const char *service);
+hostinfo_t *PROTO_connect(const char *node, const char *service);
+void PROTO_connect_ip(int count, const char **s);
+void PROTO_disconnect();
+void PROTO_req_servinfo_ip(const char *node, const char *service);
+void PROTO_req_servinfo_broadcast(); // Discover servers on a LAN
+list_t *PROTO_req_servinfo_master(const char *node, const char *service);
+void PROTO_req_name(int n, const char **s);
+void PROTO_client_parse_DGRAM();
 void PROTO_client_send_chat(const char *s);
 void PROTO_server_send_chat(clientinfo_t *c, const char *s);
 void PROTO_change_name(const char *s);
+void PROTO_client_send_packets();
 
-char PROTO_is_known_host(hostinfo_t *h);
-void PROTO_accept_acks();
+// Used by server
+void PROTO_set_servinfo(const char *name, unsigned short max_clients);
+hostinfo_t *PROTO_socket_server(const char *node, const char *service);
+void PROTO_server_parse_DGRAM();
+void PROTO_server_send_packets();
 
 #endif /* !__PROTO_H */

@@ -109,6 +109,11 @@ void R_move(int x, int y)
 	}
 }
 
+void R_movetocenter()
+{
+	R_move(v->fake_w/2, v->fake_h/2);
+}
+
 void R_moveby(int x,int y)
 {
 	x += v->cursor_x;
@@ -138,6 +143,10 @@ void R_updatelayer(int l)
 	if(!v->layer_visible[l])
 		return;
 
+	if(v->showcursor)
+		R_setchext(v->cursor,v->cursor_x,v->cursor_y,g_bg.r,g_bg.g,g_bg.b,v->cursor_color[0],v->cursor_color[1],v->cursor_color[2]);
+
+
 	for(i = 0; i < v->fake_w; i++) {
 		for(j = 0; j < v->fake_h; j++) {
 			r.x = i*v->tile_w + v->x;
@@ -156,12 +165,38 @@ void R_updatelayer(int l)
 
 			SDL_BlitSurface(s,NULL,v->screen,&r);
 
-			//TODO:VITAL: You need to figure this out! 
-			//SDL_FreeSurface(s);
-			//SDL_FreeSurface(t);
+			//TODO:VITAL: You need to figure this out! I think it used to cause a segfault?
+			SDL_FreeSurface(s);
+			SDL_FreeSurface(t);
 		}
 	}
+/*
+	// render the cursor
+	if(v->showcursor) {
+		c.r = v->cursor_color[0];
+		c.g = v->cursor_color[1];
+		c.b = v->cursor_color[2];
+		c.unused = v->cursor_color[3];
 
+		r.x = v->cursor_x*v->tile_w + v->x;
+		r.y = v->cursor_y*v->tile_h + v->y;
+
+		txt[0] = v->cursor;
+		if(txt[0]=='\0'&&txt[1]=='\0')
+			txt[0]=' ';
+
+		t=TTF_RenderUNICODE_Blended(v->font,txt,c);
+		s=SDL_DisplayFormat(t);
+
+		SDL_FillRect(s,NULL,SDL_MapRGBA(v->screen->format,c.r,c.g,c.b,c.unused));
+		SDL_BlitSurface(t,NULL,s,NULL);
+		SDL_BlitSurface(s,NULL,v->screen,&r);
+
+		//TODO:VITAL: You need to figure this out! I think it used to cause a segfault?
+		SDL_FreeSurface(s);
+		SDL_FreeSurface(t);
+	}
+*/
 	R_box(active_view);
 	SDL_Flip(v->screen);
 }
@@ -207,7 +242,8 @@ void R_clear(void)
 	for(i=0; i<v->numl; i++)
 		R_clearlayer(i);
 
-	R_move(0,0);
+	//TODO: make sure this was not needed by anything
+	//R_move(0,0);
 }
 
 void R_color(char r,char g,char b,char fr,char fg,char fb)

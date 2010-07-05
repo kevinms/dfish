@@ -5,6 +5,7 @@
 //TODO: remove this include, on here for debugging
 #include <stdio.h>
 
+//TODO:URGENT: completely get rid of this function in favor of buf_new_init
 //TODO: return -1 if malloc fails
 void buf_init(fixedbuf_t *b, int size)
 {
@@ -13,6 +14,20 @@ void buf_init(fixedbuf_t *b, int size)
 	b->curspot = 0;
 
 	b->buf = (unsigned char *)malloc(size);
+}
+
+fixedbuf_t *buf_new_init(int size)
+{
+	fixedbuf_t *b;
+
+	b = (fixedbuf_t *)malloc(sizeof(*b));
+	b->maxsize = size;
+	b->cursize = 0;
+	b->curspot = 0;
+
+	b->buf = (unsigned char *)malloc(size);
+
+	return b;
 }
 
 void buf_clear(fixedbuf_t *b)

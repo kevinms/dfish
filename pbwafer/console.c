@@ -6,6 +6,7 @@
 #include "render.h"
 #include "input.h"
 #include "utils.h"
+#include "pbwafer.h"
 
 console_t console;
 
@@ -29,6 +30,7 @@ void CONSOLE_init(const char *s,void (*callback)())
 	CONSOLE_register_cmd("/help",0,CONSOLE_help,NULL,"Tells how to use the console");
 	CONSOLE_register_cmd("/clear",0,CONSOLE_clear,NULL,"Clear the console");
 	CONSOLE_register_cmd("/cmdlist",0,CONSOLE_cmdlist,NULL,"List all the commands");
+	CONSOLE_register_cmd("/quit",0,PBWFAER_quit,NULL,"Quit the game");
 }
 
 void CONSOLE_attach_to_view(view_t *v)
@@ -85,6 +87,7 @@ void CONSOLE_accept_input()
 
 		buf_reset(&console.text);
 		buf_write_string(&console.text,(const char *)console.curhistory->item);
+		console.text.cursize--;
 		CONSOLE_update();
 	}
 	else if(g_chain.sym == K_DOWN) {
@@ -93,6 +96,7 @@ void CONSOLE_accept_input()
 				console.curhistory = console.curhistory->next;
 				buf_reset(&console.text);
 				buf_write_string(&console.text,(const char *)console.curhistory->item);
+				console.text.cursize--;
 			}
 			else {
 				console.curhistory = NULL;
@@ -142,7 +146,7 @@ void CONSOLE_accept_input()
 	else if ( g_chain.uni < 0x80 && g_chain.uni > 0 ) {
 		buf_write_char(&console.text, (char)g_chain.uni);
 
-		console.curhistory = NULL;
+		//console.curhistory = NULL;
 		console.nextlines = NULL;
 		console.curlines = &console.lines->tail;
 		console.prevlines = NULL;

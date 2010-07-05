@@ -9,6 +9,8 @@
 #include "pbwafer/net.h"
 #include "pbwafer/proto.h"
 
+#include "view_fabricator.h"
+
 vspace_t *vspace;
 
 cmd_t g_spacecmds[2] = 
@@ -23,9 +25,12 @@ void VSPACE_init(int x, int y, int real_w, int real_h, char *fontname, int fonts
 	vspace->v = VIEW_init(x,y,real_w,real_h,fontname,fontsize,screen,numl);
 
 	vspace->v->accept_input = VSPACE_accept_input;
+	vspace->v->showcursor = 1;
 
 	// Set the focus to the space view
 	VIEW_focus(vspace->v);
+
+	VFAB_init(x,y,real_w,real_h,fontname,fontsize,screen,numl);
 
 	// Print welcome message
 	R_color(0,0,0,0,0,255);
@@ -50,7 +55,11 @@ void VSPACE_menu_init(int x, int y, int real_w, int real_h, char *fontname, int 
 		menu = MENU_add_menu(menu,tmenu,"Network",KM_NONE,K_v);
 			menu = MENU_add_entry(menu,tmenu,"Find LAN Servers",KM_NONE,K_m,CB_req_servinfo_bcast,NULL);
 			menu = MENU_add_entry(menu->par,tmenu,"Connect to lo",KM_NONE,K_h,CB_req_connect,NULL);
-		menu = MENU_add_menu(menu->par->par,tmenu,"Generate Galaxy",KM_NONE,K_g);
+
+		//menu = MENU_add_entry(menu->par->par,tmenu,"Fabricator",KM_NONE,K_f,CB_fabricator,NULL);
+		VFAB_menu_init(tmenu,x,y,real_w,real_h,fontname,fontsize,screen,numl);
+
+		menu = MENU_add_menu(tmenu,tmenu,"Generate Galaxy",KM_NONE,K_g);
 			menu = MENU_add_entry(menu,tmenu,"New Galaxy",KM_NONE,K_m,CB_gengalaxy,NULL);
 		menu = MENU_add_entry(menu->par->par,tmenu,"Fuzz!!!",KM_NONE,K_p,CB_console_fuzz,NULL);
 
@@ -59,6 +68,9 @@ void VSPACE_menu_init(int x, int y, int real_w, int real_h, char *fontname, int 
 	MENU_load(tmenu);
 	tmenu->cur = tmenu;
 	vspace->menu = tmenu;
+
+	vfab->menu = vspace->menu;
+	vfab->v_menu = vspace->v_menu;
 
 	// Render the current menu (Redundant, yes?)
 	R_set(vspace->v_menu);
@@ -73,8 +85,32 @@ void VSPACE_accept_input()
 	c = CMD_find_key_array(g_spacecmds,&g_chain,2);
 	if(c != NULL)
 		CMD_do(c);
-
 	MENU_do_key(vspace->menu,&g_chain);
+
+	if(g_chain.sym == K_UP) {
+		R_moveby(0,-1);
+	}
+	else if(g_chain.sym == K_DOWN) {
+		R_moveby(0,1);
+	}
+	else if(g_chain.sym == K_LEFT) {
+		R_moveby(-1,0);
+	}
+	else if(g_chain.sym == K_RIGHT) {
+		R_moveby(1,0);
+	}
+
+	VSPACE_update();
+}
+
+void VSPACE_update()
+{
+	R_set(vspace->v);
+	R_clear();
+
+	//TODO: draw any blueprints,planets,objects that are in the view
+
+	R_update();
 }
 
 void CB_req_servinfo_bcast()

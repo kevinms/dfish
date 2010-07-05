@@ -30,8 +30,9 @@ typedef struct view_s
 	int fontsize;
 	TTF_Font *font;
 
+	char cursor;
 	char showcursor;
-	char cursor_color[3];
+	char cursor_color[4];
 	int numl; // Number of layers that exist
 	char *layer_visible; // Array of bools to set whether to render a layer
 	int l; // The current layer to render things on

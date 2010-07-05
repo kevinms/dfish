@@ -4,6 +4,8 @@
 #define EN_BIG 0
 #define EN_LIT 1
 
+void print_bits32(int n);
+int rand_max(int n);
 int split_string(char *buf, char **seg);
 char *p_strcpy(const char *str);
 int search_match(char **tree, char *apple);

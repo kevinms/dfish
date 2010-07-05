@@ -39,6 +39,8 @@ int main(void)
 		if(PROTO_recv() > 0)
 			PROTO_client_parse_DGRAM();
 
+		PROTO_client_send_packets();
+
 		ret = input_handle();
 		if(ret == 2) {
 			// Check the global commands

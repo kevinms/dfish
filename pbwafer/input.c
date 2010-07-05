@@ -24,6 +24,8 @@ input_handle()
 				g_chain.sym = event.key.keysym.sym;
 				g_chain.mod = event.key.keysym.mod;
 				g_chain.uni = event.key.keysym.unicode;
+
+				//printf("sym[%d], mod[%d], uni[%d]\n",g_chain.sym,g_chain.mod,g_chain.uni);
 				return 2;
 			case SDL_KEYUP:
 				break;
