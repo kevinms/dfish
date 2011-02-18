@@ -4,6 +4,9 @@
 #define EN_BIG 0
 #define EN_LIT 1
 
+#define MAX(x,y) if(x>y) return x; else return y;
+#define MIN(x,y) if(x<y) return x; else return y;
+
 void print_bits32(int n);
 int rand_max(int n);
 int split_string(char *buf, char **seg);

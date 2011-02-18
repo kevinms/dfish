@@ -35,9 +35,11 @@ void PROTO_init()
 hostinfo_t *PROTO_host_init()
 {
 	hostinfo_t *h;
+	int i;
 
 	h = (hostinfo_t *)malloc(sizeof(*h));
-	h->unacked_reliable_packets = list_init();
+	for(i = 0; i < NUMBITS; i++)
+		h->unacked_reliable_packet_map[i] = NULL;
 	h->packet_queue = list_init();
 
 	// Set the the whole header to 0 (including h->hdr.seq_num)
@@ -120,7 +122,6 @@ void PROTO_req_servinfo_ip(const char *node, const char *service)
 	}
 
 	// Setup header
-	//buf_init(&b, 512);
 	b = buf_new_init(512);
 	buf_memget(b, 11);
 	buf_write_char(b, PTYPE_INFO);
@@ -273,7 +274,6 @@ void PROTO_server_parse_DGRAM()
 
 	// Read the packet type from the global recieve buffer
 	type = buf_read_char(&g_buf);
-	printf("type: %d\n",type);
 
 	// Host is requeseting servinfo
 	if(type == PTYPE_INFO) {
@@ -300,7 +300,6 @@ void PROTO_server_parse_DGRAM()
 
 	// Host is requeseting to connect
 	else if(type == PTYPE_CONNECT) {
-		printf("PTYPE_CONNECT\n");
 
 		// Check if there are any slots available on the server
 		if(clientinfo_list->len == servinfo.max_clients) {
@@ -420,7 +419,6 @@ void PROTO_client_parse_DGRAM()
 
 	// Read the packet type from the global recieve buffer
 	type = buf_read_char(&g_buf);
-	printf("type: %d\n",type);
 
 	// Server sent info about itself
 	if(type == PTYPE_INFO && clientinfo.state == STATE_WAIT_ON_INFO)
@@ -464,7 +462,6 @@ void PROTO_client_parse_DGRAM()
 	}
 	// Server accepted the connection request
 	else if(type == PTYPE_CONNECT && clientinfo.state == STATE_WAIT_ON_CON) {
-		printf("PTYPE_CONNECT\n");
 
 		// Set the client state to connected and read new HID
 		clientinfo.state = STATE_CON;
@@ -543,14 +540,15 @@ int PROTO_send_reliable(hostinfo_t *h, fixedbuf_t *b)
 	rv = PROTO_send(h, b);
 
 	// Store packet data in a packet_t
-	//TODO: set some sort of timeout to resend the packet when reached
 	p = (packet_t *)malloc(sizeof(*p));
 	p->seq_num = h->hdr.seq_num;
 	p->b = b;
 	TIMER_init(&p->timer,DROP_TIME); // This timeout may depend on certain network conditions or may need to be set to some 'good' value
 
 	// Add the new packet_t to the list of unacked_reliable_packets
-	list_add(h->unacked_reliable_packets, (void *)p);
+	if( h->unacked_reliable_packet_map[p->seq_num%NUMBITS] != NULL)
+		printf("hmmmm...\n");
+	h->unacked_reliable_packet_map[p->seq_num%NUMBITS] = p;
 
 	return rv;
 }
@@ -565,11 +563,7 @@ int PROTO_send_unreliable(hostinfo_t *h, fixedbuf_t *b)
 // Try to send a single UDP packet
 int PROTO_send(hostinfo_t *h, fixedbuf_t *b)
 {
-	printf("PROTO_send()\n");
 	int rv;
-
-	// Reset the keepalive timer
-	TIMER_init(&h->keepalive,TIMEOUT);
 
 	// Increment your seq_num
 	h->hdr.seq_num++;
@@ -584,19 +578,16 @@ int PROTO_send(hostinfo_t *h, fixedbuf_t *b)
 	buf_write_long(b, h->hdr.ack_bits);
 	b->cursize = h->hdr.size;
 
-	PROTO_print_header_t(&h->hdr);
-	PROTO_print_header(b->buf);
-
 	rv = NET_send(h->n, b);
 	//TODO: check rv to make sure NET_send() sent the whole packet
+	assert(rv == b->cursize);
 
-	printf("\tL seq_num[%d], ack[%d], ack_bits[",h->hdr.seq_num,h->hdr.ack);
+	printf("SEND: seq_num[%d], ack[%d], ack_bits[",h->hdr.seq_num,h->hdr.ack);
 	print_bits32(h->hdr.ack_bits);
 	printf("]\n");
 
-	printf("\tG seq_num[%d], ack[%d], ack_bits[",g_h.hdr.seq_num,g_h.hdr.ack);
-	print_bits32(g_h.hdr.ack_bits);
-	printf("]\n");
+	// Reset the keepalive timer
+	TIMER_init(&h->keepalive,TIMEOUT);
 
 	return rv;
 }
@@ -613,7 +604,8 @@ int PROTO_recv()
 
 	rv = NET_recv(g_h.n, &g_buf);
 
-	//TODO: check rv to make sure NET_recv actually recved a packet and didn't return -1 | 0
+	//TODO: check rv to make sure NET_recv actually recved a packet and didn't return 0
+	assert(rv != 0);
 
 	if(rv > 0) {
 		// Read the application header into g_h.hdr
@@ -623,14 +615,10 @@ int PROTO_recv()
 		g_h.hdr.ack      = buf_read_short(&g_buf);
 		g_h.hdr.ack_bits = buf_read_long(&g_buf);
 
-		printf("PROTO_recv()\n");
-
-		PROTO_print_header_t(&g_h.hdr);
-		PROTO_print_header(g_buf.buf);
-
-		printf("\tG seq_num[%d], ack[%d], ack_bits[",g_h.hdr.seq_num,g_h.hdr.ack);
+		printf("RECV: seq_num[%d], ack[%d], ack_bits[",g_h.hdr.seq_num,g_h.hdr.ack);
 		print_bits32(g_h.hdr.ack_bits);
 		printf("]\n");
+
 	}
 
 	return rv;
@@ -648,7 +636,6 @@ void PROTO_client_send_chat(const char *s)
 	}
 
 	// Write packet
-	//buf_init(&b, 512);  GWACAMOLY!#$!
 	b = buf_new_init(512);
 	buf_memget(b, 11);
 	buf_write_char(b, PTYPE_MSG);
@@ -701,77 +688,41 @@ char PROTO_is_known_host(hostinfo_t *h)
 // the ack and ack_bits to send back to your buddy
 void PROTO_update_acks(hostinfo_t *h)
 {
-	// Only update acks if it is a newer seq_num
-	if(g_h.hdr.seq_num > h->hdr.ack) {
-		// First shift the ack bitfield over by the difference between the old ack and new ack
-		h->hdr.ack_bits = h->hdr.ack_bits << (g_h.hdr.seq_num - h->hdr.ack);
-		h->hdr.ack_bits++;
-
-		// Store the new ack
+	// Store the new ack
+	if(PROTO_more_recent(g_h.hdr.seq_num, h->hdr.ack, MAX_SHORT)) {
+		h->hdr.ack_bits = h->hdr.ack_bits << (PROTO_diff(g_h.hdr.seq_num, h->hdr.ack, MAX_SHORT));
 		h->hdr.ack = g_h.hdr.seq_num;
 	}
+
+	// First shift the ack bitfield over by the difference between the old ack and new ack
+	h->hdr.ack_bits = h->hdr.ack_bits | (0x1 << (PROTO_diff(h->hdr.ack, g_h.hdr.seq_num, MAX_SHORT)));
 }
 
 // See which of your seq_num's your buddy has seen and remove them from the unacked_reliable_packets list
 void PROTO_accept_acks(hostinfo_t *h)
 {
-	printf("PROTO_accept_acks()\n");
-	link_t *tmp;
-	unsigned char ack;
+	unsigned short ack,d;
 	unsigned long ack_bits;
 	int i;
-	int size;
-	int remove_prev_packet = 0;
+
+	if(PROTO_more_recent(h->hdr.ack, g_h.hdr.seq_num, MAX_SHORT)) {
+		printf("I have seen newer packets than this...\n");
+		return;
+	}
 
 	// Copy them to a local variable once so they don't have to be dereferenced each time in the loops below
 	ack = g_h.hdr.ack;
 	ack_bits = g_h.hdr.ack_bits;
 
-	printf("\tL seq_num[%d], ack[%d], ack_bits[",h->hdr.seq_num,h->hdr.ack);
-	print_bits32(h->hdr.ack_bits);
-	printf("]\n");
-
-	printf("\tG seq_num[%d], ack[%d], ack_bits[",g_h.hdr.seq_num,ack);
-	print_bits32(ack_bits);
-	printf("]\n");
-
-	// Check if the most recent ack from your buddy is in the unacked_reliable_packet list
-	for(tmp = h->unacked_reliable_packets->head; tmp != NULL; tmp = tmp->next) {
-		if(remove_prev_packet == 1) {
-			list_del_item(h->unacked_reliable_packets,tmp->prev->item);
-			remove_prev_packet = 0;
-		}
-		printf("\t");
-		PROTO_print_header(((packet_t *)tmp->item)->b->buf);
-		if( ((packet_t *)tmp->item)->seq_num == ack ) {
-			remove_prev_packet = 1;
-			break;
-		}
-	}
-	if(remove_prev_packet == 1)
-		list_del_tail(h->unacked_reliable_packets);
-
-	// Get the number of ack bits there are
-	size = sizeof(ack_bits) * 8;
-
-	// TODO: change this to a hash table
 	// Loop through all the bits
-	for(i = 0; i < size; i++) {
-		// If a bit is set remove it from the unacked_reliable_packets list if it is there remove it
-		if(((ack_bits >> i) & 0x1)) {
-			for(tmp = h->unacked_reliable_packets->head; tmp != NULL; tmp = tmp->next) {
-				if(remove_prev_packet == 1) {
-					list_del_item(h->unacked_reliable_packets,tmp->prev->item);
-					remove_prev_packet = 0;
-				}
-
-				if( ((packet_t *)tmp->item)->seq_num == ack-i-1 ) {
-					remove_prev_packet = 1;
-					break;
+	for(i = 0; i < NUMBITS; i++) {
+		if(h->unacked_reliable_packet_map[i] != NULL) {
+			d = h->unacked_reliable_packet_map[i]->seq_num;
+			if(PROTO_more_recent(ack, d, MAX_SHORT) || d == ack) {
+				if((ack_bits >> (PROTO_diff(ack,d,MAX_SHORT))) & 0x1) {
+					h->unacked_reliable_packet_map[i] = NULL;
 				}
 			}
-			if(remove_prev_packet == 1)
-				list_del_tail(h->unacked_reliable_packets);
 		}
 	}
 }
@@ -780,53 +731,31 @@ void PROTO_accept_acks(hostinfo_t *h)
 // them to the packet_queue to be resent
 void PROTO_handle_timeout(hostinfo_t *h)
 {
-	link_t *tmp;
 	packet_t *p;
-	int remove_prev_packet = 0;
+	int i;
 
 	// Go through all the packets that have not been ack'ed by this host
-	assert(h != NULL);
-	assert(h->unacked_reliable_packets != NULL);
-	for(tmp = h->unacked_reliable_packets->head; tmp != NULL; tmp = tmp->next) {
-		if(remove_prev_packet == 1) {
-			printf("h->unacked_reliable_packets->len = %d\n",h->unacked_reliable_packets->len);
-			fflush(stdout);
-			printf("First\n");
-			list_del_item(h->unacked_reliable_packets,tmp->prev->item); //TODO: implement list_del_link() which will be able to remove in O(1)
-			remove_prev_packet = 0;
-		}
-
-		p = (packet_t *)tmp->item;
-		assert(p != NULL);
-		assert(&p->timer != NULL);
+	for(i = 0; i < NUMBITS; i++) {
+		p = h->unacked_reliable_packet_map[i];
 		// If a timeout occured the packet is assumed to have been dropped and needs to be resent
-		if(TIMER_is_timeout(&p->timer)) {
-			printf("TIMEOUT\n");
-			printf("\t");
-			PROTO_print_header(p->b->buf);
+		if(p && TIMER_is_timeout(&p->timer)) {
+			printf("TIMEOUT\n\t");
 			PROTO_queue_packet(h,p);
-			remove_prev_packet = 1;
+			h->unacked_reliable_packet_map[i] = NULL;
 		}
-	}
-	if(remove_prev_packet == 1) {
-		list_del_tail(h->unacked_reliable_packets);
-		printf("Second\n");
 	}
 }
 
 // Add a packet to the packet_queue which will be sent
 void PROTO_queue_packet(hostinfo_t *h, packet_t *p)
 {
-	// Increase the host seq_num because we have added a new packet with the current seq_num
-	//h->hdr.seq_num++;
-
 	// Set packets new seq_num
 	p->seq_num = h->hdr.seq_num;
 	list_add(h->packet_queue, (void *)p);
 	printf("h->packet_queue->len = %d\n",h->packet_queue->len);
 }
 
-// Send all the packets
+// Send all the reliable packets that have been placed back into the packet_queue
 void PROTO_send_packets(hostinfo_t *h)
 {
 	//TODO: this is one place congestion control can be taken into account
@@ -835,8 +764,6 @@ void PROTO_send_packets(hostinfo_t *h)
 	// Send any packets in the queue and remove them from it
 	while (h->packet_queue->head != NULL) {
 		p = (packet_t *)h->packet_queue->head->item;
-		PROTO_print_header(p->b->buf);
-		//*(unsigned short *)(p->b->buf+2) = p->seq_num;
 		PROTO_send_reliable(h,p->b);
 
 		list_del_head(h->packet_queue);
@@ -869,6 +796,7 @@ void PROTO_client_keepalive()
 	fixedbuf_t *b;
 
 	if(TIMER_is_timeout(&clientinfo.info->keepalive)) {
+		printf("keepalive\n");
 		// Write packet
 		b = buf_new_init(512);
 		buf_memget(b, 11);
@@ -878,9 +806,22 @@ void PROTO_client_keepalive()
 	}
 }
 
+int PROTO_more_recent(unsigned short s1, unsigned short s2, unsigned short max_sequence)
+{
+	return (( s1 > s2 ) && ( s1 - s2 <= max_sequence/2 )) || (( s2 > s1 ) && ( s2 - s1 > max_sequence/2  ));
+}
+
+unsigned short PROTO_diff(unsigned short s1, unsigned short s2, unsigned short max_sequence)
+{
+	if(PROTO_more_recent(s1, s2, max_sequence))
+		if(s2 > s1)
+			return(max_sequence - s2 + s1 + 1);
+		return(s1 - s2);
+}
+
 void PROTO_print_header_t(header_t *h)
 {
-	printf("header[%d,%d,%d,%d,%d]\n",h->size,
+	printf("header[%hu,%hu,%u,%hu,%lu]\n",h->size,
 	                                  h->seq_num,
 	                                  h->hid,
 	                                  h->ack,
@@ -890,10 +831,10 @@ void PROTO_print_header_t(header_t *h)
 
 void PROTO_print_header(unsigned char *buf)
 {
-	printf("header[%d,%d,%u,%d,%d]\n",buf[0]<<8 | buf[1],
+	printf("header[%hu,%hu,%u,%hu,%lu]\n",buf[0]<<8 | buf[1],
 	                                  buf[2]<<8 | buf[3],
 	                                  buf[4],
 	                                  buf[5]<<8 | buf[6],
-	                                  buf[7]<<24 | buf[8]<<16 | buf[9]<<8 | buf[10]
+	                                  (unsigned long)(buf[7]<<24 | buf[8]<<16 | buf[9]<<8 | buf[10])
 	                                  );
 }

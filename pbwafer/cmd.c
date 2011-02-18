@@ -33,11 +33,9 @@ void CMD_do(cmd_t *c)
 		return;
 
 	if(c->data) {
-		printf("called CMD_do() with data\n");
 		c->callback(c->data);
 	}
 	else if(c->data_type == 1) {
-		printf("called CMD_do() with data\n");
 		c->callback(c->n);
 	}
 	else

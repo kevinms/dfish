@@ -13,8 +13,6 @@
 #include "console.h"
 #include "utils.h"
 
-//TODO:URGENT: Get the reliability layer working
-//TODO:URGENT: Get KEEPALIVE msg type working to test the reliability layer
 //TODO:URGENT: Get a basic flow control algorithm working based of a few metrics
 
 // Initilizes the NET module, called by PBWAFER_init()
@@ -87,8 +85,6 @@ net_t *NET_socket_server(const char *node, const char *service)
 	// Can go ahead and free servinfo since it is not stored in net_t anymore
 	freeaddrinfo(servinfo);
 
-	//NET_print(n);
-
 	return n;
 }
 
@@ -142,18 +138,13 @@ net_t *NET_socket_client(const char *node, const char *service)
 	// Can go ahead and free servinfo since it is not stored in net_t anymore
 	freeaddrinfo(servinfo);
 
-	//NET_print(n);
-
 	return n;
 }
 
 //TODO: Handle partial sends
 int NET_send(net_t *n, fixedbuf_t *b)
 {
-	printf("NET_send()\n");
 	int numbytes;
-
-	NET_print(n);
 
 	// Simulate a few network conditions
 	NET_sim(n);
@@ -172,8 +163,8 @@ int NET_send(net_t *n, fixedbuf_t *b)
 		perror("Error: sendto failed");
 	}
 
-	if(numbytes > 0)
-		printf("\tnumbytes sent: %d\n",numbytes);
+	//if(numbytes > 0)
+	//	printf("\tnumbytes sent: %d\n",numbytes);
 
 	return numbytes;
 }
@@ -185,16 +176,15 @@ int NET_recv(net_t *n, fixedbuf_t *b)
 	int numbytes;
 
 	buf_clear(b);
-	if ((numbytes = recvfrom(n->sockfd, b->buf, b->maxsize , 0, (struct sockaddr *)&n->addr, &n->addrlen)) == -1) {
+	if ((numbytes = recvfrom(n->sockfd, b->buf, b->maxsize , 0, (struct sockaddr *)&n->addr, (socklen_t *)&n->addrlen)) == -1) {
 		//perror("recvfrom");
 	}
 
 	if(numbytes <= 0)
 		return numbytes;
 
-	//NET_print(n);
 
-	printf("numbytes recved: %d\n",numbytes);
+	//printf("numbytes recved: %d\n",numbytes);
 	buf_clear(b);
 	b->cursize = numbytes;
 
