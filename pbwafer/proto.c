@@ -796,7 +796,6 @@ void PROTO_client_keepalive()
 	fixedbuf_t *b;
 
 	if(TIMER_is_timeout(&clientinfo.info->keepalive)) {
-		printf("keepalive\n");
 		// Write packet
 		b = buf_new_init(512);
 		buf_memget(b, 11);
