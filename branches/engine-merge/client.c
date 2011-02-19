@@ -28,7 +28,7 @@ int main(void)
 	vm = VID_init_mode(700,480,32,"dfish");
 
 	// Initilize 3 views
-	VSPACE_init(0,0,500,280,"./Font.ttf",7,vm->screen,7);
+	VSPACE_init(0,0,500,280,"./Font_default.ttf",10,vm->screen,7);
 	VSPACE_menu_init(500,0,200,480,"./Font_default.ttf",10,vm->screen,7);
 	VCONSOLE_init(0,280,500,200,"./Font_default.ttf",10,vm->screen,7);
 

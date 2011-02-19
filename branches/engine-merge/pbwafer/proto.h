@@ -45,7 +45,7 @@
 #define STATE_WAIT_ON_CON  2
 #define STATE_CON          3
 
-#define TIMEOUT   3
+#define TIMEOUT   1000
 #define DROP_TIME 1500
 
 #define NUMBITS 32

@@ -52,28 +52,36 @@ from a single armor piece to a wooden floor piece
 
 // There are basically 3 data structures in a blueprint...
 //   - 2D Doubly-linked list
-//   - Doubly-linked list
+//   - Linked list
 //   - Hash table
 
 //TODO: Find if there is a good easy way to loop through a 2D Doubly-linked list
+
+typedef struct prim_s {
+	int ch;
+	char r,g,b;
+	char fr,fg,fb;
+} prim_t;
 
 typedef struct entity_s
 {
 	unsigned short id;
 	unsigned int mass;
 	unsigned int health;
+	prim_t *p;
 
+	// 2D Doubly-Linked List
 	struct entity_s *n;
 	struct entity_s *s;
 	struct entity_s *e;
 	struct entity_s *w;
 
+	// Hashmap pieces
 	int offset_x; // These could hashed and stored in a table
 	int offset_y; // It would enable a much faster search
 
-	struct entity_s *next; // Doubly linked list, will speed up looping through
-
-	char ch;
+	// Linked List, will speed up looping through
+	struct entity_s *next;
 } entity_t;
 
 typedef struct bp_s {
@@ -97,8 +105,10 @@ typedef struct delta_s
 	
 } delta_t;
 
+extern prim_t primitives[2];
+
 bp_t *BP_init();
-entity_t *BP_add_entity(bp_t *b, int id);
+entity_t *BP_add_entity(bp_t *b, int id, int x, int y);
 
 void BP_render_ent(entity_t *e,int x, int y);
 void BP_render(bp_t *b);

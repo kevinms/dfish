@@ -29,11 +29,9 @@ list_add(list_t *list, void *entity)
 	newlink->item = entity;
 
 	if(list->head == NULL && list->tail == NULL) {
-		//printf("added to an empty list\n");
 		list->head = newlink;
 		list->tail = newlink;
 	} else {
-		//printf("added to a list\n");
 		newlink->prev = list->tail;
 		list->tail->next = newlink;
 		list->tail = newlink;
@@ -45,7 +43,6 @@ list_add(list_t *list, void *entity)
 void
 list_del_item(list_t *list, void *item)
 {
-	//printf("del_item---------------------------------------\n");
 	fflush(stdout);
 	link_t *templink;
 
@@ -60,19 +57,15 @@ list_del_item(list_t *list, void *item)
 		return;
 
 	if(templink == list->tail && templink == list->head) {
-		//fprintf(stderr,"del 1\n");
 		list->head = NULL;
 		list->tail = NULL;
 	} else if(templink == list->tail) {
-		//fprintf(stderr,"del 2\n");
 		list->tail = templink->prev;
 		list->tail->next = NULL;
 	} else if(templink == list->head) {
-		//fprintf(stderr,"del 3\n");
 		list->head = templink->next;
 		list->head->prev = NULL;
 	} else {
-		//fprintf(stderr,"del 4\n");
 		templink->prev->next = templink->next;
 		templink->next->prev = templink->prev;
 	}
@@ -120,11 +113,9 @@ int list_del_tail(list_t *list)
 	tmp = list->tail;
 
 	if(list->len == 1) {
-		//printf("1\n");
 		list->tail = NULL;
 		list->head = NULL;
 	} else {
-		//printf("2\n");
 		tmp->prev->next = NULL;
 		list->tail = tmp->prev;
 	}

@@ -23,7 +23,7 @@ void R_string(const char *s);
 void R_stringln(const char *s);
 void R_stringn(const char *s,int n);
 void R_stringnln(const char *s,int n);
-void R_blueprint(bp_t *b);
+//void R_blueprint(bp_t *b);
 void R_move(int x,int y);
 void R_movetocenter();
 void R_moveby(int x,int y);
