@@ -50,7 +50,8 @@ typedef struct net_s
 {
 	int sockfd;
 	struct sockaddr_storage addr;
-	size_t addrlen;
+	socklen_t addrlen;
+	//size_t addrlen;
 
 	struct timeval to; // Socket timeout, will result in a disconnect if it reaches 0
 
