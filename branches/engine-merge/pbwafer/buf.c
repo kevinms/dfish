@@ -238,17 +238,20 @@ int buf_read_long(fixedbuf_t *b)
 float buf_read_float(fixedbuf_t *b)
 {
 	unsigned char *buf = b->buf+b->curspot;
-	float *f;
+	union
+	{
+		int l;
+		float f;
+	} data;
 
 	if(b->curspot+4 > b->cursize)
 		return 0.0;
 
 	b->curspot += 4;
 
-	int l = buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3];
-	f = (float *)&l;
+	data.l = buf[0]<<24 | buf[1]<<16 | buf[2]<<8 | buf[3];
 
-	return *f;
+	return data.f;
 }
 
 void buf_read_float2(fixedbuf_t *b, float *f)
