@@ -12,4 +12,9 @@ void CB_req_servinfo_ip(int count, const char **s);
 void CB_req_servinfo_broadcast(int count, const char **s);
 void CB_netsim(int count, const char **s);
 
+#ifdef SOUND
+void CB_snd_volume(int count, const char **s);
+void CB_snd_play(int count, const char **s);
+#endif // SOUND
+
 #endif /* !__VIEW_CONSOLE_H */

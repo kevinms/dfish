@@ -6,6 +6,10 @@
 #include "pbwafer/console.h"
 #include "pbwafer/proto.h"
 
+#ifdef SOUND
+#include "pbwafer/snd.h"
+#endif // SOUND
+
 view_t *v_console;
 
 void VCONSOLE_init(int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl)
@@ -25,6 +29,11 @@ void VCONSOLE_init(int x, int y, int real_w, int real_h, char *fontname, int fon
 	CONSOLE_register_cmd("/info",2,CB_req_servinfo_ip,"IP PORT","Request info from a server");
 	CONSOLE_register_cmd("/info-bcast",1,CB_req_servinfo_broadcast,"PORT","Get info from all servers on LAN");
 	CONSOLE_register_cmd("/netsim",1,CB_netsim,NULL,"Tells how to use the console");
+#ifdef SOUND
+	CONSOLE_register_cmd("/snd-volume",1,CB_snd_volume,"VOLUME (percent)","Set music volume");
+	CONSOLE_register_cmd("/snd-stop",0,SND_stop,NULL,"Stop music");
+	CONSOLE_register_cmd("/snd-play",1,CB_snd_play,"music filename (no spaces)","Play specific music file");
+#endif // SOUND
 
 	// Print a message for the user to see.
 	CONSOLE_print("Type /help for the console guide.");
@@ -36,7 +45,6 @@ void CB_req_servinfo_ip(int count, const char **s)
 	PROTO_req_servinfo_ip(s[0], s[1]);
 }
 
-
 void CB_req_servinfo_broadcast(int count, const char **s)
 {
 	PROTO_req_servinfo_broadcast(s[0]);
@@ -46,3 +54,15 @@ void CB_netsim(int count, const char **s)
 {
 	PROTO_client_netsim(atoi(s[0]),SIM_DC|SIM_PL);
 }
+
+#ifdef SOUND
+void CB_snd_volume(int count, const char **s)
+{
+	SND_volume(atoi(s[0]));
+}
+
+void CB_snd_play(int count, const char **s)
+{
+	SND_play_music(s[0]);
+}
+#endif // SOUND
