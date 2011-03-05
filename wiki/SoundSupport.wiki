@@ -1,0 +1,31 @@
+#summary Howto compile dfish with sound support!
+
+= Instructions =
+
+In order to have sound in dfish SDL_mixer needs to be installed. Go to http://www.libsdl.org/projects/SDL_mixer/ and download:
+
+{{{
+# 32-bit
+SDL_mixer-1.2.11-1.i586.rpm
+SDL_mixer-devel-1.2.11-1.i586.rpm
+}}}
+
+or
+
+{{{
+# 64-bit
+SDL_mixer-1.2.11-1.x86_64.rpm
+SDL_mixer-devel-1.2.11-1.x86_64.rpm
+}}}
+
+If you need a debian package just use the alien command:
+
+{{{
+
+}}}
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
