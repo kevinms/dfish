@@ -32,7 +32,8 @@ Now just use your package manager and install the package!
 To compile dfish run:
 
 {{{
-make with-sound
+make clean
+make SND=1
 }}}
 
 Enjoy the music :)
