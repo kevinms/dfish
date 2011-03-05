@@ -6,6 +6,7 @@
 #define INIT_VID     4
 #define INIT_RENDER  8
 #define INIT_INPUT   16
+#define INIT_SND     32
 
 void PBWAFER_init(char mask);
 void PBWFAER_quit();

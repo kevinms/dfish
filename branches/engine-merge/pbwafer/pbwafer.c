@@ -6,6 +6,10 @@
 #include "render.h"
 #include "input.h"
 
+#ifdef SOUND
+#include "snd.h"
+#endif // SOUND
+
 void PBWAFER_init(char mask)
 {
 	if(mask & INIT_NET)
@@ -18,6 +22,10 @@ void PBWAFER_init(char mask)
 		R_init();
 	if(mask & INIT_INPUT)
 		input_init();
+#ifdef SOUND
+	if(mask & INIT_SND)
+		SND_init();
+#endif // SOUND
 }
 
 void PBWFAER_quit()
