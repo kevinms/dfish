@@ -37,3 +37,21 @@ make SND=1
 }}}
 
 Enjoy the music :)
+
+= Sound Commands =
+
+There are three commands which control sound in dfish
+
+{{{
+/snd-volume VOLUME (percent) - Set music volume
+/snd-stop - Stop music
+/snd-play music filename (no spaces) - Play specific music file
+}}}
+
+You can play any music you would like simply by providing the path to the music file, for example:
+
+{{{
+/snd-play /usr/home/alice/favoritesong.mp3
+}}}
+
+By default the music will play in a loop forever.
