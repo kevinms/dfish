@@ -1,9 +1,7 @@
 CC=gcc
 CFLAGS=-g -Wall -O0 `sdl-config --cflags`
 
-LDFLAGS=`sdl-config --libs` -lSDL_ttf -lSDL_mixer
-
-# -lSDL_mixer
+LDFLAGS=`sdl-config --libs` -lSDL_ttf
 
 ################################################################################
 # Build tests
