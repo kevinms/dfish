@@ -25,7 +25,7 @@ sudo alien -d SDL_mixer-1.2.11-1.x86_64.rpm
 sudo alien -d SDL_mixer-devel-1.2.11-1.x86_64.rpm
 }}}
 
-Now just use your package manager and install the package!
+You may need to first remove the old version of libsdl-mixer that might be installed. Once you have the package in the correct format just use your package manager and install!
 
 = Compiling dfish =
 
