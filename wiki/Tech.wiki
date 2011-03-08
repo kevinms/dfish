@@ -8,154 +8,154 @@ We're planning on implementing large tech trees for this game. We'd like to pool
 = Details =
 
 4 main "Sectors" of research
-  * *Weapons*
+
+*Weapons*
 
      _technology to hurt your opponent_
 
-     - Projectiles
+     * Projectiles
 
-       - coil guns (aka  Gauss Cannons)
+       * coil guns (aka  Gauss Cannons)
 
-       - Fire arms (i.e. machine guns )
+       * Fire arms (i.e. machine guns )
 
-       - Rail guns
+       * Rail guns
 
-       - Missiles
+       * Missiles
 
-       - Bombs
+       * Bombs
 
-       - Mines
+       * Mines
 
-       - Attack Drones
+       * Attack Drones
 
-       - Particle beams
+       * Particle beams
 
-       - Lasers
+       * Lasers
 
-       - Tractor / Gravity Beams
+       * Tractor / Gravity Beams
 
-       - Plasma
+       * Plasma
 
-       - Black Hole Device
+       * Black Hole Device
 
-       - EMP
+       * EMP
 
-       - Flamethrower / Plasma thrower
+       * Flamethrower / Plasma thrower
 
-       - Chemical weapon (i.e. acid)
+       * Chemical weapon (i.e. acid)
 
-       - Biological weapon
+       * Biological weapon
 
-       - Dark Matter / anti matter weapon
+       * Dark Matter / anti matter weapon
 
-       - Nuclear
+       * Nuclear
 
-       - Space-time warping weapon
+       * Space*time warping weapon
 
-       - radiation
+       * radiation
 
-       - the German's "Sun Gun"
+       * the German's "Sun Gun"
 
-       - Rods from God
+       * Rods from God
 
-       - Boarding Parties
-         - manned
-         - unmanned
+       * Boarding Parties
+         * manned
+         * unmanned
 
-  * *Armor*
+*Armor*
 
      _technology to keep from being hurt_
 
-       - Kinetic Barriers (i.e. fat metal hulls)
+       * Kinetic Barriers (i.e. fat metal hulls)
 
-       - Beam shields 
+       * Beam shields 
 
-       - Reactive armor
+       * Reactive armor
 
-       - Reflective armor
+       * Reflective armor
 
-       - High Energy Absorption Armor
+       * High Energy Absorption Armor
 
-       - Electronic CounterMeasures (ECMs)
-         - Magnetic field to deflect coil/rail gun bullets
+       * Electronic CounterMeasures (ECMs)
+         * Magnetic field to deflect coil/rail gun bullets
 
-       - Chemical/Biological Retardants
+       * Chemical/Biological Retardants
 
-       - Point Defense
-         - Lasers
-         - Flak Cannons (space shotguns...)
+       * Point Defense
+         * Lasers
+         * Flak Cannons (space shotguns...)
 
-       - Gun jammer
+       * Gun jammer
 
-  * *Engines/mobility*
+*Engines/mobility*
 
      _technology to move_
 
-       - Warp Drive
+       * Warp Drive
 
-       - Wormhole Device
+       * Wormhole Device
 
-       - In-system FTL drive
+       * In*system FTL drive
 
-       - Ion drives
+       * Ion drives
 
-       - Interdiction Device
+       * Interdiction Device
 
-       - Solar Sails
+       * Solar Sails
 
-       - Magnetic Manipulation
-         - Attracts or repulses a planet's or star's magnetic field
+       * Magnetic Manipulation
+         * Attracts or repulses a planet's or star's magnetic field
 
 
-  * *Support*
+*Support*
 
-       - communication
+       * communication
 
-       - power management
+       * power management
 
-       - sensors
+       * sensors
 
-       - mining
+       * mining
 
-       - robotics
-         - unmanned defense points
-           - turrets
-           - vs. boarding parties
-         - allows for more dangerous environments on ship
-           - lax radiation protocols
-           - could use combo of robots and environment to
-               repel boarders
+       * robotics
+         * unmanned defense points
+           * turrets
+           * vs. boarding parties
+         * allows for more dangerous environments on ship
+           * lax radiation protocols
+           * could use combo of robots and environment to repel boarders
 
-       - resource gathering / management
+       * resource gathering / management
 
-       - Power Management
-         - Fusion
-         - Fission
-         - Containment Fields
-         - Superconductivity
-         - Chemical energy storage
+       * Power Management
+         * Fusion
+         * Fission
+         * Containment Fields
+         * Superconductivity
+         * Chemical energy storage
 
-       - Command Interfaces
-         - Ship slaving
-         - ship targeting lasers
+       * Command Interfaces
+         * Ship slaving
+         * ship targeting lasers
 
-       - Communication
+       * Communication
 
-       - Scanners
-         - Harvester/Resource Scanners
-         - Ship/Combat Scanners
-           -> Use for 
-             - projectile detection
-             - scanning ship for weaknesses
-               - Possibly player designated targets on hull blueprint
-         - Long Range Entity Detection
+       * Scanners
+         * Harvester/Resource Scanners
+         * Ship/Combat Scanners
+           * Use for 
+             * projectile detection
+             * scanning ship for weaknesses
+               * Possibly player designated targets on hull blueprint
+         * Long Range Entity Detection
 
-       - Crew Enhancers
+       * Crew Enhancers
 
-         - Stimulants
+         * Stimulants
 
-         - Cybernetics
+         * Cybernetics
 
-         - Biological Engineering
+         * Biological Engineering
 
-         - Genetic Engineering
+         * Genetic Engineering
