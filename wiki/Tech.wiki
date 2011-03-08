@@ -58,6 +58,10 @@ We're planning on implementing large tech trees for this game. We'd like to pool
 
        - Rods from God
 
+       - Boarding Parties
+         - manned
+         - unmanned
+
   * *Armor*
 
      _technology to keep from being hurt_
@@ -73,12 +77,13 @@ We're planning on implementing large tech trees for this game. We'd like to pool
        - High Energy Absorption Armor
 
        - Electronic CounterMeasures (ECMs)
-
          - Magnetic field to deflect coil/rail gun bullets
 
        - Chemical/Biological Retardants
 
        - Point Defense
+         - Lasers
+         - Flak Cannons (space shotguns...)
 
        - Gun jammer
 
@@ -99,7 +104,6 @@ We're planning on implementing large tech trees for this game. We'd like to pool
        - Solar Sails
 
        - Magnetic Manipulation
-
          - Attracts or repulses a planet's or star's magnetic field
 
 
@@ -114,30 +118,37 @@ We're planning on implementing large tech trees for this game. We'd like to pool
        - mining
 
        - robotics
+         - unmanned defense points
+           - turrets
+           - vs. boarding parties
+         - allows for more dangerous environments on ship
+           - lax radiation protocols
+           - could use combo of robots and environment to
+               repel boarders
 
        - resource gathering / management
 
        - Power Management
-
          - Fusion
-
          - Fission
-
          - Containment Fields
-
          - Superconductivity
-
          - Chemical energy storage
 
        - Command Interfaces
-
          - Ship slaving
-
          - ship targeting lasers
 
        - Communication
 
        - Scanners
+         - Harvester/Resource Scanners
+         - Ship/Combat Scanners
+           -> Use for 
+             - projectile detection
+             - scanning ship for weaknesses
+               - Possibly player designated targets on hull blueprint
+         - Long Range Entity Detection
 
        - Crew Enhancers
 
