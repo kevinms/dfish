@@ -22,3 +22,10 @@ Lorem ipsum, etc.
 ----
 
 = Scaling over the course of the game =
+
+----
+
+= Entities =
+== Ship Parts ==
+== Raw Materials ==
+== Larger-Scale Tiles ==
