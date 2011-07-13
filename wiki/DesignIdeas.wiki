@@ -1,0 +1,24 @@
+= Scope =
+
+----
+
+= Blueprints =
+Lorem ipsum, etc.
+
+== Layers of Ship Design ==
+
+----
+
+= Interface =
+
+----
+
+= Management of Units =
+<wiki:comment> Potentially inapplicable </wiki:comment>
+----
+
+= Cosmetic Effects =
+ * When a ship is destroyed, little space men should be visible floating out into space.
+----
+
+= Scaling over the course of the game =
