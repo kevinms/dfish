@@ -21,21 +21,35 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <unistd.h>
 #include <fcntl.h>
-#include <arpa/inet.h>
 #include <time.h>
-
 #include "console.h"
 #include "utils.h"
+
+#ifdef _WIN32
+#include <Ws2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+#else
+#include <sys/socket.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#endif
 
 //TODO:URGENT: Get a basic flow control algorithm working based of a few metrics
 
 // Initilizes the NET module, called by PBWAFER_init()
-void NET_init()
+int NET_init()
 {
-	
+#ifdef _WIN32
+	WSADATA WsaData;
+	if (WSAStartup( MAKEWORD(2,2), &WsaData ) == NO_ERROR)
+		return 1;
+
+	fprintf(stderr, "ERROR: could not initialize network module\n");
+	return 0;
+#else
+	return 1;
+#endif
 }
 
 // Create a socket for the server to communicate on and fill a net_t
@@ -44,6 +58,7 @@ net_t *NET_socket_server(const char *node, const char *service)
 	net_t *n;
 	int rv;
 	int yes = 1;
+	unsigned long ulMode = 1;
 	struct addrinfo hints;
 	struct addrinfo *servinfo;
 	struct addrinfo *p;
@@ -76,7 +91,11 @@ net_t *NET_socket_server(const char *node, const char *service)
 		}
 
 		if (bind(n->sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+#ifdef _WIN32
+			closesocket(n->sockfd);
+#else
 			close(n->sockfd);
+#endif
 			perror("server: bind");
 			continue;
 		}
@@ -90,7 +109,12 @@ net_t *NET_socket_server(const char *node, const char *service)
 	}
 
 	// Set the socket to non-blocking
+#ifdef WIN32
+	ioctlsocket( n->sockfd, FIONBIO, &ulMode );
+#else
 	fcntl(n->sockfd, F_SETFL, fcntl(n->sockfd, F_GETFL)|O_NONBLOCK);
+#endif
+	
 
 	// Store the sockaddr and length in the net_t
 	memcpy(&n->addr, p->ai_addr, p->ai_addrlen);
@@ -110,6 +134,7 @@ net_t *NET_socket_client(const char *node, const char *service)
 {
 	net_t *n;
 	int rv;
+	unsigned long ulMode = 1;
 	struct addrinfo hints;
 	struct addrinfo *servinfo;
 	struct addrinfo *p;
@@ -123,7 +148,7 @@ net_t *NET_socket_client(const char *node, const char *service)
 
 	// Get a listing of interfaces we may be able to make a socket on
 	if ((rv = getaddrinfo(node, service, &hints, &servinfo)) != 0) {
-		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(rv));
+		fprintf(stdout, "getaddrinfo error: %s\n", gai_strerror(rv));
 		return NULL;
 	}
 
@@ -143,7 +168,11 @@ net_t *NET_socket_client(const char *node, const char *service)
 	}
 
 	// Set the socket to non-blocking
+#ifdef WIN32
+	ioctlsocket(n->sockfd, FIONBIO, &ulMode);
+#else
 	fcntl(n->sockfd, F_SETFL, fcntl(n->sockfd, F_GETFL)|O_NONBLOCK);
+#endif
 
 	// Store the sockaddr and length in the net_t
 	memcpy(&n->addr, p->ai_addr, p->ai_addrlen);
@@ -261,14 +290,24 @@ int NET_portcmp(net_t *n1, net_t *n2)
 	return rv;
 }
 
+//TODO: why does this not use NET_get_ip and NET_get_port
 // Print the IP address and Port number to stdout
 void NET_print(net_t *n)
 {
-	char ip[INET6_ADDRSTRLEN];
+	char *ip = NULL;
 	unsigned short port;
 
-	printf("IP: ");
+	ip = NET_get_ip(n);
+	port = NET_get_port(n);
 
+	if(ip) {
+		printf("IP: %s:%d\n", ip, port);
+		free(ip);
+	} else {
+		printf("IP: ERROR\n");
+	}
+
+	/*
 	// IPv4 use sockaddr_in
 	if(((struct sockaddr *)&n->addr)->sa_family == AF_INET) {
 		if(inet_ntop(AF_INET, &(((struct sockaddr_in *)&n->addr)->sin_addr), ip, INET6_ADDRSTRLEN) != NULL)
@@ -287,6 +326,7 @@ void NET_print(net_t *n)
 	else {
 		printf("Address family unkown!\n");
 	}
+	*/
 }
 
 // Gets a human readable string representation of the IP
@@ -294,6 +334,12 @@ char *NET_get_ip(net_t *n)
 {
 	char ip[INET6_ADDRSTRLEN];
 
+#ifdef _WIN32
+	if(!getnameinfo((struct sockaddr *)&n->addr, n->addrlen, ip, INET6_ADDRSTRLEN, NULL, 0, 0))
+		return strdup(ip);
+	printf("ERROR: cannot get ip\n");
+	return NULL;
+#else
 	// IPv4 use sockaddr_in
 	if(((struct sockaddr *)&n->addr)->sa_family == AF_INET) {
 		if(inet_ntop(AF_INET, &(((struct sockaddr_in *)&n->addr)->sin_addr), ip, INET6_ADDRSTRLEN) != NULL)
@@ -307,6 +353,7 @@ char *NET_get_ip(net_t *n)
 	// Address family unkown
 	printf("Address family unkown!\n");
 	return NULL;
+#endif
 }
 
 // Gets a human readable unsigned short of the PORT
@@ -353,7 +400,7 @@ void NET_sim(net_t *n)
 		// Supposedly 1 in 1000 chance of disconnecting
 		if(rand_max(1000) == 2)
 			n->ns.dc = 1;
-		CONSOLE_print("dc = %d", n->ns.dc);
+		//CONSOLE_print("dc = %d", n->ns.dc);
 	}
 	if(n->ns.opt & SIM_PL) {
 		// Since packet loss is usually more than one packet when it happens
@@ -362,7 +409,7 @@ void NET_sim(net_t *n)
 			n->ns.pl--;
 		else if((i = rand_max(100)) < 10)
 			n->ns.pl = i;
-		CONSOLE_print("pl = %d", n->ns.pl);
+		//CONSOLE_print("pl = %d", n->ns.pl);
 	}
 }
 

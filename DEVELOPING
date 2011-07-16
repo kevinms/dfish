@@ -1,0 +1,144 @@
+--------------------Information for developing dfish--------------------
+
+Dfish is currently supported on Linux and Windows. This document
+describes how to setup a devlopment environment on each of the operating
+systems.
+
+1. Linux
+2. Linux Sound Suport
+3. Windows
+4. Windows Sound Support
+
+========================================================================
+1. Linux
+========================================================================
+
+First you will need to download a few sdl libraries that are used:
+	sudo apt-get install libsdl-dev libsdl-ttf2.0-dev
+
+Next checkout the code and compile, for sound support check SoundSupport:
+	svn checkout http://dfish.googlecode.com/svn/ dfish
+	cd dfish/branches/engine-merge/
+	make clean
+	make
+
+Open a new terminal and run the server (default port 8888):
+	./server
+
+Open a new terminal and run the client:
+	./client
+
+Pretty easy setup for linux ;)
+
+========================================================================
+2. Linux Sound Support
+========================================================================
+
+-Dependencies-
+In order to have sound in dfish SDL_mixer needs to be installed. Go to
+http://www.libsdl.org/projects/SDL_mixer/ and download:
+	# 32-bit
+	SDL_mixer-1.2.11-1.i586.rpm
+	SDL_mixer-devel-1.2.11-1.i586.rpm
+	or
+	# 64-bit
+	SDL_mixer-1.2.11-1.x86_64.rpm
+	SDL_mixer-devel-1.2.11-1.x86_64.rpm
+
+If you need a debian package just use the alien command:
+	sudo alien -d SDL_mixer-1.2.11-1.x86_64.rpm 
+	sudo alien -d SDL_mixer-devel-1.2.11-1.x86_64.rpm
+
+You may need to first remove the old version of libsdl-mixer that might
+be installed. Once you have the package in the correct format just use
+your package manager and install!
+
+-Compile-
+To compile dfish run:
+	make clean
+	make SND=1
+
+-Sound Commands-
+There are three commands which control sound in dfish
+	/snd-volume VOLUME (percent) - Set music volume
+	/snd-stop - Stop music
+	/snd-play music filename (no spaces) - Play specific music file
+
+You can play any music you would like simply by providing the path to
+the music file, for example:
+	/snd-play /usr/home/alice/favoritesong.mp3
+
+By default the music will play in a loop forever.
+
+========================================================================
+3. Windows
+========================================================================
+
++----------------------------------------------------------------------+
+|PART 1 - Setup SVN and get the dfish source                           |
++----------------------------------------------------------------------+
+Install: Visual Studio, TortoiseSVN
+
+Create a new folder for all the dfish source files. In this example, I
+will use C:\my_data\dfish
+
+Right click on the folder you just created and choose 'SVN Checkout...'
+
+Make sure the following fields are correctly filled and click OK:
+	URL of Repository: http://dfish.googlecode.com/svn/
+	Checkout Directory: C:\my_data\dfish
+
++----------------------------------------------------------------------+
+|PART 2 - Install Dependencies                                         |
++----------------------------------------------------------------------+
+We are going to need 3 libraries: SDL, SDL_ttf, SDL_mixer
+
+These can be obtained from these links (for broken links just google):
+	http://www.libsdl.org/download-1.2.php
+	http://www.libsdl.org/projects/SDL_ttf/
+	http://www.libsdl.org/projects/SDL_mixer/
+
+You want the Win32 versions of:
+	SDL-devel-*-VC8.zip
+	SDL_mixer-devel-*-VC.zip
+	SDL_ttf-devel-*-VC.zip
+
+[In this example we will install these developement files in C:\dev\]
+
+Move the zip files to C:\dev\. Extract them each to their respective
+directories. Now, open up the dfish Visual Studio solution file:
+	dfish\branches\engine-merge\win\win.sln
+
+Go to Tools->Options->Projects and Solutions->VC++ Directories.
+
+From the "Show directories for" drop down box select "Library files".
+Click the new button and add the following directories:
+	C:\dev\SDL_mixer-*\lib
+	C:\dev\SDL_tff-*\lib
+	C:\dev\SDL-*\lib
+NOTE: You don't actually type the '*'
+
+From the "Show directories for" drop down box select "Include files".
+Click the new button and add the following directories:
+	C:\dev\SDL_mixer-*\include
+	C:\dev\SDL_tff-*\include
+	C:\dev\SDL-*\include
+NOTE: You don't actually type the '*'
+
+The last step is to copy each of the dll's from the C:\dev\SDL-foo\lib
+directories to:
+	dfish\branches\engine-merge\win\client
+	dfish\branches\engine-merge\win\server
+
+There are 10 dll's in all that you should be copying.
+
++----------------------------------------------------------------------+
+|PART 3 - Building/Debugging                                           |
++----------------------------------------------------------------------+
+
+
+========================================================================
+4. Windows Sound Support
+========================================================================
+
+Coming soon I suppose :)

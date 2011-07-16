@@ -18,8 +18,12 @@
 #ifndef __NET_H
 #define __NET_H
 
+#ifdef _WIN32
+#include <Winsock2.h>
+#else
 #include <netdb.h>
 #include <sys/time.h>
+#endif
 
 #include "buf.h"
 #include "list.h"
@@ -51,6 +55,10 @@
 #define RELI_US  0 // Unreliable Sequenced
 #define RELI_R   1 // Reliable
 
+#ifdef _WIN32
+typedef int socklen_t;
+#endif
+
 // Network Simulation Variables, each hostinfo_t contains one
 typedef struct netsim_s
 {
@@ -75,7 +83,7 @@ typedef struct net_s
 	netsim_t ns;
 } net_t;
 
-void NET_init();
+int NET_init();
 
 // Create and send to/from sockets
 net_t *NET_socket_server(const char *address, const char *service);

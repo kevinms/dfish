@@ -40,6 +40,11 @@ view_t *VIEW_init(int x, int y, int real_w, int real_h, char *fontname, int font
 
 	v->font = TTF_OpenFont(v->fontname,v->fontsize);
 
+	if(!v->font) {
+		fprintf(stderr, "ERROR: Could not open font file!\n");
+		exit();
+	}
+
 	// Get the tile_w and tile_h
 	TTF_GlyphMetrics(v->font,'@',&x,&x,&x,&x,&v->tile_w);
 	v->tile_h = TTF_FontLineSkip(v->font)+1;

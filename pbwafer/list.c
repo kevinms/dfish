@@ -60,8 +60,8 @@ list_add(list_t *list, void *entity)
 void
 list_del_item(list_t *list, void *item)
 {
-	fflush(stdout);
 	link_t *templink;
+	fflush(stdout);
 
 	if(list == NULL)
 		return;
@@ -112,7 +112,6 @@ int list_del_head(list_t *list)
 	}
 
 	free(tmp);
-
 
 	list->len--;
 	return 0;
@@ -202,7 +201,7 @@ list_is_in(list_t *list, void *item) {
 
 	if(templink == NULL)
 		return 0;
-        else
-            return 1;
+	else
+		return 1;
 
 }

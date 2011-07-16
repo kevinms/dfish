@@ -28,8 +28,9 @@
 
 vfab_t *vfab;
 
-cmd_t g_fabcmds[0] = 
+cmd_t g_fabcmds[1] = 
 {
+	{{KM_NONE,K_i},NULL,NULL} //TEMP
 	//{{KM_NONE,K_i},CB_req_servinfo,NULL},
 	//{{KM_NONE,K_c},CB_req_connect,NULL},
 };

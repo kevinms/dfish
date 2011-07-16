@@ -20,8 +20,14 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 #include <sys/stat.h>
+
+#ifdef _WIN32
+#include <winsock.h>
+#else
+#include <sys/time.h>
+#include <unistd.h>
+#endif
 
 void print_bits32(int n)
 {
@@ -81,11 +87,14 @@ search_match(char **tree, char *apple)
 double
 getTime()
 {
+/*
 	//check and return time
 	struct timeval curTime;
 	(void) gettimeofday (&curTime, (struct timezone *) NULL);
 	return (((((double) curTime.tv_sec) * 1000000.0) 
-             + (double) curTime.tv_usec) / 1000000.0); 
+             + (double) curTime.tv_usec) / 1000000.0);
+*/
+return 0.0;
 }
 
 void
@@ -146,19 +155,20 @@ fcheck_for_file(const char *file)
 
 //Take path of file EX: '/this/is/a/test.txt' an return 'test.txt'
 char *
-fileFromPath(char * path) {
+fileFromPath(char *path) {
 	int len = strlen(path);
 	int j = 0;
 	int i = len;
+	char *result;
 
-	while(i != 0 && path[i] != '/'){
+	while(i != 0 && path[i] != '/') {
 		j++;
 		i--;
 	}
 	if(path[i] == '/') {
 		j--;
 	}
-	char * result = malloc(j);
+	result = malloc(j);
 	strncpy(result, path + (len - j), j);
 
 	return result;
