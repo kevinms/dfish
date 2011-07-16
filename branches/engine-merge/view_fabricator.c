@@ -44,6 +44,8 @@ void VFAB_init(int x, int y, int real_w, int real_h, char *fontname, int fontsiz
 
 	vfab->v->accept_input = VFAB_accept_input;
 	vfab->v->showcursor = 1;
+
+	vfab->g_bp_edit = NULL;
 }
 
 void VFAB_menu_init(menu_t *r, int x, int y, int real_w, int real_h, char *fontname, int fontsize, SDL_Surface *screen, int numl)
