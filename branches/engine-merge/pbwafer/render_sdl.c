@@ -438,24 +438,23 @@ void R_addcolor(int x,int y,int r,int g,int b,int fr,int fg,int fb)
 
 void R_box(view_t *view)
 {
-	Uint32 color = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
-	// Top line
 	//printf("%d, %d, %d, %d\n",view->x, view->y, view->real_w, view->real_h);
-	SDL_Rect rect = {view->x,view->y,view->real_w,1};
-	SDL_FillRect(view->screen, &rect, color);
 
+	Uint32 color = SDL_MapRGBA(view->screen->format,g_bd.r,g_bd.g,g_bd.b,g_bd.unused);
+
+	// Top line
+	SDL_Rect rect = {view->x,view->y,view->real_w,1};
 	// Bottom line
 	SDL_Rect rect1 = {view->x,view->y + view->real_h-1,view->real_w,1};
-	SDL_FillRect(view->screen, &rect1, color);
-
 	// Left line
 	SDL_Rect rect2 = {view->x,view->y,1,view->real_h};
-	SDL_FillRect(view->screen, &rect2, color);
-
 	// Right line
 	SDL_Rect rect3 = {view->x + view->real_w-1,view->y,1,view->real_h};
-	SDL_FillRect(view->screen, &rect3, color);
 
+	SDL_FillRect(view->screen, &rect, color);
+	SDL_FillRect(view->screen, &rect1, color);
+	SDL_FillRect(view->screen, &rect2, color);
+	SDL_FillRect(view->screen, &rect3, color);
 /*
 	int x, y;
 
@@ -479,22 +478,21 @@ void R_box(view_t *view)
 
 void R_boxext(view_t *view,char r,char g,char b)
 {
+	//printf("%d, %d, %d, %d\n",view->x, view->y, view->real_w, view->real_h);
+
 	Uint32 color = SDL_MapRGBA(view->screen->format,r,g,b,255);
 
 	// Top line
-	//printf("%d, %d, %d, %d\n",view->x, view->y, view->real_w, view->real_h);
 	SDL_Rect rect = {view->x,view->y,view->real_w,1};
-	SDL_FillRect(view->screen, &rect, color);
-
 	// Bottom line
 	SDL_Rect rect1 = {view->x,view->y + view->real_h-1,view->real_w,1};
-	SDL_FillRect(view->screen, &rect1, color);
-
 	// Left line
 	SDL_Rect rect2 = {view->x,view->y,1,view->real_h};
-	SDL_FillRect(view->screen, &rect2, color);
-
 	// Right line
 	SDL_Rect rect3 = {view->x + view->real_w-1,view->y,1,view->real_h};
+
+	SDL_FillRect(view->screen, &rect, color);
+	SDL_FillRect(view->screen, &rect1, color);
+	SDL_FillRect(view->screen, &rect2, color);
 	SDL_FillRect(view->screen, &rect3, color);
 }

@@ -119,7 +119,7 @@ typedef struct bp_s {
 
 typedef struct delta_s
 {
-	
+	int deletme;
 } delta_t;
 
 extern prim_t primitives[2];

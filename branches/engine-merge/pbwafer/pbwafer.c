@@ -27,6 +27,10 @@
 #include "snd.h"
 #endif // SOUND
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 void PBWAFER_init(char mask)
 {
 	if(mask & INIT_NET)
@@ -43,6 +47,13 @@ void PBWAFER_init(char mask)
 	if(mask & INIT_SND)
 		SND_init();
 #endif // SOUND
+
+#ifdef _WIN32
+	// On windows, the prebuilt SDL library decides, without asking politely, to redirect stdout/stderr to files...
+	AllocConsole(); //TODO: This line may only be need for Visual Studio
+	freopen( "CON", "wt", stdout );
+	freopen( "CON", "wt", stderr );
+#endif
 }
 
 void PBWFAER_quit()
