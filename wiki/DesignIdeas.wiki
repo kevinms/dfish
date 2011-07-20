@@ -1,4 +1,7 @@
 = Scope =
+Just think: Dwarf Fortress + Space + Real-time + Online + Legos + Combat + Destructability!
+
+Imagine being plopped into a beautiful galaxy next to a remote planet. Having only a small ship with a few crew members for company, the struggle for existence begins here. Your ship is set into orbit around the planet you soon call home. With harvested materials from deep within the core, modifications are made to your ship. More rooms. Airlock doors. Missiles. Lasers. Mines. The population growth pushes for a full space station to begin construction. Suddenly, light is warped into blackness. Out of the abyss a mammoth ship rolls out. All eyes are on this new object. What seems like waves of colorful light shine from the ship. The light literally rips apart your station piece by piece. Defense systems are assimilated before they even active. Your ships are being eaten away. The crew is sucked into the vacuum of space. Chaos threatens your existence. The only hope of survival calls for drastic measures. As the orders are made you shoot off into space on the same small ship you arrived in. You watch as your planet, your home, implodes taking your unknown enemy with it.
 
 ----
 = Map Generation =
