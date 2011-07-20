@@ -17,6 +17,13 @@ Maps will be created using procedural generation. Using a set of random seeds + 
   # Clients populate their spatial indexing data structure
 Planetoids will be represented as blueprints and will be given a location somewhere in space. Using some noise generating functions like perlin noise it should be possible to create interesting textures for the planetoids.
 
+A few things need to be discussed:
+  * What the map struct will look like
+  * The protocol used for transferring the map data
+  * Will planets be mobile?
+
+I also think blueprints will need to have a class identifier to tell whether it is a planet/asteroid/nebula/star/space-debris/black hole/worm hole/etc.
+
 References:
   * [http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_rand.aspx Random Number Generators]
   * [http://notch.tumblr.com/post/3746989361/terrain-generation-part-1 Procedural Generation]
