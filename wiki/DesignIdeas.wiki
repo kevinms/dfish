@@ -2,7 +2,22 @@
 
 ----
 = Map Generation =
+Maps will be created using procedural generation. Using a set of random seeds + a PRNG + a procedural function it should be possible to generate an entire map. An overly simple example would be:
+  # Server receives requested map size from clients
+  # Server generates a set of seed numbers
+  # Server generates N random planetoid locations
+  # Server creates a blueprint for each planetoid
+  # Server generates properties and textures for each planetoid
+  # Server generates random space debri blueprints around planetoids
+  # Server populates its indexed data structure with blueprints
+  # Server sends all blueprints and map data to clients
+  # Clients populate their indexed data structure
+Planetoids will be represented as blueprints and will be given a location somewhere in space. Using some noise generating functions like perlin noise it should be possible to create interesting textures for the planetoids.
 
+References:
+  * [http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_rand.aspx Random Number Generators]
+  * [http://notch.tumblr.com/post/3746989361/terrain-generation-part-1 Procedural Generation]
+  * [http://www.cs.clemson.edu/~kevin4/perlin.html Perlin Noise]
 
 = Blueprints =
 All information in the game is stored in blueprints. This includes entire ships, guns, floor tiles, wires, spacemen, etc. I will go into a bit more depth on how I think BPs (blueprints) should be stored and accessed a bit later. Whether or not maps will be a blueprint is undecided. Blueprints make up an entire hierarchy of objects. At the most basic level you have primitives.
