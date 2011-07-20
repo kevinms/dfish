@@ -51,6 +51,10 @@ Linked List:
 }}}
 Whether all these data structures will actually be used in the end is yet to be determined. Some data structures may use the principle of shifting computation in time to improve performance.
 
+Entity positions will be stored relative to a base piece, e.g. (+20x -20y). The base piece can be either the visual center or center of mass which can be calculated.
+
+An unsigned short or two bytes for entity IDs gives us 2^16 or 65536 ids. That means players can build blueprints with 2^16 tiles in them!
+
 The final level is the blueprint itself:
 {{{
 typedef struct bp_s {
@@ -81,10 +85,25 @@ typedef struct delta_s
 	//hmmm
 } delta_t;
 }}}
+
 Nested Blueprints?
 
 Should maps be BPs?
 
+More Info:
+
+  * Blueprints that are intended to move, such as ships, must have all pieces connecting. The fabricator can give errors telling the requirements.
+  * We can calculate the final velocity of the object and have it display in a stats window
+
+  * Blueprints will list entities pieces along with id (e.g. door = 42, id = 1), ID will help link entities
+OR
+  * Blueprints will list entities pieces (e.g. door = 42), entity position will help link entities
+  * If an entity is moved or destroyed you search to destroy the link
+
+{{{
+// Archie says :)
+We might need to check if a wall has been damanged enough for space to come in 
+}}}
 
 == Layers of Ship Design ==
 
