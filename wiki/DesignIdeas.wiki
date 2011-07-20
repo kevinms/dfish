@@ -1,9 +1,77 @@
 = Scope =
 
 ----
+= Map Generation =
+
 
 = Blueprints =
-Lorem ipsum, etc.
+All information in the game is stored in blueprints. This includes entire ships, guns, floor tiles, wires, spacemen, etc. I will go into a bit more depth on how I think BPs (blueprints) should be stored and accessed a bit later. Whether or not maps will be a blueprint is undecided. Blueprints make up an entire hierarchy of objects. At the most basic level you have primitives.
+{{{
+typedef struct prim_s {
+	int ch;
+	char r,g,b;
+	char fr,fg,fb;
+} prim_t;
+}}}
+Primitives are a single character which can represent one type of tile. There could be hundreds/thousands of primitives. One might be a floor tile; another a wall tile; another a piece of glass; another a gold wire. Next up in the hierarchy is an entity.
+{{{
+typedef struct entity_s
+{
+	unsigned short id;
+	unsigned int mass;
+	unsigned int health;
+	prim_t *p;
+
+	// 2D Doubly-Linked List
+	struct entity_s *n;
+	struct entity_s *s;
+	struct entity_s *e;
+	struct entity_s *w;
+
+	// Hashmap pieces
+	int offset_x; // These could hashed and stored in a table
+	int offset_y; // It would enable a much faster search
+
+	// Linked List, will speed up looping through
+	struct entity_s *next;
+} entity_t;
+}}}
+
+Each entity is just an instance of a primitive. There could be a hundred instances of the wall primitive so each entity would just have a reference to the same wall tile. Now there are some variables that each instance needs to keep track of separately like id, mass, health, etc. which are also contained within the entity. Finally, each entity is a piece of a larger data structure. Actually, multiple data structures. Each one has its own benefits.
+
+2D Doubly-Linked List:
+ faster collision detection
+ faster path finding
+
+Hashmap:
+ faster lookup
+
+Linked List:
+ faster iterating
+
+Whether all these data structures will actually be used in the end is yet to be determined. Some data structures may use the principle of lazy loading.
+
+The final level is the blueprint itself:
+{{{
+typedef struct bp_s {
+	entity_t *head;
+
+	entity_t *center[3];
+
+	entity_t *hull; // Just a pointer to a hull piece, this will hopefully speed
+	                // up collision detection
+
+	unsigned int mass;
+
+	int x;
+	int y;
+} bp_t;
+}}}
+
+
+
+Should maps be BPs?
+
 
 == Layers of Ship Design ==
 
