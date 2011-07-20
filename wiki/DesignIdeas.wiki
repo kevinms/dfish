@@ -7,7 +7,7 @@ Maps will be created using procedural generation. Using a set of random seeds + 
   # Server generates a set of seed numbers
   # Server generates N random planetoid locations
   # Server creates a blueprint for each planetoid
-  # Server generates properties and textures for each planetoid
+  # Server applies procedural function to generates properties and textures for each planetoid
   # Server generates random space debri blueprints around planetoids
   # Server populates its spacial indexing data structure with blueprints
   # Server sends all blueprints and map data to clients
