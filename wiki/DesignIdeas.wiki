@@ -38,7 +38,7 @@ typedef struct entity_s
 }}}
 
 Each entity is just an instance of a primitive. There could be a hundred instances of the wall primitive so each entity would just have a reference to the same wall tile. Now there are some variables that each instance needs to keep track of separately like id, mass, health, etc. which are also contained within the entity. Finally, each entity is a piece of a larger data structure. Actually, multiple data structures. Each one has its own benefits.
-
+{{{
 2D Doubly-Linked List:
  faster collision detection
  faster path finding
@@ -48,8 +48,8 @@ Hashmap:
 
 Linked List:
  faster iterating
-
-Whether all these data structures will actually be used in the end is yet to be determined. Some data structures may use the principle of lazy loading.
+}}}
+Whether all these data structures will actually be used in the end is yet to be determined. Some data structures may use the principle of shifting computation in time to improve performance.
 
 The final level is the blueprint itself:
 {{{
@@ -68,7 +68,20 @@ typedef struct bp_s {
 } bp_t;
 }}}
 
+Information about an object as a whole is stored here. Such as mass, speed, position, etc. The entity pointers are again for quicker access and computation. The head pointer is for the first item in the linked list. The center entity will point to the 'center' of the blueprint object (which will be calculated on the fly). The hull entity will point to any hull tile (outside edge piece). This should quicken collision detection.
 
+The next step is remembering dfish is an online multiplayer game. Each player will need to get some info on each ship out in space as other players build them. Also, since ships are completely  destructible they will need some way to tell which parts have been damaged/destroyed. It will be possible for blueprints to be split as well.
+
+First, a limited blueprint will be sent to each player when it is built in the fabricator. This blueprint will not contain ALL the information about the blueprint only what is needed by the other clients.
+
+Second, deltas will be sent over the network to each player to update each other of events that are happening to their blueprints. The name implies correctly that only the changes in the blueprint are sent. Much brain-thunderstorming needs to be done in this area before anything becomes close final in the code.
+
+typedef struct delta_s
+{
+	//hmmm
+} delta_t;
+
+Nested Blueprints?
 
 Should maps be BPs?
 
