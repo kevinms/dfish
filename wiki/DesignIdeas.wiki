@@ -75,12 +75,12 @@ The next step is remembering dfish is an online multiplayer game. Each player wi
 First, a limited blueprint will be sent to each player when it is built in the fabricator. This blueprint will not contain ALL the information about the blueprint only what is needed by the other clients.
 
 Second, deltas will be sent over the network to each player to update each other of events that are happening to their blueprints. The name implies correctly that only the changes in the blueprint are sent. Much brain-thunderstorming needs to be done in this area before anything becomes close final in the code.
-
+{{{
 typedef struct delta_s
 {
 	//hmmm
 } delta_t;
-
+}}}
 Nested Blueprints?
 
 Should maps be BPs?
