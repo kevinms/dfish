@@ -9,9 +9,9 @@ Maps will be created using procedural generation. Using a set of random seeds + 
   # Server creates a blueprint for each planetoid
   # Server generates properties and textures for each planetoid
   # Server generates random space debri blueprints around planetoids
-  # Server populates its indexed data structure with blueprints
+  # Server populates its spacial indexing data structure with blueprints
   # Server sends all blueprints and map data to clients
-  # Clients populate their indexed data structure
+  # Clients populate their spatial indexing data structure
 Planetoids will be represented as blueprints and will be given a location somewhere in space. Using some noise generating functions like perlin noise it should be possible to create interesting textures for the planetoids.
 
 References:
