@@ -21,7 +21,7 @@ References:
   * [http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_rand.aspx Random Number Generators]
   * [http://notch.tumblr.com/post/3746989361/terrain-generation-part-1 Procedural Generation]
   * [http://www.cs.clemson.edu/~kevin4/perlin.html Perlin Noise]
-
+----
 = Blueprints =
 All information in the game is stored in blueprints. This includes entire ships, guns, floor tiles, wires, spacemen, etc. I will go into a bit more depth on how I think BPs (blueprints) should be stored and accessed a bit later. Whether or not maps will be a blueprint is undecided. Blueprints make up an entire hierarchy of objects. At the most basic level you have primitives.
 {{{
@@ -123,7 +123,29 @@ OR
 We might need to check if a wall has been damanged enough for space to come in 
 }}}
 
+----
+
 == Layers of Ship Design ==
+
+There are multiple layers that can be viewed for a ship:
+  * Exo-Layer
+  * Endo-Layer
+    * Floor Plan
+    * Wiring
+
+The exo-layer will be seen by your enemies. Enemies should not be able to see any of the endo-layer unless they steal a ship or board the ship. The hull of the ship will define how the exo-layer appears.
+
+The endo-layer will be seen by the owner of the ship. The floor plan will be the default layer but you can also switch to the wiring layer to connect pieces of machinery. Route power to different destinations. And more.
+
+Blueprints are built in what is called the fabricator. If you want the object to be movable, e.g. ships, all tiles must be connected. There can not be any loose parts floating in space. This helps define a definite hull for ships. There will probably be some sort of ship core that will be given upon starting the game. Objects can only move and be considered ships if they have this ship core, intact.
+
+dfish should push for good ship design to be an integral part of game play. A few key factors could be:
+  * where the ship core is placed
+  * where the wiring is run throughout the ship
+  * how rooms are organized
+  * how airlock doors are utilized
+
+Some elements of circuit design could be interesting to incorporate as well.
 
 ----
 
