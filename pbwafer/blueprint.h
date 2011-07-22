@@ -74,7 +74,7 @@ from a single armor piece to a wooden floor piece
 
 //TODO: Find if there is a good easy way to loop through a 2D Doubly-linked list
 
-typedef struct prim_s {
+typedef struct primitive_s {
 	int ch;
 	char r,g,b;
 	char fr,fg,fb;
@@ -86,6 +86,8 @@ typedef struct entity_s
 	unsigned int mass;
 	unsigned int health;
 	prim_t *p;
+
+	void *sub_bp;
 
 	// 2D Doubly-Linked List
 	struct entity_s *n;
@@ -101,18 +103,25 @@ typedef struct entity_s
 	struct entity_s *next;
 } entity_t;
 
-typedef struct bp_s {
+typedef struct blueprint_s {
+	unsigned short type; // planet/star/field/asteroid/ship/mobile/others
+
 	entity_t *head;
-
 	entity_t *center[3];
-
-	entity_t *hull; // Just a pointer to a hull piece, this will hopefully speed
-	                // up collision detection
+	entity_t *hull; // pointer to a hull piece, speeds up collision detection
 
 	unsigned int mass;
+	unsigned int mass_center;
+	float velocity;
+	float acceleration;
 
 	int x;
 	int y;
+
+	// bounding circle
+	unsigned short bc_radius;
+
+	void *priv; // Extra info that needs to be stored for a specific type
 } bp_t;
 
 // Firing a weapon - [shot origin] [type] (speed)
