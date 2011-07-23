@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include "render.h"
+#include "buf.h"
 
 prim_t primitives[2] = {{'O',0,255,0,0,0,0},{'_',255,255,0,0,0,0}};
 
@@ -101,4 +102,11 @@ void BP_render(bp_t *b)
 
 	for(tmp = b->head; tmp != NULL; tmp = tmp->next)
 		BP_render_ent(tmp,b->x,b->y);
+}
+
+fixedbuf_t *BP_pack()
+{
+	fixedbuf_t *f = buf_new_init(512);
+	
+
 }

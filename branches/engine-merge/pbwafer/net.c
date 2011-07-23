@@ -244,6 +244,7 @@ void NET_copy(net_t *dest, net_t *src)
 	dest->sockfd = src->sockfd;
 	memcpy((void *)&(dest->addr), (void *)&src->addr, src->addrlen);
 	dest->addrlen = src->addrlen;
+	dest->ns.state = src->ns.state;
 }
 
 // Compare the ip's of two net_t structs
@@ -290,7 +291,6 @@ int NET_portcmp(net_t *n1, net_t *n2)
 	return rv;
 }
 
-//TODO: why does this not use NET_get_ip and NET_get_port
 // Print the IP address and Port number to stdout
 void NET_print(net_t *n)
 {
@@ -306,27 +306,6 @@ void NET_print(net_t *n)
 	} else {
 		printf("IP: ERROR\n");
 	}
-
-	/*
-	// IPv4 use sockaddr_in
-	if(((struct sockaddr *)&n->addr)->sa_family == AF_INET) {
-		if(inet_ntop(AF_INET, &(((struct sockaddr_in *)&n->addr)->sin_addr), ip, INET6_ADDRSTRLEN) != NULL)
-			printf("%s", ip);
-		port = htons(((struct sockaddr_in *)&n->addr)->sin_port);
-		printf(":%d\n", port);
-	}
-	// IPv6 use sockaddr_in6
-	else if(((struct sockaddr *)&n->addr)->sa_family == AF_INET6) {
-		inet_ntop(AF_INET6, &(((struct sockaddr_in6 *)&n->addr)->sin6_addr.s6_addr), ip, INET6_ADDRSTRLEN);
-		printf("%s", ip);
-		port = htons(((struct sockaddr_in6 *)&n->addr)->sin6_port);
-		printf(":%d\n", port);
-	}
-	// Address family unkown
-	else {
-		printf("Address family unkown!\n");
-	}
-	*/
 }
 
 // Gets a human readable string representation of the IP

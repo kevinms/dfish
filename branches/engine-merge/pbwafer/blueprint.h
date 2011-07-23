@@ -84,7 +84,9 @@ typedef struct entity_s
 {
 	unsigned short id;
 	unsigned int mass;
-	unsigned int health;
+	unsigned short health;
+	unsigned short primitive_type;
+	unsigned short layer;
 	prim_t *p;
 
 	void *sub_bp;
@@ -105,6 +107,8 @@ typedef struct entity_s
 
 typedef struct blueprint_s {
 	unsigned short type; // planet/star/field/asteroid/ship/mobile/others
+
+	unsigned short ent_count;
 
 	entity_t *head;
 	entity_t *center[3];
