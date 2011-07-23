@@ -33,7 +33,7 @@ next to it. If there is a piece next to it then set the pointer. If not
 set null. That should completely rebuild the blueprint
 
 ------------------------------------------------------------------------
-implement a hashmap for blueprints
+implement a hash table for blueprints
 ------------------------------------------------------------------------
 
 Check eternally confuzzled!
