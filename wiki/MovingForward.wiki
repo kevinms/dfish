@@ -4,11 +4,12 @@ Here you will find a listing of items that need to be completed soon. We will tr
 
 ===Tasks===
 
-|| Blueprint Structs || Finalize as much as possible what members each struct will need and create new ones as needed. ||
-|| Blueprint Deltas || Extremely important for good network play. Lots of brain-thunderstorming needs to happen for this. Any ideas you have should be brought to the table. The sooner we can get this going the sooner we will have a playable game ||
-|| Networking Code || There are a few known bugs lurking in the networking code. Also there is no flow control algorithm implemented as of yet. Packet sending needs to be buffered. Network simulator needs to be finished. ||
-|| Fabricator || This is in it's infancy and is needed to build blueprints in game. I think the blueprint design should be a little more finale before moving on here. ||
-|| Blueprint Saving || Functions to save blueprints to disk for later use/reference. This function will change as the blueprint structure itself evolves. Careful planning is needed. ||
+|| *Stage* || *Topic* || *Description* || 
+|| _done_|| Blueprint Structs || Finalize as much as possible what members each struct will need and create new ones as needed. ||
+|| _in progress_ || Blueprint Deltas || Extremely important for good network play. Lots of brain-thunderstorming needs to happen for this. Any ideas you have should be brought to the table. The sooner we can get this going the sooner we will have a playable game ||
+|| _in progress_ || Networking Code || There are a few known bugs lurking in the networking code. Also there is no flow control algorithm implemented as of yet. Packet sending needs to be buffered. Network simulator needs to be finished. ||
+|| _planning_ || Fabricator || This is in it's infancy and is needed to build blueprints in game. I think the blueprint design should be a little more finale before moving on here. ||
+|| _none_ || Blueprint Saving || Functions to save blueprints to disk for later use/reference. This function will change as the blueprint structure itself evolves. Careful planning is needed. ||
 
 ===TODO====
 Results of a large brainstorming session:
