@@ -46,6 +46,7 @@ void PROTO_init()
 	g_h.n = (net_t *)malloc(sizeof(*g_h.n));
 	g_h.n->sockfd = 0;
 	g_h.n->addrlen = sizeof(g_h.n->addr);
+	NET_sim_state(g_h.n,0,0);
 }
 
 // Initialize a new hostinfo_t
@@ -335,6 +336,7 @@ void PROTO_server_parse_DGRAM()
 			c->name = buf_read_string(&g_buf);
 			c->info = PROTO_host_init();
 			c->info->n = (net_t *)malloc(sizeof(*c->info->n));
+			NET_print(g_h.n);
 			NET_copy(c->info->n, g_h.n);
 			c->info->hdr.hid = 10; //TODO: Generate a host id and move this to the payload
 

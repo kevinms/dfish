@@ -50,7 +50,7 @@ void PBWAFER_init(char mask)
 
 #ifdef _WIN32
 	// On windows, the prebuilt SDL library decides, without asking politely, to redirect stdout/stderr to files...
-	AllocConsole(); //TODO: This line may only be need for Visual Studio
+	AllocConsole(); //TODO: This line may only be needed for Visual Studio
 	freopen( "CON", "wt", stdout );
 	freopen( "CON", "wt", stderr );
 #endif
