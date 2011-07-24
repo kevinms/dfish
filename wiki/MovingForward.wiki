@@ -33,26 +33,6 @@ next to it. If there is a piece next to it then set the pointer. If not
 set null. That should completely rebuild the blueprint
 
 ------------------------------------------------------------------------
-implement a hash table for blueprints
-------------------------------------------------------------------------
-
-Check eternally confuzzled!
-
-Our hash table will use separate chaining for handling collisions. The
-major reasons are:
-  + it can handle deletion of keys easily - destroying entities will be
-    a common operation this is needed
-  + it can handle duplicate keys easily - the x,y offsets will be used
-    as the key in the hash table, entities may have the same offsets
-    since there are multiple layers of entities
-
-When the game is in a playable state comparison of hash functions will
-have to be done on the blueprint data sets to minimize collisions.
-
-Again, eternally confuzzled is a good resource to find many common
-hashing algorithms that are very quick and can achieve avalanche!
-
-------------------------------------------------------------------------
 blueprint delta packing
 ------------------------------------------------------------------------
 
