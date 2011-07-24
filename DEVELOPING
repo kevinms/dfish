@@ -111,6 +111,9 @@ directories. Now, open up the dfish Visual Studio solution file:
 
 Go to Tools->Options->Projects and Solutions->VC++ Directories.
 
+NOTE: For VS 2010 try looking at:
+http://blogs.msdn.com/b/vsproject/archive/2009/07/07/vc-directories.aspx
+
 From the "Show directories for" drop down box select "Library files".
 Click the new button and add the following directories:
 	C:\dev\SDL_mixer-*\lib
