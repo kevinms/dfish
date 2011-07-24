@@ -155,6 +155,27 @@ Again, eternally confuzzled is a good resource to find many common
 hashing algorithms that are very quick and can achieve avalanche!
 }}}
 ----
+= Average Packet Size/Rate =
+
+{{{
+Estimated average packet statistics:
+30 packets/sec at ~512 B/packet = ~15 kB/s
+
+Client upload speeds are the limiting factor ranging from 10 kB/s
+to 50 kB/s. We should not flood the clients with data from the server
+even though download speeds are much higher. The ack bitfield can only
+support a certain number of acks per second.
+
+It is suggested by Glenn Feidler to have several states you can drop
+into depending on your current network conditions. We might use 3
+states being 10, 30, 60 packets/sec. On LANs this rate can be increased
+even more.
+
+Resources:
+http://gafferongames.com/networking-for-game-programmers/reliability-and-flow-control/
+Google search, wireshark capturing, etc.
+}}}
+----
 
 = Layers of Ship Design =
 
