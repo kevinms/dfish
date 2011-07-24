@@ -4,12 +4,37 @@ Here you will find a listing of items that need to be completed soon. We will tr
 
 ===Tasks===
 
-|| *Stage* || *Topic* || *Description* || 
-|| _done_|| Blueprint Structs || Finalize as much as possible what members each struct will need and create new ones as needed. ||
-|| _in progress_ || Blueprint Deltas || Extremely important for good network play. Lots of brain-thunderstorming needs to happen for this. Any ideas you have should be brought to the table. The sooner we can get this going the sooner we will have a playable game ||
-|| _in progress_ || Networking Code || There are a few known bugs lurking in the networking code. Also there is no flow control algorithm implemented as of yet. Packet sending needs to be buffered. Network simulator needs to be finished. ||
-|| _planning_ || Fabricator || This is in it's infancy and is needed to build blueprints in game. I think the blueprint design should be a little more finale before moving on here. ||
-|| _none_ || Blueprint Saving || Functions to save blueprints to disk for later use/reference. This function will change as the blueprint structure itself evolves. Careful planning is needed. ||
+Blueprints:
+  * Finalize members for each struct type
+  * Which members will be sent to the server/clients?
+  * Write function for packing all blueprint data
+Blueprint Deltas:
+  * Write function for packing blueprint delta information
+  * Write function for unpacking/applying deltas
+Networking:
+  * Implement a flow control algorithm
+  * Packet sending needs to be buffered instead of many tiny packets
+  * Network simulator needs to be finished
+  * Handle partial receives
+  * Test the networking protocol with the simulator to iron out bugs
+Interface:
+  * Handle mouse input
+  * Reorganize views in the window
+Fabricator:
+  * Add lots of primitives
+  * Improve interface for fabricator
+  * Pack blueprint data as building
+  * Switch between ship layers
+  * Circuit building
+Procedural Generation:
+  * Implement perlin noise
+  * Create RNG functions that will be needed
+  * Try to create stunning textures for planets!
+  * Deterministic generation of background stars [perlin?]
+Blueprint File Format:
+  * Wait till blueprints finalized a bit more
+  * Needs to save a version number with it
+  * Look at the blender file format for ideas
 
 ===TODO====
 Results of a large brainstorming session:
