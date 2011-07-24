@@ -1,3 +1,7 @@
+=== Table of Contents ===
+
+<wiki:toc max_depth="1" />
+
 = Scope =
 Just think: Dwarf Fortress + Space + Real-time + Online + Legos + Combat + Destructability!
 
@@ -131,8 +135,28 @@ We might need to check if a wall has been damanged enough for space to come in
 }}}
 
 ----
+= Hash Table for Blueprints =
+{{{
 
-== Layers of Ship Design ==
+Check eternally confuzzled!
+
+Our hash table will use separate chaining for handling collisions. The
+major reasons are:
+  + it can handle deletion of keys easily - destroying entities will be
+    a common operation this is needed
+  + it can handle duplicate keys easily - the x,y offsets will be used
+    as the key in the hash table, entities may have the same offsets
+    since there are multiple layers of entities
+
+When the game is in a playable state comparison of hash functions will
+have to be done on the blueprint data sets to minimize collisions.
+
+Again, eternally confuzzled is a good resource to find many common
+hashing algorithms that are very quick and can achieve avalanche!
+}}}
+----
+
+= Layers of Ship Design =
 
 There are multiple layers that can be viewed for a ship:
   * Exo-Layer
