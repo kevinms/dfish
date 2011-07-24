@@ -100,7 +100,7 @@ unsigned HT_hash_elf(void *key, int len)
 	return h;
 }
 
-hashtable_t *HT_init(int size, unsigned (*hash)(void *, int))
+hashtable_t *HT_init(int size, unsigned (*hash)(void *, int), int (*cmp)(void *, void *))
 {
 	hashtable_t *ht = (hashtable_t *)calloc(1, sizeof(*ht));
 	if(!ht)
@@ -108,6 +108,7 @@ hashtable_t *HT_init(int size, unsigned (*hash)(void *, int))
 
 	ht->table = (hashnode_t **)calloc(size, sizeof(*(ht->table)));
 	ht->hash = hash;
+	ht->cmp = cmp;
 	ht->size = size;
 }
 
@@ -147,7 +148,7 @@ void *HT_delete(hashtable_t *ht, void *key, int len, void *value)
 		return NULL;
 
 	// Check if it is the first link
-	if(ht->table[m] != NULL && ht->table[m]->value == value) {
+	if(ht->table[m] != NULL && ht->cmp(ht->table[m]->value,value) == 0) {
 		n = ht->table[m];
 		ht->table[m] = ht->table[m]->next;
 		value = n->value;
@@ -159,7 +160,7 @@ void *HT_delete(hashtable_t *ht, void *key, int len, void *value)
 
 	// Check the other links
 	for(n = ht->table[m]->next, p = ht->table[m]; n != NULL; p = n, n = n->next) {
-		if(n->value == value) {
+		if(ht->cmp(n->value,value) == 0) {
 			p->next = n->next;
 			value = n->value;
 			free(n->key);
@@ -180,10 +181,8 @@ void *HT_find(hashtable_t *ht, void *key, int len, void *value)
 
 	m = ht->hash(key, len) % ht->size;
 
-	for(n = ht->table[m]; n != NULL && n->value != value; n = n->next)
-	{
-		m = m;
-	}
+	for(n = ht->table[m]; n != NULL && ht->cmp(n->value,value) != 0; n = n->next)
+		;
 
 	if(n)
 		return n->value;
@@ -201,11 +200,10 @@ void HT_flush(hashtable_t *ht)
 			n = n->next;
 			free(t->key);
 			free(t);
-			ht->count--;
 		}
 		ht->table[i] = NULL;
 	}
-	//ht->count = 0;
+	ht->count = 0;
 }
 
 int HT_resize(hashtable_t **ht, int size)
@@ -214,7 +212,7 @@ int HT_resize(hashtable_t **ht, int size)
 	hashnode_t *n, *t;
 	int i;
 
-	new_ht = HT_init(size, (*ht)->hash);
+	new_ht = HT_init(size, (*ht)->hash, (*ht)->cmp);
 	if(!new_ht)
 		return 0;
 

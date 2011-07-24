@@ -34,6 +34,16 @@ typedef struct bob_s
 int rv = 0;
 bob_t *vtab[COUNT][COUNT] = {NULL};
 
+int bob_cmp(void *a, void *b)
+{
+	bob_t *b1 = (bob_t *)a;
+	bob_t *b2 = (bob_t *)b;
+
+	if(b1->x != b2->x || b1->y != b2->y)
+		return 1;
+	return 0;
+}
+
 void init_data()
 {
 	int x, y;
@@ -117,7 +127,7 @@ int main()
 {
 	hashtable_t *ht;
 	
-	ht = HT_init(COUNT * COUNT * 2, &HT_hash_djb);
+	ht = HT_init(COUNT * COUNT * 2, HT_hash_djb, bob_cmp);
 
 	init_data();
 

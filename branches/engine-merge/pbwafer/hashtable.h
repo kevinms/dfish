@@ -32,6 +32,7 @@ typedef struct hashtable_s
 	int size;
 	int count;
 	unsigned (*hash)(void *, int);
+	int (*cmp)(void *, void *);
 } hashtable_t;
 
 unsigned HT_hash_djb(void *key, int len); // Modified Bernstein
@@ -40,7 +41,7 @@ unsigned HT_hash_fnv(void *key, int len); // FNV (Fowler/Noll/Vo)
 unsigned HT_hash_oat(void *key, int len); // One-at-a-Time
 unsigned HT_hash_elf(void *key, int len); // ELF
 
-hashtable_t *HT_init(int size, unsigned (*hash)(void *, int));
+hashtable_t *HT_init(int size, unsigned (*hash)(void *, int), int (*cmp)(void *, void *));
 
 int HT_insert(hashtable_t *ht, void *key, int len, void *value);
 void *HT_delete(hashtable_t *ht, void *key, int len, void *value);
