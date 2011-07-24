@@ -211,6 +211,8 @@ void CONSOLE_update()
 
 	if(tmp != NULL)
 		console.nextlines = &tmp->next;
+	//else
+	//	console.nextlines = NULL;
 
 	// Render text
 	R_move(0,h-1);
