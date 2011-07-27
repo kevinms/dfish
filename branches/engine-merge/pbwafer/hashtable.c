@@ -110,6 +110,8 @@ hashtable_t *HT_init(int size, unsigned (*hash)(void *, int), int (*cmp)(void *,
 	ht->hash = hash;
 	ht->cmp = cmp;
 	ht->size = size;
+
+	return ht;
 }
 
 int HT_insert(hashtable_t *ht, void *key, int len, void *value)
