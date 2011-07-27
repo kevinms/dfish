@@ -23,6 +23,6 @@
 #define MICRO_VERSION 0
 
 #define IS_COMPATABILE(x,y) \
-	(PBUOGT_MAJOR_VERSION == x && PBUOGT_MINOR_VERSION == y ? 1 : 0)
+	(MAJOR_VERSION == x && MINOR_VERSION == y ? 1 : 0)
 
 #endif /* !VERSION_H_ */
