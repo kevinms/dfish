@@ -1,11 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client\client.vcproj", "{C512FF68-94F4-488C-9258-909EA95E50C7}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client\client.vcxproj", "{C512FF68-94F4-488C-9258-909EA95E50C7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcproj", "{CC538FDA-4F5A-41E8-9F38-9401969931F7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcxproj", "{CC538FDA-4F5A-41E8-9F38-9401969931F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pbwafer", "pbwafer\pbwafer.vcproj", "{DE67411E-431F-4E28-84D7-D378DC2CAF31}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pbwafer", "pbwafer\pbwafer.vcxproj", "{DE67411E-431F-4E28-84D7-D378DC2CAF31}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{3AF4ED96-EB4A-4D3E-BB2B-A29513B7B952}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{DE67411E-431F-4E28-84D7-D378DC2CAF31}.Debug|Win32.Build.0 = Debug|Win32
 		{DE67411E-431F-4E28-84D7-D378DC2CAF31}.Release|Win32.ActiveCfg = Release|Win32
 		{DE67411E-431F-4E28-84D7-D378DC2CAF31}.Release|Win32.Build.0 = Release|Win32
+		{3AF4ED96-EB4A-4D3E-BB2B-A29513B7B952}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3AF4ED96-EB4A-4D3E-BB2B-A29513B7B952}.Debug|Win32.Build.0 = Debug|Win32
+		{3AF4ED96-EB4A-4D3E-BB2B-A29513B7B952}.Release|Win32.ActiveCfg = Release|Win32
+		{3AF4ED96-EB4A-4D3E-BB2B-A29513B7B952}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
