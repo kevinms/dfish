@@ -12,6 +12,7 @@ Blueprint Deltas:
   * Write function for packing blueprint delta information
   * Write function for unpacking/applying deltas
 Networking:
+  * Add a lobby screen while waiting for a game to begin
   * Implement a flow control algorithm
   * Packet sending needs to be buffered instead of many tiny packets
   * Network simulator needs to be finished
