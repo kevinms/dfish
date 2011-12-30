@@ -1,0 +1,78 @@
+                              DFISH Task List
+                           [codename: spacebox]
+
+Table of Contents
+    1.  Input
+    2.  Renderer
+    3.  Blueprints
+    4.  Events
+    5.  Physics
+    6.  Audio
+    7.  Networking
+    8.  Math
+    9.  Resource Management
+
+--------------------------------------------------------------------------------
+1. Input
+--------------------------------------------------------------------------------
+ + create classes to handle both mouse and keyboard
+ + make sure it can handle chainable hotkeys (e.g. ctl+alt+d or ctl+lmb)
+ + maybe have some system to register a input command with a callback
+
+--------------------------------------------------------------------------------
+2. Renderer
+--------------------------------------------------------------------------------
+ + write a importer for wavefront .obj files
+ + have some way of storing models in a Vertex Buffer Object (VBO)
+ + support a few primitives: textured quads, cubes, etc.
+ + manage model/world/view/projection/screen frames and transformations
+ + functions to go from screen space coordinates to world space and vice versa
+
+--------------------------------------------------------------------------------
+3. Blueprints
+--------------------------------------------------------------------------------
+ + all objects in the game are represented by blueprints
+ + determine blueprint format
+ + implement class with many helper functions
+
+--------------------------------------------------------------------------------
+4. Events
+--------------------------------------------------------------------------------
+ + create an event subsystem that manages events
+ + should communicate with the netcode to send/recv between the server/client
+ + if packets are dropped this is the layer that should repack the event
+
+--------------------------------------------------------------------------------
+5. Physics
+--------------------------------------------------------------------------------
+ + start looking into bullet for physics
+ + we want: rigid bodies, soft bodies, springs, motors, etc.
+ + figure out how to get the current state of the world to send over the network
+
+--------------------------------------------------------------------------------
+6. Audio
+--------------------------------------------------------------------------------
+ + create a small audio subsystem that manages loading and playing
+ + should be able to play small effect clips and background music
+ + should determine priority of sounds when many sounds are queued
+
+--------------------------------------------------------------------------------
+7. Networking
+--------------------------------------------------------------------------------
+ + implement connection manager that can be used by either the client or server
+ + implement a ReliableConnection class
+ + implement flow control
+
+--------------------------------------------------------------------------------
+8. Math
+--------------------------------------------------------------------------------
+ + vector2, vector3, vector4
+ + matrix33, matrix44
+ + quaterion
+ + hermitespline
+
+--------------------------------------------------------------------------------
+9. Resource Management
+--------------------------------------------------------------------------------
+ + manage saving/loading of blueprints
+ + manage saving/loading of levels
