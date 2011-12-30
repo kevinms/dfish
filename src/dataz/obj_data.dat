@@ -1,7 +1,0 @@
-MAP_DATA
-	NUM_OBJS 1
-		
-		TYPE 	OBJ_ASTEROID
-		XY		10 5
-		HW	10 16	;
-		/escape
